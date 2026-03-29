@@ -164,6 +164,16 @@ img{
   --char-scale: .92;
 }
 
+.char.slot-far-left{
+  left: 20%;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
+}
+
+.char.slot-far-right{
+  left: 80%;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
+}
+
 .top-ui{
   z-index: 20;
   pointer-events: none;
