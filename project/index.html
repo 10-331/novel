@@ -27,8 +27,10 @@
             <img src="./assets/images/ui/location.png" alt="" />
           </button>
 
-          <button class="icon-btn icon-right" id="menuBtn" aria-label="menu">
-            <img src="./assets/images/ui/menu.png" alt="" />
+          <button class="menu-toggle icon-right" id="menuBtn" aria-label="menu">
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
 
@@ -38,14 +40,12 @@
             <div class="speaker-en" id="speakerEn">AYA</div>
           </div>
 
-          <div class="dialogue-line"></div>
+          <div class="dialogue-line-image">
+            <img src="./assets/images/ui/line.png" alt="" />
+          </div>
 
           <div class="text-row">
             <div class="dialogue-text" id="dialogueText"></div>
-
-            <button class="voice-btn" id="voiceBtn" aria-label="voice">
-              <span>🔊</span>
-            </button>
           </div>
 
           <button class="next-indicator hidden" id="nextBtn" aria-label="next">
@@ -60,7 +60,7 @@
 
         <div class="menu-panel hidden" id="menuPanel">
           <div class="menu-card">
-            <button class="menu-close" id="menuClose">×</button>
+            <button class="menu-close" id="menuClose" aria-label="close menu">×</button>
             <h2>MENU</h2>
 
             <label class="menu-item">
