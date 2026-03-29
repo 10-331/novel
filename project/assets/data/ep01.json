@@ -9,7 +9,7 @@
     ]
   },
   {
-    "chars": ["aya:back", "rakuro:front"],
+"chars": ["aya:right", "rakuro:left"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "chars": ["rakuro:front", "aya:back"],
+"chars": ["aya:right", "rakuro:left"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
@@ -29,7 +29,7 @@
 {
   "_comment": "四人並びの確認用（無効化中）",
   "disabled": true,
-  "chars": ["rakuro:front", "aya:back", "rakuro:front", "aya:back"],
+"chars": ["rakuro:far-left", "kuguri:left", "aya:right", "ten:far-right"],
   "speaker": "モブ客",
   "speakerSub": "",
   "text": [
