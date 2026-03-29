@@ -101,41 +101,19 @@ function renderLine() {
   startTyping(line.text || []);
 }
 
+/**
+ * chars の略記は読むが、表示上は front/back/x/y/scale/bottom を無視する。
+ * つまり、今の JSON にそれらが残っていても横並び固定にする。
+ */
 function parseCharacter(entry) {
   const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
   const id = parts[0];
 
-  const data = {
+  return {
     id,
     src: CHARACTER_SOURCES[id] || "",
-    visible: true,
-    bottom: 0,
-    motion: {}
+    visible: true
   };
-
-  parts.slice(1).forEach(p => {
-    if (p.startsWith("scale=")) {
-      data.motion.scale = Number(p.replace("scale=", ""));
-      return;
-    }
-    if (p.startsWith("x=")) {
-      data.motion.x = Number(p.replace("x=", ""));
-      return;
-    }
-    if (p.startsWith("y=")) {
-      data.motion.y = Number(p.replace("y=", ""));
-      return;
-    }
-    if (p.startsWith("bottom=")) {
-      data.bottom = Number(p.replace("bottom=", ""));
-      return;
-    }
-    if (p === "hide") {
-      data.visible = false;
-    }
-  });
-
-  return data;
 }
 
 function renderCharacters(chars) {
@@ -159,19 +137,6 @@ function renderCharacters(chars) {
     const slot = slots[i];
     if (slot) img.classList.add(slot);
 
-    const motion = c.motion || {};
-    const baseBottom = c.bottom ?? 0;
-
-    img.style.bottom = `${52 + baseBottom + (motion.y ?? 0)}px`;
-
-    if (typeof motion.scale === "number") {
-      img.style.setProperty("--char-scale", motion.scale);
-    }
-
-    const baseLeft = getSlotLeftValue(slot);
-    const offsetX = motion.x ?? 0;
-    img.style.left = `calc(${baseLeft}% + ${offsetX}px)`;
-
     img.classList.remove("hidden");
   });
 }
@@ -184,14 +149,36 @@ function getSlots(count) {
   return ["slot-far-left", "slot-left", "slot-right", "slot-far-right"];
 }
 
-function getSlotLeftValue(slot) {
-  if (slot === "slot-single") return 50;
-  if (slot === "slot-far-left") return 14;
-  if (slot === "slot-left") return 32;
-  if (slot === "slot-center") return 50;
-  if (slot === "slot-right") return 68;
-  if (slot === "slot-far-right") return 86;
-  return 50;
+/**
+ * text 配列で意図的に分けた行は維持しつつ、
+ * 各行だけ「最大30文字程度」を上限に折り返す。
+ */
+function wrapTextLines(lines, limit = 30) {
+  const wrappedLines = [];
+
+  for (const rawLine of lines) {
+    if (!rawLine) {
+      wrappedLines.push("");
+      continue;
+    }
+
+    let current = "";
+
+    for (const char of rawLine) {
+      current += char;
+
+      if (current.length >= limit) {
+        wrappedLines.push(current);
+        current = "";
+      }
+    }
+
+    if (current) {
+      wrappedLines.push(current);
+    }
+  }
+
+  return wrappedLines.join("\n");
 }
 
 function startTyping(lines) {
@@ -200,7 +187,7 @@ function startTyping(lines) {
   el.text.textContent = "";
   el.next.style.opacity = 0;
 
-  const full = lines.join("\n");
+  const full = wrapTextLines(lines, 30);
   currentFullText = full;
 
   let i = 0;
