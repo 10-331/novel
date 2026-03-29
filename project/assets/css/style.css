@@ -60,7 +60,7 @@ button{
   overflow: hidden;
 }
 
-/* 1600x900 固定 */
+/* 1600x900 固定ステージ */
 .game-stage{
   position: absolute;
   left: 50%;
@@ -148,12 +148,12 @@ button{
   bottom: 52px;
   width: auto;
   max-height: 670px;
-  transform: translateX(-50%) scale(var(--char-scale, 1));
+  transform: translateX(-50%);
   transform-origin: bottom center;
   opacity: 1;
 }
 
-/* 横並びのみ */
+/* 完全横並び。前後感なし */
 .char.slot-single{ left: 50%; }
 .char.slot-far-left{ left: 14%; }
 .char.slot-left{ left: 32%; }
@@ -223,12 +223,12 @@ button{
   pointer-events: none;
 }
 
+/* 名前位置 */
 .name-row{
   display: flex;
   align-items: baseline;
   gap: 10px;
-  margin: 0 0 8px 0;
-  padding-left: 430px;
+  margin: 0 0 8px 430px;
 }
 
 .speaker-ja{
@@ -250,11 +250,9 @@ button{
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
+/* ライン位置 */
 .dialogue-line-image{
-  width: 100%;
-  margin-bottom: 16px;
-  padding-left: 365px;
-  padding-right: 300px;
+  margin: 0 300px 16px 365px;
 }
 
 .dialogue-line-image img{
@@ -264,23 +262,24 @@ button{
   opacity: .96;
 }
 
+/* 本文。位置と幅を分離する */
 .text-row{
-  display: flex;
-  align-items: flex-start;
+  display: block;
 }
 
 .dialogue-text{
-  width: auto;
-  max-width: 30em; /* または 28〜32で微調整 */
+  margin-left: 430px;
+  width: 30ic;
+  max-width: 30ic;
   min-height: calc(1.62em * 3);
-  padding-left: 430px;
+  padding-left: 0;
   font-size: 24px;
   line-height: 1.62;
   letter-spacing: .01em;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   white-space: pre-wrap;
-  word-break: auto-phrase;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 /* ===== NEXT ===== */
