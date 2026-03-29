@@ -22,11 +22,11 @@
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "\"たぶん\"と言っている時点で、自分の限界を把握できていない証拠だ。",
-      "もうアウトに近い。"
+      "\"たぶん\"と言っている時点で、自分の限界を把握できていない",
+      "証拠だ。もうアウトに近い。"
     ]
   },
-  {
+//  {
     "chars": ["rakuro:back", "aya:front", "rakuro:back:x=-140", "aya:front:x=140"],
     "speaker": "モブ客",
     "speakerSub": "GUEST",
