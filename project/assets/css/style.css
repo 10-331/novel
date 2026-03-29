@@ -4,8 +4,6 @@
 
   --text: #ffffff;
   --muted: rgba(255,255,255,.76);
-  --line: rgba(255,255,255,.35);
-  --panel: rgba(18,18,22,.72);
   --panel-strong: rgba(10,10,14,.88);
   --accent: #d9ff3f;
 
@@ -73,7 +71,6 @@ img{
   aspect-ratio: calc(var(--viewport-w) / var(--viewport-h));
   overflow: hidden;
   background: #000;
-  border-radius: 0;
 }
 
 .bg-layer,
@@ -144,13 +141,12 @@ img{
   pointer-events: none;
 }
 
-.icon-btn{
+.icon-btn,
+.menu-toggle{
   position: absolute;
   width: clamp(40px, 4.8vw, 64px);
   height: clamp(40px, 4.8vw, 64px);
   pointer-events: auto;
-  display: grid;
-  place-items: center;
 }
 
 .icon-btn img{
@@ -169,6 +165,24 @@ img{
   right: clamp(18px, 2.4vw, 28px);
 }
 
+.menu-toggle{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(4px, .45vw, 6px);
+  background: rgba(35,35,40,.96);
+  border-radius: 6px;
+}
+
+.menu-toggle span{
+  display: block;
+  width: 48%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 999px;
+}
+
 .dialogue-area{
   inset: auto 0 0 0;
   height: 28%;
@@ -184,7 +198,7 @@ img{
   display: flex;
   align-items: baseline;
   gap: .8em;
-  margin: 0 0 .5rem 0;
+  margin: 0 0 .45rem 0;
 }
 
 .speaker-ja{
@@ -202,10 +216,16 @@ img{
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-.dialogue-line{
-  height: 1px;
-  background: var(--line);
+.dialogue-line-image{
+  width: 100%;
   margin-bottom: 1rem;
+}
+
+.dialogue-line-image img{
+  width: 100%;
+  height: clamp(10px, 1vw, 16px);
+  object-fit: fill;
+  opacity: .96;
 }
 
 .text-row{
@@ -235,19 +255,6 @@ img{
 
 .dialogue-text .font-sans{
   font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-}
-
-.voice-btn{
-  width: clamp(30px, 3vw, 46px);
-  height: clamp(30px, 3vw, 46px);
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  font-size: clamp(14px, 1.4vw, 22px);
-  opacity: .92;
-  pointer-events: auto;
-  flex-shrink: 0;
 }
 
 .next-indicator{
