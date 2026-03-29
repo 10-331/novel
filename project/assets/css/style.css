@@ -5,11 +5,6 @@
   --text: #ffffff;
   --panel-strong: rgba(10,10,14,.88);
   --accent: #d9ff3f;
-
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 *{
@@ -24,6 +19,10 @@ html, body{
   color: var(--text);
   font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
   overflow: hidden;
+}
+
+body{
+  min-height: 100dvh;
 }
 
 button{
@@ -46,22 +45,19 @@ img{
 
 .app{
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
+  position: relative;
   background:
     radial-gradient(circle at 50% 30%, rgba(255,255,255,.06), transparent 35%),
     linear-gradient(180deg, #1b1b21 0%, #0e0e12 100%);
+  overflow: hidden;
 }
 
 .game-shell{
   width: 100%;
   height: 100%;
-  display: grid;
-  place-items: center;
-  padding:
-    calc(8px + var(--safe-top))
-    calc(8px + var(--safe-right))
-    calc(8px + var(--safe-bottom))
-    calc(8px + var(--safe-left));
+  position: relative;
+  overflow: hidden;
 }
 
 .game-viewport{
@@ -95,6 +91,10 @@ img{
   inset: 0;
 }
 
+.bg-layer{
+  z-index: 1;
+}
+
 .bg-layer img{
   width: 100%;
   height: 100%;
@@ -105,7 +105,7 @@ img{
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at center, transparent 48%, rgba(0,0,0,.16) 100%);
+    radial-gradient(circle at center, transparent 48%, rgba(0,0,0,.14) 100%);
 }
 
 .bg-bottom-shadow{
@@ -114,10 +114,11 @@ img{
   right: 0;
   bottom: 0;
   height: 320px;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.18) 35%, rgba(0,0,0,.50) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.12) 35%, rgba(0,0,0,.48) 100%);
 }
 
 .char-layer{
+  z-index: 5;
   pointer-events: none;
 }
 
@@ -125,7 +126,6 @@ img{
   position: absolute;
   bottom: 0;
   width: auto;
-  max-width: none;
   max-height: 780px;
   object-fit: contain;
   opacity: .88;
@@ -138,7 +138,6 @@ img{
     bottom .28s ease;
 }
 
-/* 自動配置の基準 */
 .char.slot-single{
   left: 50%;
   transform: translateX(-50%) scale(var(--char-scale, 1));
@@ -181,6 +180,7 @@ img{
 }
 
 .top-ui{
+  z-index: 20;
   pointer-events: none;
 }
 
@@ -227,17 +227,16 @@ img{
 }
 
 .dialogue-area{
+  z-index: 25;
   inset: auto 0 0 0;
   height: 235px;
   padding: 0 52px 22px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  z-index: 5;
   pointer-events: none;
 }
 
-/* 名前位置は参考画像寄せ */
 .name-row{
   display: flex;
   align-items: baseline;
@@ -247,14 +246,16 @@ img{
 }
 
 .speaker-ja{
-  font-size: 36px;
+  min-height: 1em;
+  font-size: 34px;
   font-weight: 700;
   letter-spacing: .03em;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
 .speaker-en{
-  font-size: 18px;
+  min-height: 1em;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: .03em;
   color: var(--accent);
@@ -271,11 +272,10 @@ img{
 .dialogue-line-image img{
   width: 100%;
   height: 12px;
-  object-fit: center 30％;
+  object-fit: fill;
   opacity: .96;
 }
 
-/* 3行・1行30文字前後想定 */
 .text-row{
   display: flex;
   align-items: flex-start;
@@ -284,14 +284,14 @@ img{
 .dialogue-text{
   width: 30em;
   max-width: 30em;
-  min-height: calc(1.72em * 3);
+  min-height: calc(1.7em * 3);
   padding-left: 410px;
-  font-size: 24px;
-  line-height: 1.72;
+  font-size: 23px;
+  line-height: 1.7;
   letter-spacing: .02em;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   word-break: break-word;
-  white-space: normal;
+  white-space: pre-wrap;
 }
 
 .dialogue-text .tx{
@@ -333,8 +333,8 @@ img{
 }
 
 .tap-zone{
+  z-index: 15;
   inset: 0;
-  z-index: 4;
   background: transparent;
 }
 
@@ -343,7 +343,7 @@ img{
   top: 26px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 20;
+  z-index: 40;
   padding: .55rem .9rem;
   border-radius: 999px;
   background: rgba(0,0,0,.62);
@@ -353,7 +353,7 @@ img{
 
 .menu-panel,
 .episode-end{
-  z-index: 30;
+  z-index: 50;
   background: rgba(0,0,0,.52);
   display: grid;
   place-items: center;
@@ -422,6 +422,24 @@ img{
   gap: 12px;
 }
 
+.orientation-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: rgba(8,8,12,.82);
+  color: #fff;
+  font-size: clamp(18px, 5vw, 28px);
+  letter-spacing: .08em;
+  text-align: center;
+}
+
+.orientation-overlay.show{
+  display: grid;
+}
+
 @keyframes nextFloat{
   0%, 100%{
     transform: translateY(0);
@@ -451,29 +469,5 @@ img{
   }
   50%{
     transform: translateX(-50%) translateY(-6px) scale(var(--char-scale, 1));
-  }
-}
-
-/* 縦持ちは横画面案内 */
-@media (orientation: portrait){
-  .game-viewport{
-    display: none;
-  }
-
-  body::before{
-    content: "横画面でご覧ください";
-    position: fixed;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    background:
-      radial-gradient(circle at 50% 35%, rgba(255,255,255,.06), transparent 35%),
-      linear-gradient(180deg, #1b1b21 0%, #0e0e12 100%);
-    color: #fff;
-    font-size: clamp(18px, 5vw, 28px);
-    letter-spacing: .08em;
-    text-align: center;
-    z-index: 9999;
   }
 }
