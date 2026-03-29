@@ -248,6 +248,10 @@ function applyScene(line) {
   renderCharacters(parsedCharacters);
 }
 
+  const parsedCharacters = parseChars(line.chars || []);
+  renderCharacters(parsedCharacters);
+}
+
 function resolveBgPath(bg) {
   if (bg.startsWith("./") || bg.startsWith("../") || bg.startsWith("http")) {
     return bg;
@@ -317,7 +321,7 @@ function parseCharacterObject(entry) {
   };
 }
 
-function renderCharacters(characters, activeId) {
+function renderCharacters(characters) {
   const slots = getSlots(characters.length);
 
   el.chars.forEach((img, index) => {
@@ -356,10 +360,6 @@ function renderCharacters(characters, activeId) {
       img.classList.add("motion-pop");
     } else if (motion.effect === "float") {
       img.classList.add("motion-float");
-    }
-
-    if (activeId && data.id === activeId) {
-      img.classList.add("is-active");
     }
 
     const baseLeft = getSlotLeftValue(slotClass);
