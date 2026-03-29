@@ -29,9 +29,9 @@
 {
   "_comment": "四人並びの確認用（無効化中）",
   "disabled": true,
-  "chars": ["rakuro:back", "aya:front", "rakuro:back:x=-140", "aya:front:x=140"],
+  "chars": ["rakuro:front", "aya:back", "rakuro:front", "aya:back"],
   "speaker": "モブ客",
-  "speakerSub": "GUEST",
+  "speakerSub": "",
   "text": [
     "立ち絵のないモブは、名前だけでも喋らせられる。",
     "四人並びの確認用。"
