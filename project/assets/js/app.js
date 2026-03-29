@@ -19,7 +19,7 @@ const el = {
 };
 
 // ==========================
-// キャラ画像定義（存在する分だけ書け）
+// キャラ画像
 // ==========================
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
@@ -28,8 +28,6 @@ const CHARACTER_SOURCES = {
 };
 
 // ==========================
-// 状態管理
-// ==========================
 let script = [];
 let index = 0;
 
@@ -37,8 +35,6 @@ let isTyping = false;
 let typingTimer = null;
 let currentFullText = "";
 
-// ==========================
-// 初期化
 // ==========================
 window.addEventListener("DOMContentLoaded", async () => {
   await loadScript();
@@ -49,15 +45,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 window.addEventListener("resize", updateOrientation);
 
 // ==========================
-// JSON読み込み
-// ==========================
 async function loadScript() {
   const res = await fetch("./assets/data/ep01.json");
   script = await res.json();
 }
 
-// ==========================
-// 画面向き制御（必要なら使え）
 // ==========================
 function updateOrientation() {
   if (!el.overlay) return;
@@ -70,31 +62,23 @@ function updateOrientation() {
 }
 
 // ==========================
-// 行描画
-// ==========================
 function renderLine() {
   const line = script[index];
   if (!line) return;
 
-  // 背景
   if (line.bg) {
     el.bg.src = `./assets/images/bg/${line.bg}`;
   }
 
-  // 名前
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
 
-  // キャラ
   const parsed = (line.chars || []).map(parseCharacter);
   renderCharacters(parsed);
 
-  // テキスト
   startTyping(line.text || []);
 }
 
-// ==========================
-// キャラ解析
 // ==========================
 function parseCharacter(entry) {
   const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
@@ -109,10 +93,6 @@ function parseCharacter(entry) {
   };
 
   parts.slice(1).forEach(p => {
-    if (p === "front" || p === "back") {
-      data.motion.depth = p;
-      return;
-    }
     if (p.startsWith("scale=")) {
       data.motion.scale = Number(p.replace("scale=", ""));
       return;
@@ -138,8 +118,6 @@ function parseCharacter(entry) {
 }
 
 // ==========================
-// キャラ描画（最大4人）
-// ==========================
 function renderCharacters(chars) {
   const visible = chars.filter(c => c && c.visible !== false && c.src);
   const slots = getSlots(visible.length);
@@ -150,6 +128,8 @@ function renderCharacters(chars) {
     img.className = "char hidden";
     img.style.display = "none";
     img.style.removeProperty("--char-scale");
+    img.style.removeProperty("left");
+    img.style.removeProperty("bottom");
 
     if (!c) return;
 
@@ -160,24 +140,14 @@ function renderCharacters(chars) {
     if (slot) img.classList.add(slot);
 
     const motion = c.motion || {};
-
-    // 縦位置
     const baseBottom = c.bottom ?? 0;
+
     img.style.bottom = `${baseBottom + (motion.y ?? 0)}px`;
 
-    // スケール
     if (typeof motion.scale === "number") {
       img.style.setProperty("--char-scale", motion.scale);
     }
 
-    // 前後
-    if (motion.depth === "front") {
-      img.classList.add("motion-front");
-    } else if (motion.depth === "back") {
-      img.classList.add("motion-back");
-    }
-
-    // 横位置
     const baseLeft = getSlotLeftValue(slot);
     const offsetX = motion.x ?? 0;
     img.style.left = `calc(${baseLeft}% + ${offsetX}px)`;
@@ -186,8 +156,6 @@ function renderCharacters(chars) {
   });
 }
 
-// ==========================
-// スロット
 // ==========================
 function getSlots(count) {
   if (count <= 0) return [];
@@ -199,25 +167,23 @@ function getSlots(count) {
 
 function getSlotLeftValue(slot) {
   if (slot === "slot-single") return 50;
-  if (slot === "slot-far-left") return 20;
-  if (slot === "slot-left") return 38;
+  if (slot === "slot-far-left") return 14;
+  if (slot === "slot-left") return 32;
   if (slot === "slot-center") return 50;
-  if (slot === "slot-right") return 62;
-  if (slot === "slot-far-right") return 80;
+  if (slot === "slot-right") return 68;
+  if (slot === "slot-far-right") return 86;
   return 50;
 }
 
 // ==========================
-// タイプライター
-// ==========================
 function startTyping(lines) {
   clearTimeout(typingTimer);
 
-  el.text.innerHTML = "";
+  el.text.textContent = "";
   el.next.style.opacity = 0;
 
   const full = lines.join("\n");
-  currentFullText = full.replace(/<[^>]+>/g, "");
+  currentFullText = full;
 
   let i = 0;
   isTyping = true;
@@ -237,8 +203,6 @@ function startTyping(lines) {
   step();
 }
 
-// ==========================
-// 入力
 // ==========================
 el.stage.addEventListener("click", () => {
   if (isTyping) {
