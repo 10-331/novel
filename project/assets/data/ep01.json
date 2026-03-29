@@ -1,0 +1,38 @@
+[
+  {
+    "bg": "placeholder.jpg",
+    "chars": ["rakuro"],
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……今日、ちょっと飲みすぎじゃない？"
+    ]
+  },
+  {
+    "chars": ["aya:back", "rakuro:front"],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "うん、んん？　そんなに飲んでないです～。",
+      "……たぶん。"
+    ]
+  },
+  {
+    "chars": ["rakuro:back", "aya:front:x=20"],
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "\"たぶん\"と言っている時点で、自分の限界を把握できていない証拠だ。",
+      "もうアウトに近い。"
+    ]
+  },
+  {
+    "chars": ["rakuro:back", "aya:front", "rakuro:back:x=-140", "aya:front:x=140"],
+    "speaker": "モブ客",
+    "speakerSub": "GUEST",
+    "text": [
+      "立ち絵のないモブは、名前だけでも喋らせられる。",
+      "四人並びの確認用。"
+    ]
+  }
+]
