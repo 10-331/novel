@@ -319,3 +319,19 @@ menuBtn.addEventListener("click", (e) => {
   menuBtn.classList.toggle("open", isMenuOpen);
   menuPanel.classList.toggle("hidden", !isMenuOpen);
 });
+
+document.getElementById("backBtn")?.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  if (index > 0) {
+    index--;
+    renderLine();
+  }
+});
+
+document.getElementById("skipBtn")?.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  index = script.length;
+  renderLine();
+});
