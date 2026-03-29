@@ -9,7 +9,7 @@
     ]
   },
   {
-    "chars": ["aya:back", "rakuro:front:pop"],
+    "chars": ["aya:back", "rakuro:front"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -18,12 +18,12 @@
     ]
   },
   {
-    "chars": ["rakuro:back", "ten:front", "renga:back:float"],
+    "chars": ["rakuro:back", "aya:front"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "<size=1.08>\"たぶん\"と言っている時点で、自分の限界を把握できていない証拠だ。",
-      "もうアウトに近い。</size>"
+      "\"たぶん\"と言っている時点で、自分の限界を把握できていない証拠だ。",
+      "もうアウトに近い。"
     ]
   }
 ]
