@@ -1,4 +1,6 @@
 const STORY_PATH = "./stories/ep01.json";
+const BASE_WIDTH = 1600;
+const BASE_HEIGHT = 900;
 
 const state = {
   story: [],
@@ -13,9 +15,14 @@ const state = {
 };
 
 const el = {
+  gameViewport: document.getElementById("gameViewport"),
+  gameStage: document.getElementById("gameStage"),
   bgImage: document.getElementById("bgImage"),
-  charLeft: document.getElementById("charLeft"),
-  charRight: document.getElementById("charRight"),
+  chars: [
+    document.getElementById("char1"),
+    document.getElementById("char2"),
+    document.getElementById("char3")
+  ],
   speakerJa: document.getElementById("speakerJa"),
   speakerEn: document.getElementById("speakerEn"),
   dialogueText: document.getElementById("dialogueText"),
@@ -38,6 +45,7 @@ async function init() {
     const res = await fetch(STORY_PATH);
     state.story = await res.json();
     bindEvents();
+    fitStage();
     renderLine();
   } catch (error) {
     console.error("ストーリー読込失敗:", error);
@@ -46,10 +54,17 @@ async function init() {
 }
 
 function bindEvents() {
+  window.addEventListener("resize", fitStage);
+  window.addEventListener("orientationchange", () => {
+    setTimeout(fitStage, 250);
+  });
+
   el.tapZone.addEventListener("click", handleTap);
+
   el.menuBtn.addEventListener("click", () => {
     el.menuPanel.classList.remove("hidden");
   });
+
   el.menuClose.addEventListener("click", () => {
     el.menuPanel.classList.add("hidden");
   });
@@ -82,6 +97,17 @@ function bindEvents() {
   el.closeStoryBtn.addEventListener("click", () => {
     el.episodeEnd.classList.add("hidden");
   });
+}
+
+function fitStage() {
+  if (!el.gameViewport || !el.gameStage) return;
+
+  const vw = el.gameViewport.clientWidth;
+  const vh = el.gameViewport.clientHeight;
+
+  const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
+
+  el.gameStage.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
 function handleTap() {
@@ -142,31 +168,77 @@ function applyScene(line) {
     el.bgImage.src = line.bg;
   }
 
-  const left = line.characters?.find(c => c.position === "left");
-  const right = line.characters?.find(c => c.position === "right");
+  renderCharacters(line.characters || [], line.activeId);
+}
 
-  if (left) {
-    el.charLeft.src = left.src;
-    el.charLeft.style.display = left.visible === false ? "none" : "block";
-  } else {
-    el.charLeft.style.display = "none";
-  }
+function renderCharacters(characters, activeId) {
+  const slots = getSlots(characters.length);
 
-  if (right) {
-    el.charRight.src = right.src;
-    el.charRight.style.display = right.visible === false ? "none" : "block";
-  } else {
-    el.charRight.style.display = "none";
-  }
+  el.chars.forEach((img, index) => {
+    const data = characters[index];
 
-  el.charLeft.classList.remove("is-active");
-  el.charRight.classList.remove("is-active");
+    img.className = "char hidden";
+    img.style.removeProperty("--char-scale");
+    img.style.removeProperty("bottom");
 
-  if (line.activeSide === "left") {
-    el.charLeft.classList.add("is-active");
-  } else if (line.activeSide === "right") {
-    el.charRight.classList.add("is-active");
-  }
+    if (!data) return;
+
+    img.src = data.src || "";
+    img.style.display = data.visible === false ? "none" : "block";
+    img.style.bottom = `${data.bottom ?? 0}px`;
+
+    const slotClass = slots[index];
+    if (slotClass) img.classList.add(slotClass);
+
+    if (data.id && activeId && data.id === activeId) {
+      img.classList.add("is-active");
+    }
+
+    if (data.motion?.depth === "front") {
+      img.classList.add("motion-front");
+    }
+
+    if (data.motion?.depth === "back") {
+      img.classList.add("motion-back");
+    }
+
+    if (data.motion?.effect === "pop") {
+      img.classList.add("motion-pop");
+    }
+
+    if (data.motion?.effect === "float") {
+      img.classList.add("motion-float");
+    }
+
+    if (typeof data.motion?.scale === "number") {
+      img.style.setProperty("--char-scale", data.motion.scale);
+    }
+
+    if (typeof data.motion?.x === "number") {
+      const baseLeft = getSlotLeftValue(slotClass);
+      img.style.left = `calc(${baseLeft}% + ${data.motion.x}px)`;
+    }
+
+    if (typeof data.motion?.y === "number") {
+      img.style.bottom = `${(data.bottom ?? 0) + data.motion.y}px`;
+    }
+
+    img.classList.remove("hidden");
+  });
+}
+
+function getSlots(count) {
+  if (count === 1) return ["slot-single"];
+  if (count === 2) return ["slot-left", "slot-right"];
+  return ["slot-left", "slot-center", "slot-right"];
+}
+
+function getSlotLeftValue(slotClass) {
+  if (slotClass === "slot-single") return 50;
+  if (slotClass === "slot-left") return 31.5;
+  if (slotClass === "slot-center") return 50;
+  if (slotClass === "slot-right") return 68.5;
+  return 50;
 }
 
 function applySpeaker(line) {
@@ -192,13 +264,8 @@ function appendToken(token) {
   span.className = `tx ${token.fontClass || ""}`;
   span.textContent = token.char;
 
-  if (token.color) {
-    span.style.color = token.color;
-  }
-
-  if (token.scale) {
-    span.style.fontSize = `${token.scale}em`;
-  }
+  if (token.color) span.style.color = token.color;
+  if (token.scale) span.style.fontSize = `${token.scale}em`;
 
   el.dialogueText.appendChild(span);
 }
@@ -221,9 +288,7 @@ function finishTyping() {
 
   if (state.isAutoSkip) {
     setTimeout(() => {
-      if (state.isLineComplete) {
-        proceedToNext();
-      }
+      if (state.isLineComplete) proceedToNext();
     }, 450);
   }
 }
