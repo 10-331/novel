@@ -131,9 +131,9 @@ img{
   opacity: 1;
   filter: none;
   transition:
-    transform .28s ease,
-    left .28s ease,
-    bottom .28s ease;
+    left .12s linear,
+    bottom .12s linear,
+    transform .12s linear;
 }
 
 .char.slot-single{
