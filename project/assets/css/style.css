@@ -1,6 +1,6 @@
 :root{
-  --viewport-w: 1600;
-  --viewport-h: 900;
+  --base-w: 1600;
+  --base-h: 900;
 
   --text: #ffffff;
   --panel-strong: rgba(10,10,14,.88);
@@ -19,7 +19,7 @@
 html, body{
   margin: 0;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   background: #111;
   color: var(--text);
   font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
@@ -66,8 +66,19 @@ img{
 
 .game-viewport{
   position: relative;
-  width: min(100vw, calc(100vh * (var(--viewport-w) / var(--viewport-h))));
-  aspect-ratio: calc(var(--viewport-w) / var(--viewport-h));
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.game-stage{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1600px;
+  height: 900px;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) scale(1);
   overflow: hidden;
   background: #000;
 }
@@ -102,7 +113,7 @@ img{
   left: 0;
   right: 0;
   bottom: 0;
-  height: 36%;
+  height: 320px;
   background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.18) 35%, rgba(0,0,0,.50) 100%);
 }
 
@@ -115,27 +126,58 @@ img{
   bottom: 0;
   width: auto;
   max-width: none;
-  max-height: 86%;
+  max-height: 780px;
   object-fit: contain;
-  transition: opacity .25s ease, filter .25s ease, transform .25s ease;
   opacity: .88;
   filter: brightness(.72);
+  transition:
+    opacity .25s ease,
+    filter .25s ease,
+    transform .28s ease,
+    left .28s ease,
+    bottom .28s ease;
 }
 
-/* 参考画像寄せ: 左は中央寄り、右はやや中央寄り */
-.char-left{
+/* 自動配置の基準 */
+.char.slot-single{
+  left: 50%;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
+}
+
+.char.slot-left{
   left: 31.5%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scale(var(--char-scale, 1));
 }
 
-.char-right{
-  left: 67.8%;
-  transform: translateX(-50%);
+.char.slot-center{
+  left: 50%;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
+}
+
+.char.slot-right{
+  left: 68.5%;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
 }
 
 .char.is-active{
   opacity: 1;
   filter: brightness(1);
+}
+
+.char.motion-front{
+  --char-scale: 1.08;
+}
+
+.char.motion-back{
+  --char-scale: .92;
+}
+
+.char.motion-pop{
+  animation: charPop .35s ease;
+}
+
+.char.motion-float{
+  animation: charFloat 1.8s ease-in-out infinite;
 }
 
 .top-ui{
@@ -145,8 +187,8 @@ img{
 .icon-btn,
 .menu-toggle{
   position: absolute;
-  width: clamp(42px, 4.1vw, 58px);
-  height: clamp(42px, 4.1vw, 58px);
+  width: 58px;
+  height: 58px;
   pointer-events: auto;
 }
 
@@ -157,13 +199,13 @@ img{
 }
 
 .icon-left{
-  top: clamp(18px, 2vw, 28px);
-  left: clamp(18px, 2vw, 28px);
+  top: 22px;
+  left: 22px;
 }
 
 .icon-right{
-  top: clamp(18px, 2vw, 28px);
-  right: clamp(18px, 2vw, 28px);
+  top: 22px;
+  right: 22px;
 }
 
 .menu-toggle{
@@ -171,7 +213,7 @@ img{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: clamp(4px, .35vw, 6px);
+  gap: 5px;
   background: rgba(35,35,40,.96);
   border-radius: 6px;
 }
@@ -186,8 +228,8 @@ img{
 
 .dialogue-area{
   inset: auto 0 0 0;
-  height: 25.5%;
-  padding: 0 clamp(42px, 4vw, 62px) clamp(18px, 1.8vw, 26px);
+  height: 235px;
+  padding: 0 52px 22px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -195,24 +237,24 @@ img{
   pointer-events: none;
 }
 
-/* 名前位置を参考画像寄せ */
+/* 名前位置は参考画像寄せ */
 .name-row{
   display: flex;
   align-items: baseline;
-  gap: .7em;
-  margin: 0 0 .35rem 0;
-  padding-left: 22%;
+  gap: 10px;
+  margin: 0 0 6px 0;
+  padding-left: 410px;
 }
 
 .speaker-ja{
-  font-size: clamp(24px, 2.45vw, 42px);
+  font-size: 36px;
   font-weight: 700;
   letter-spacing: .03em;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
 .speaker-en{
-  font-size: clamp(12px, 1.05vw, 20px);
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: .03em;
   color: var(--accent);
@@ -221,32 +263,32 @@ img{
 
 .dialogue-line-image{
   width: 100%;
-  margin-bottom: .7rem;
-  padding-left: 22%;
-  padding-right: 18%;
+  margin-bottom: 10px;
+  padding-left: 368px;
+  padding-right: 300px;
 }
 
 .dialogue-line-image img{
   width: 100%;
-  height: clamp(10px, .9vw, 14px);
+  height: 12px;
   object-fit: fill;
   opacity: .96;
 }
 
+/* 3行・1行30文字前後想定 */
 .text-row{
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
 }
 
 .dialogue-text{
-  width: 100%;
-  min-height: 3.8em;
-  padding-left: 22%;
-  padding-right: 18%;
-  font-size: clamp(18px, 1.7vw, 29px);
-  line-height: 1.78;
-  letter-spacing: .03em;
+  width: 30em;
+  max-width: 30em;
+  min-height: calc(1.72em * 3);
+  padding-left: 410px;
+  font-size: 24px;
+  line-height: 1.72;
+  letter-spacing: .02em;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   word-break: break-word;
   white-space: normal;
@@ -266,25 +308,25 @@ img{
 
 .next-indicator{
   position: absolute;
-  right: clamp(28px, 3vw, 44px);
-  bottom: clamp(14px, 1.6vw, 22px);
-  width: clamp(50px, 4.2vw, 68px);
+  right: 34px;
+  bottom: 16px;
+  width: 62px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .15rem;
+  gap: 2px;
   pointer-events: none;
   animation: nextFloat 1.8s ease-in-out infinite;
 }
 
 .next-indicator img{
-  width: clamp(22px, 1.8vw, 30px);
-  height: clamp(22px, 1.8vw, 30px);
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 
 .next-indicator span{
-  font-size: clamp(10px, .82vw, 13px);
+  font-size: 12px;
   color: var(--accent);
   font-weight: 700;
   letter-spacing: .08em;
@@ -298,14 +340,14 @@ img{
 
 .skip-banner{
   position: absolute;
-  top: clamp(22px, 2.2vw, 32px);
+  top: 26px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
   padding: .55rem .9rem;
   border-radius: 999px;
   background: rgba(0,0,0,.62);
-  font-size: clamp(12px, 1vw, 15px);
+  font-size: 14px;
   letter-spacing: .08em;
 }
 
@@ -391,53 +433,29 @@ img{
   }
 }
 
-/* タブレット横 */
-@media (max-width: 1180px){
-  .game-viewport{
-    width: 100vw;
-    height: auto;
-    aspect-ratio: 16 / 9;
+@keyframes charPop{
+  0%{
+    transform: translateX(-50%) scale(.92);
   }
-
-  .char{
-    max-height: 84%;
+  60%{
+    transform: translateX(-50%) scale(1.1);
   }
-
-  .char-left{
-    left: 31%;
-  }
-
-  .char-right{
-    left: 68%;
-  }
-
-  .dialogue-area{
-    height: 27%;
-    padding: 0 26px calc(16px + var(--safe-bottom));
-  }
-
-  .name-row{
-    padding-left: 18%;
-  }
-
-  .dialogue-line-image{
-    padding-left: 18%;
-    padding-right: 14%;
-  }
-
-  .dialogue-text{
-    padding-left: 18%;
-    padding-right: 14%;
-    font-size: clamp(16px, 1.9vw, 24px);
+  100%{
+    transform: translateX(-50%) scale(var(--char-scale, 1));
   }
 }
 
-/* スマホ・タブレット縦持ち時は横画面前提の案内 */
-@media (orientation: portrait){
-  .game-shell{
-    padding: 0;
+@keyframes charFloat{
+  0%,100%{
+    transform: translateX(-50%) translateY(0) scale(var(--char-scale, 1));
   }
+  50%{
+    transform: translateX(-50%) translateY(-6px) scale(var(--char-scale, 1));
+  }
+}
 
+/* 縦持ちは横画面案内 */
+@media (orientation: portrait){
   .game-viewport{
     display: none;
   }
@@ -457,102 +475,5 @@ img{
     letter-spacing: .08em;
     text-align: center;
     z-index: 9999;
-  }
-}
-
-/* スマホ横 */
-@media (max-height: 520px) and (orientation: landscape){
-  .game-shell{
-    padding:
-      max(4px, var(--safe-top))
-      max(4px, var(--safe-right))
-      max(4px, var(--safe-bottom))
-      max(4px, var(--safe-left));
-  }
-
-  .game-viewport{
-    width: 100vw;
-    height: 100vh;
-    aspect-ratio: auto;
-  }
-
-  .icon-btn,
-  .menu-toggle{
-    width: 36px;
-    height: 36px;
-  }
-
-  .icon-left{
-    top: 12px;
-    left: 12px;
-  }
-
-  .icon-right{
-    top: 12px;
-    right: 12px;
-  }
-
-  .char{
-    max-height: 83%;
-  }
-
-  .char-left{
-    left: 30.5%;
-  }
-
-  .char-right{
-    left: 69%;
-  }
-
-  .dialogue-area{
-    height: 29%;
-    padding: 0 14px calc(10px + var(--safe-bottom));
-  }
-
-  .name-row{
-    gap: .55em;
-    margin-bottom: .2rem;
-    padding-left: 13%;
-  }
-
-  .speaker-ja{
-    font-size: 20px;
-  }
-
-  .speaker-en{
-    font-size: 11px;
-  }
-
-  .dialogue-line-image{
-    margin-bottom: .45rem;
-    padding-left: 13%;
-    padding-right: 10%;
-  }
-
-  .dialogue-line-image img{
-    height: 10px;
-  }
-
-  .dialogue-text{
-    min-height: 3.1em;
-    padding-left: 13%;
-    padding-right: 10%;
-    font-size: 15px;
-    line-height: 1.62;
-  }
-
-  .next-indicator{
-    right: 14px;
-    bottom: calc(8px + var(--safe-bottom));
-    width: 48px;
-  }
-
-  .next-indicator img{
-    width: 20px;
-    height: 20px;
-  }
-
-  .next-indicator span{
-    font-size: 9px;
   }
 }
