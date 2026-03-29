@@ -248,10 +248,6 @@ function applyScene(line) {
   renderCharacters(parsedCharacters);
 }
 
-  const parsedCharacters = parseChars(line.chars || []);
-  renderCharacters(parsedCharacters);
-}
-
 function resolveBgPath(bg) {
   if (bg.startsWith("./") || bg.startsWith("../") || bg.startsWith("http")) {
     return bg;
