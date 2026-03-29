@@ -32,7 +32,6 @@ let isTyping = false;
 let typingTimer = null;
 let currentFullText = "";
 
-// 行ごとの状態保持
 let currentBg = "placeholder.jpg";
 let currentChars = [];
 
@@ -79,6 +78,10 @@ function updateOrientation() {
 }
 
 function renderLine() {
+  while (index < script.length && script[index]?.disabled === true) {
+    index++;
+  }
+
   const line = script[index];
   if (!line) return;
 
@@ -102,57 +105,131 @@ function renderLine() {
 }
 
 /**
- * chars の略記は読むが、表示上は front/back/x/y/scale/bottom を無視する。
- * つまり、今の JSON にそれらが残っていても横並び固定にする。
+ * 略記ルール
+ * "rakuro"
+ * "rakuro:left"
+ * "rakuro:right:x=20"
+ * "aya:center"
+ *
+ * 無視するもの:
+ * front / back / scale / y / bottom
  */
 function parseCharacter(entry) {
   const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
   const id = parts[0];
 
-  return {
+  const data = {
     id,
     src: CHARACTER_SOURCES[id] || "",
-    visible: true
+    visible: true,
+    position: null,
+    x: 0
   };
+
+  parts.slice(1).forEach(p => {
+    // 明示位置指定
+    if (
+      p === "left" ||
+      p === "right" ||
+      p === "center" ||
+      p === "single" ||
+      p === "far-left" ||
+      p === "far-right"
+    ) {
+      data.position = p;
+      return;
+    }
+
+    // 微調整
+    if (p.startsWith("x=")) {
+      data.x = Number(p.replace("x=", "")) || 0;
+      return;
+    }
+
+    // 非表示
+    if (p === "hide") {
+      data.visible = false;
+      return;
+    }
+
+    // front/back 等は仕様上無視
+  });
+
+  return data;
 }
 
 function renderCharacters(chars) {
   const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const slots = getSlots(visible.length);
+
+  // 明示位置が1人でもあるなら、その指定を優先
+  const hasExplicitPosition = visible.some(c => c.position);
 
   el.chars.forEach((img, i) => {
-    const c = visible[i];
-
     img.className = "char hidden";
     img.style.display = "none";
-    img.style.removeProperty("--char-scale");
     img.style.removeProperty("left");
     img.style.removeProperty("bottom");
+    img.style.removeProperty("transform");
+  });
 
-    if (!c) return;
+  if (hasExplicitPosition) {
+    visible.forEach((c, i) => {
+      const img = el.chars[i];
+      if (!img) return;
+
+      img.src = c.src;
+      img.style.display = "block";
+
+      const left = getPositionLeftValue(c.position || "center");
+      img.classList.add("char");
+      img.style.left = `calc(${left}% + ${c.x}px)`;
+      img.style.bottom = "52px";
+      img.style.transform = "translateX(-50%)";
+
+      img.classList.remove("hidden");
+    });
+
+    return;
+  }
+
+  // 明示位置がない場合のみ、人数ベースの自動配置
+  const slots = getAutoSlots(visible.length);
+
+  visible.forEach((c, i) => {
+    const img = el.chars[i];
+    if (!img) return;
 
     img.src = c.src;
     img.style.display = "block";
 
-    const slot = slots[i];
-    if (slot) img.classList.add(slot);
+    const left = getPositionLeftValue(slots[i]);
+    img.classList.add("char");
+    img.style.left = `calc(${left}% + ${c.x}px)`;
+    img.style.bottom = "52px";
+    img.style.transform = "translateX(-50%)";
 
     img.classList.remove("hidden");
   });
 }
 
-function getSlots(count) {
+function getAutoSlots(count) {
   if (count <= 0) return [];
-  if (count === 1) return ["slot-single"];
-  if (count === 2) return ["slot-left", "slot-right"];
-  if (count === 3) return ["slot-left", "slot-center", "slot-right"];
-  return ["slot-far-left", "slot-left", "slot-right", "slot-far-right"];
+  if (count === 1) return ["single"];
+  if (count === 2) return ["left", "right"];
+  if (count === 3) return ["left", "center", "right"];
+  return ["far-left", "left", "right", "far-right"];
 }
 
-/**
- * text 配列で意図的に分けた行は維持しつつ、
- * 各行だけ「最大30文字程度」を上限に折り返す。
- */
+function getPositionLeftValue(position) {
+  if (position === "single") return 50;
+  if (position === "far-left") return 14;
+  if (position === "left") return 32;
+  if (position === "center") return 50;
+  if (position === "right") return 68;
+  if (position === "far-right") return 86;
+  return 50;
+}
+
 function wrapTextLines(lines, limit = 30) {
   const wrappedLines = [];
 
@@ -218,32 +295,5 @@ el.stage.addEventListener("click", () => {
   }
 
   index++;
-  if (index >= script.length) return;
-
   renderLine();
 });
-
-
-const menuBtn = document.getElementById("menuBtn");
-const menuPanel = document.getElementById("menuPanel");
-const menuClose = document.getElementById("menuClose");
-
-if (menuBtn && menuPanel) {
-  menuBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menuPanel.classList.remove("hidden");
-  });
-}
-
-if (menuClose && menuPanel) {
-  menuClose.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menuPanel.classList.add("hidden");
-  });
-}
-
-
-if(line.disabled) {
-  next(); // または return だけでもOK
-  return;
-}
