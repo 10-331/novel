@@ -351,12 +351,6 @@ function renderCharacters(characters) {
       img.classList.add("motion-back");
     }
 
-    if (motion.effect === "pop") {
-      img.classList.add("motion-pop");
-    } else if (motion.effect === "float") {
-      img.classList.add("motion-float");
-    }
-
     const baseLeft = getSlotLeftValue(slotClass);
     const offsetX = motion.x ?? 0;
     img.style.left = `calc(${baseLeft}% + ${offsetX}px)`;
