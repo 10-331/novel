@@ -216,7 +216,7 @@ function startTyping(lines) {
   el.text.innerHTML = "";
   el.next.style.opacity = 0;
 
-  const full = lines.join("<br>");
+  const full = lines.join("\n");
   currentFullText = full.replace(/<[^>]+>/g, "");
 
   let i = 0;
