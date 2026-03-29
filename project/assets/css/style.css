@@ -164,14 +164,6 @@ img{
   --char-scale: .92;
 }
 
-.char.motion-pop{
-  animation: charPop .35s ease;
-}
-
-.char.motion-float{
-  animation: charFloat 1.8s ease-in-out infinite;
-}
-
 .top-ui{
   z-index: 20;
   pointer-events: none;
@@ -441,26 +433,5 @@ img{
   50%{
     transform: translateY(-5px);
     opacity: 1;
-  }
-}
-
-@keyframes charPop{
-  0%{
-    transform: translateX(-50%) scale(.92);
-  }
-  60%{
-    transform: translateX(-50%) scale(1.1);
-  }
-  100%{
-    transform: translateX(-50%) scale(var(--char-scale, 1));
-  }
-}
-
-@keyframes charFloat{
-  0%,100%{
-    transform: translateX(-50%) translateY(0) scale(var(--char-scale, 1));
-  }
-  50%{
-    transform: translateX(-50%) translateY(-6px) scale(var(--char-scale, 1));
   }
 }
