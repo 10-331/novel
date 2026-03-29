@@ -379,37 +379,3 @@ el.stage.addEventListener("click", () => {
   index++;
   renderLine();
 });
-
-const menuBtn = document.getElementById("menuBtn");
-const menuPanel = document.getElementById("menuPanel");
-
-let isMenuOpen = false;
-
-menuBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-
-  isMenuOpen = !isMenuOpen;
-
-  menuBtn.classList.toggle("open", isMenuOpen);
-  menuPanel.classList.toggle("hidden", !isMenuOpen);
-});
-
-document.getElementById("backBtn")?.addEventListener("click", (e) => {
-  e.stopPropagation();
-
-  if (index > 0) {
-    index--;
-    renderLine();
-  }
-});
-
-document.getElementById("skipBtn")?.addEventListener("click", (e) => {
-  e.stopPropagation();
-
-  index = script.length;
-  renderLine();
-});
-
-function showEndChoice(){
-  document.getElementById("endChoiceOverlay").classList.remove("hidden");
-}
