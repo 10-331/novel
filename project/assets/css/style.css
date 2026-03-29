@@ -270,8 +270,8 @@ button{
 }
 
 .dialogue-text{
-  width: 30ic;
-  max-width: 30ic;
+  width: auto;
+  max-width: 30em; /* または 28〜32で微調整 */
   min-height: calc(1.62em * 3);
   padding-left: 430px;
   font-size: 24px;
