@@ -1,478 +1,103 @@
-:root{
-  --base-w: 1600;
-  --base-h: 900;
-
-  --text: #ffffff;
-  --panel-strong: rgba(10,10,14,.88);
-  --accent: #d9ff3f;
-}
-
-*{
-  box-sizing: border-box;
-}
-
-html, body{
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  background: #111;
-  color: var(--text);
-  font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-  overflow: hidden;
-}
-
-body{
-  min-height: 100dvh;
-}
-
-button{
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-img{
-  display: block;
-  max-width: 100%;
-}
-
-.hidden{
-  display: none !important;
-}
-
-.app{
-  width: 100vw;
-  height: 100dvh;
-  position: relative;
-  background:
-    radial-gradient(circle at 50% 30%, rgba(255,255,255,.06), transparent 35%),
-    linear-gradient(180deg, #1b1b21 0%, #0e0e12 100%);
-  overflow: hidden;
-}
-
-.game-shell{
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.game-viewport{
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.game-stage{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1600px;
-  height: 900px;
-  transform-origin: center center;
-  transform: translate(-50%, -50%) scale(1);
-  overflow: hidden;
-  background: #000;
-}
-
-/* すべて同じステージ上に載せる */
-.bg-layer,
-.char-layer,
-.top-ui,
-.dialogue-area,
-.tap-zone,
-.skip-banner,
-.menu-panel,
-.episode-end{
-  position: absolute;
-  inset: 0;
-}
-
-.bg-layer{
-  z-index: 1;
-}
-
-.bg-layer img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.bg-vignette{
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at center, transparent 48%, rgba(0,0,0,.16) 100%);
-}
-
-.bg-bottom-shadow{
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 320px;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.18) 35%, rgba(0,0,0,.50) 100%);
-}
-
-/* キャラ */
-.char-layer{
-  z-index: 5;
-  pointer-events: none;
-}
-
-.char{
-  position: absolute;
-  bottom: 0;
-  width: auto;
-  max-height: 780px;
-  object-fit: contain;
-  opacity: .88;
-  filter: brightness(.72);
-  transition:
-    opacity .25s ease,
-    filter .25s ease,
-    transform .28s ease,
-    left .28s ease,
-    bottom .28s ease;
-}
-
-.char.slot-single{
-  left: 50%;
-  transform: translateX(-50%) scale(var(--char-scale, 1));
-}
-
-.char.slot-left{
-  left: 31.5%;
-  transform: translateX(-50%) scale(var(--char-scale, 1));
-}
-
-.char.slot-center{
-  left: 50%;
-  transform: translateX(-50%) scale(var(--char-scale, 1));
-}
-
-.char.slot-right{
-  left: 68.5%;
-  transform: translateX(-50%) scale(var(--char-scale, 1));
-}
-
-.char.is-active{
-  opacity: 1;
-  filter: brightness(1);
-}
-
-.char.motion-front{
-  --char-scale: 1.08;
-}
-
-.char.motion-back{
-  --char-scale: .92;
-}
-
-.char.motion-pop{
-  animation: charPop .35s ease;
-}
-
-.char.motion-float{
-  animation: charFloat 1.8s ease-in-out infinite;
-}
-
-/* 上部UI */
-.top-ui{
-  z-index: 20;
-  pointer-events: none;
-}
-
-.icon-btn,
-.menu-toggle{
-  position: absolute;
-  width: 58px;
-  height: 58px;
-  pointer-events: auto;
-}
-
-.icon-btn img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.icon-left{
-  top: 22px;
-  left: 22px;
-}
-
-.icon-right{
-  top: 22px;
-  right: 22px;
-}
-
-.menu-toggle{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  background: rgba(35,35,40,.96);
-  border-radius: 6px;
-}
-
-.menu-toggle span{
-  display: block;
-  width: 48%;
-  height: 2px;
-  background: #ffffff;
-  border-radius: 999px;
-}
-
-/* 会話UI */
-.dialogue-area{
-  z-index: 25;
-  inset: auto 0 0 0;
-  height: 235px;
-  padding: 0 52px 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-
-.name-row{
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin: 0 0 6px 0;
-  padding-left: 410px;
-}
-
-.speaker-ja{
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: .03em;
-  text-shadow: 0 2px 8px rgba(0,0,0,.45);
-}
-
-.speaker-en{
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: .03em;
-  color: var(--accent);
-  text-shadow: 0 2px 8px rgba(0,0,0,.45);
-}
-
-.dialogue-line-image{
-  width: 100%;
-  margin-bottom: 10px;
-  padding-left: 368px;
-  padding-right: 300px;
-}
-
-.dialogue-line-image img{
-  width: 100%;
-  height: 12px;
-  object-fit: fill;
-  opacity: .96;
-}
-
-.text-row{
-  display: flex;
-  align-items: flex-start;
-}
-
-.dialogue-text{
-  width: 30em;
-  max-width: 30em;
-  min-height: calc(1.72em * 3);
-  padding-left: 410px;
-  font-size: 24px;
-  line-height: 1.72;
-  letter-spacing: .02em;
-  text-shadow: 0 2px 10px rgba(0,0,0,.55);
-  word-break: break-word;
-  white-space: pre-wrap;
-}
-
-.dialogue-text .tx{
-  display: inline;
-}
-
-.dialogue-text .font-serif{
-  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-}
-
-.dialogue-text .font-sans{
-  font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-}
-
-.next-indicator{
-  position: absolute;
-  right: 34px;
-  bottom: 16px;
-  width: 62px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  pointer-events: none;
-  animation: nextFloat 1.8s ease-in-out infinite;
-}
-
-.next-indicator img{
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-
-.next-indicator span{
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 700;
-  letter-spacing: .08em;
-}
-
-/* タップ判定 */
-.tap-zone{
-  z-index: 15;
-  inset: 0;
-  background: transparent;
-}
-
-/* オーバーレイ類 */
-.skip-banner{
-  position: absolute;
-  top: 26px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 40;
-  padding: .55rem .9rem;
-  border-radius: 999px;
-  background: rgba(0,0,0,.62);
-  font-size: 14px;
-  letter-spacing: .08em;
-}
-
-.menu-panel,
-.episode-end{
-  z-index: 50;
-  background: rgba(0,0,0,.52);
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.menu-card,
-.episode-end-card{
-  width: min(92%, 520px);
-  background: var(--panel-strong);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 20px;
-  padding: 24px 20px;
-  box-shadow: 0 18px 50px rgba(0,0,0,.36);
-}
-
-.menu-card{
-  position: relative;
-}
-
-.menu-card h2{
-  margin: 0 0 20px;
-  font-size: 1.1rem;
-  letter-spacing: .06em;
-}
-
-.menu-close{
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  font-size: 28px;
-  line-height: 1;
-}
-
-.menu-item{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-.menu-item input[type="range"]{
-  width: 180px;
-}
-
-.menu-btn,
-.episode-end-actions button{
-  width: 100%;
-  margin-top: 16px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.1);
-}
-
-.episode-end-card p{
-  margin: 0 0 18px;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.episode-end-actions{
-  display: grid;
-  gap: 12px;
-}
-
-/* 縦向きでも背景だけにはしない。案内を上に被せる */
-.orientation-overlay{
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: none;
-  place-items: center;
-  padding: 24px;
-  background: rgba(8,8,12,.82);
-  color: #fff;
-  font-size: clamp(18px, 5vw, 28px);
-  letter-spacing: .08em;
-  text-align: center;
-}
-
-.orientation-overlay.show{
-  display: grid;
-}
-
-@keyframes nextFloat{
-  0%, 100%{
-    transform: translateY(0);
-    opacity: .62;
-  }
-  50%{
-    transform: translateY(-5px);
-    opacity: 1;
-  }
-}
-
-@keyframes charPop{
-  0%{
-    transform: translateX(-50%) scale(.92);
-  }
-  60%{
-    transform: translateX(-50%) scale(1.1);
-  }
-  100%{
-    transform: translateX(-50%) scale(var(--char-scale, 1));
-  }
-}
-
-@keyframes charFloat{
-  0%,100%{
-    transform: translateX(-50%) translateY(0) scale(var(--char-scale, 1));
-  }
-  50%{
-    transform: translateX(-50%) translateY(-6px) scale(var(--char-scale, 1));
-  }
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Novel Story Prototype</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="game-shell">
+      <div class="game-viewport" id="gameViewport">
+        <div class="game-stage" id="gameStage">
+
+          <div class="bg-layer">
+            <img id="bgImage" src="./assets/images/bg/placeholder.jpg" alt="background" />
+            <div class="bg-vignette"></div>
+            <div class="bg-bottom-shadow"></div>
+          </div>
+
+          <div class="char-layer" id="charLayer">
+            <img id="char1" class="char hidden" alt="character 1" />
+            <img id="char2" class="char hidden" alt="character 2" />
+            <img id="char3" class="char hidden" alt="character 3" />
+          </div>
+
+          <div class="top-ui">
+            <button class="icon-btn icon-left" id="locationBtn" aria-label="location">
+              <img src="./assets/images/ui/location.png" alt="" />
+            </button>
+
+            <button class="menu-toggle icon-right" id="menuBtn" aria-label="menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+
+          <div class="dialogue-area">
+            <div class="name-row">
+              <div class="speaker-ja" id="speakerJa"></div>
+              <div class="speaker-en" id="speakerEn"></div>
+            </div>
+
+            <div class="dialogue-line-image">
+              <img src="./assets/images/ui/line.png" alt="" />
+            </div>
+
+            <div class="text-row">
+              <div class="dialogue-text" id="dialogueText"></div>
+            </div>
+
+            <button class="next-indicator hidden" id="nextBtn" aria-label="next">
+              <img src="./assets/images/ui/tap-next.png" alt="" />
+              <span>NEXT</span>
+            </button>
+          </div>
+
+          <button class="tap-zone" id="tapZone" aria-label="tap to continue"></button>
+
+          <div class="skip-banner hidden" id="skipBanner">SKIP ON</div>
+
+          <div class="menu-panel hidden" id="menuPanel">
+            <div class="menu-card">
+              <button class="menu-close" id="menuClose" aria-label="close menu">×</button>
+              <h2>MENU</h2>
+
+              <label class="menu-item">
+                <span>ストーリースキップ</span>
+                <input type="checkbox" id="skipToggle" />
+              </label>
+
+              <label class="menu-item">
+                <span>タイプ速度</span>
+                <input type="range" id="speedRange" min="8" max="60" step="1" value="24" />
+              </label>
+
+              <button class="menu-btn" id="restartBtn">最初から読む</button>
+            </div>
+          </div>
+
+          <div class="episode-end hidden" id="episodeEnd">
+            <div class="episode-end-card">
+              <p>この話はここまで。</p>
+              <div class="episode-end-actions">
+                <button id="readNextBtn">次のストーリーを読む</button>
+                <button id="closeStoryBtn">読まない</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="orientation-overlay" id="orientationOverlay">
+    横画面でご覧ください
+  </div>
+
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
