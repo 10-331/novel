@@ -18,7 +18,7 @@
     ]
   },
   {
-    "chars": ["rakuro:back", "aya:front:x=20"],
+    "chars": ["rakuro:front", "aya:back"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
