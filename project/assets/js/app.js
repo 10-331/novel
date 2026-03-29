@@ -222,3 +222,22 @@ el.stage.addEventListener("click", () => {
 
   renderLine();
 });
+
+
+const menuBtn = document.getElementById("menuBtn");
+const menuPanel = document.getElementById("menuPanel");
+const menuClose = document.getElementById("menuClose");
+
+if (menuBtn && menuPanel) {
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menuPanel.classList.remove("hidden");
+  });
+}
+
+if (menuClose && menuPanel) {
+  menuClose.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menuPanel.classList.add("hidden");
+  });
+}
