@@ -1,26 +1,71 @@
-function startTyping(lines) {
-  clearTimeout(typingTimer);
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Novel Story Prototype</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="game-shell">
+      <div class="game-viewport" id="gameViewport">
+        <div class="game-stage" id="stage">
 
-  el.text.textContent = "";
-  el.next.style.opacity = 0;
+          <div class="bg-layer">
+            <img id="bg" src="./assets/images/bg/placeholder.jpg" alt="background" />
+            <div class="bg-vignette"></div>
+            <div class="bg-bottom-shadow"></div>
+          </div>
 
-  const full = lines.join("\n");
-  currentFullText = full;
+          <div class="char-layer">
+            <img id="char1" class="char hidden" alt="character 1" />
+            <img id="char2" class="char hidden" alt="character 2" />
+            <img id="char3" class="char hidden" alt="character 3" />
+            <img id="char4" class="char hidden" alt="character 4" />
+          </div>
 
-  let i = 0;
-  isTyping = true;
+          <div class="top-ui">
+            <button class="icon-btn icon-left" type="button" aria-label="location">
+              <img src="./assets/images/ui/location.png" alt="" />
+            </button>
 
-  function step() {
-    if (i >= currentFullText.length) {
-      isTyping = false;
-      el.next.style.opacity = 1;
-      return;
-    }
+            <button class="menu-toggle icon-right" type="button" aria-label="menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
 
-    el.text.textContent += currentFullText[i];
-    i++;
-    typingTimer = setTimeout(step, 28);
-  }
+          <div class="dialogue-area">
+            <div class="name-row">
+              <div class="speaker-ja" id="nameMain"></div>
+              <div class="speaker-en" id="nameSub"></div>
+            </div>
 
-  step();
-}
+            <div class="dialogue-line-image">
+              <img src="./assets/images/ui/line.png" alt="" />
+            </div>
+
+            <div class="text-row">
+              <div class="dialogue-text" id="text"></div>
+            </div>
+
+            <div class="next-indicator" id="nextIndicator" aria-hidden="true">
+              <img src="./assets/images/ui/tap-next.png" alt="" />
+              <span>NEXT</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="orientation-overlay" id="orientationOverlay">
+    横画面でご覧ください
+  </div>
+
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
