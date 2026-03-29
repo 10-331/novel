@@ -56,7 +56,9 @@ window.addEventListener("orientationchange", () => {
 
 async function loadScript() {
   const res = await fetch("./assets/data/ep01.json");
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
   script = await res.json();
 }
 
@@ -78,12 +80,20 @@ function updateOrientation() {
 }
 
 function renderLine() {
-  while (index < script.length && script[index]?.disabled === true) {
+  while (index < script.length && script[index] && script[index].disabled === true) {
     index++;
   }
 
+  if (index >= script.length) {
+    el.nameMain.textContent = "";
+    el.nameSub.textContent = "";
+    el.text.textContent = "";
+    el.next.style.opacity = 0;
+    renderCharacters([]);
+    return;
+  }
+
   const line = script[index];
-  if (!line) return;
 
   if (line.bg) {
     currentBg = line.bg;
@@ -94,28 +104,19 @@ function renderLine() {
   }
 
   el.bg.src = `./assets/images/bg/${currentBg}`;
-
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
 
-  const parsed = (currentChars || []).map(parseCharacter);
-  renderCharacters(parsed);
+  const parsed = Array.isArray(currentChars)
+    ? currentChars.map(parseCharacter)
+    : [];
 
-  startTyping(line.text || []);
+  renderCharacters(parsed);
+  startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
 }
 
-/**
- * 略記ルール
- * "rakuro"
- * "rakuro:left"
- * "rakuro:right:x=20"
- * "aya:center"
- *
- * 無視するもの:
- * front / back / scale / y / bottom
- */
 function parseCharacter(entry) {
-  const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
+  const parts = String(entry).split(":").map(v => v.trim()).filter(Boolean);
   const id = parts[0];
 
   const data = {
@@ -126,8 +127,7 @@ function parseCharacter(entry) {
     x: 0
   };
 
-  parts.slice(1).forEach(p => {
-    // 明示位置指定
+  for (const p of parts.slice(1)) {
     if (
       p === "left" ||
       p === "right" ||
@@ -137,40 +137,39 @@ function parseCharacter(entry) {
       p === "far-right"
     ) {
       data.position = p;
-      return;
+      continue;
     }
 
-    // 微調整
     if (p.startsWith("x=")) {
-      data.x = Number(p.replace("x=", "")) || 0;
-      return;
+      const n = Number(p.replace("x=", ""));
+      data.x = Number.isFinite(n) ? n : 0;
+      continue;
     }
 
-    // 非表示
     if (p === "hide") {
       data.visible = false;
-      return;
+      continue;
     }
 
-    // front/back 等は仕様上無視
-  });
+    // front/back/scale/y/bottom などは無視
+  }
 
   return data;
 }
 
 function renderCharacters(chars) {
   const visible = chars.filter(c => c && c.visible !== false && c.src);
-
-  // 明示位置が1人でもあるなら、その指定を優先
   const hasExplicitPosition = visible.some(c => c.position);
 
-  el.chars.forEach((img, i) => {
+  el.chars.forEach((img) => {
     img.className = "char hidden";
     img.style.display = "none";
-    img.style.removeProperty("left");
-    img.style.removeProperty("bottom");
-    img.style.removeProperty("transform");
+    img.style.left = "";
+    img.style.bottom = "";
+    img.style.transform = "translateX(-50%)";
   });
+
+  if (visible.length === 0) return;
 
   if (hasExplicitPosition) {
     visible.forEach((c, i) => {
@@ -179,20 +178,17 @@ function renderCharacters(chars) {
 
       img.src = c.src;
       img.style.display = "block";
+      img.classList.add("char");
 
       const left = getPositionLeftValue(c.position || "center");
-      img.classList.add("char");
       img.style.left = `calc(${left}% + ${c.x}px)`;
       img.style.bottom = "52px";
       img.style.transform = "translateX(-50%)";
-
       img.classList.remove("hidden");
     });
-
     return;
   }
 
-  // 明示位置がない場合のみ、人数ベースの自動配置
   const slots = getAutoSlots(visible.length);
 
   visible.forEach((c, i) => {
@@ -201,13 +197,12 @@ function renderCharacters(chars) {
 
     img.src = c.src;
     img.style.display = "block";
+    img.classList.add("char");
 
     const left = getPositionLeftValue(slots[i]);
-    img.classList.add("char");
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = "52px";
     img.style.transform = "translateX(-50%)";
-
     img.classList.remove("hidden");
   });
 }
@@ -221,38 +216,51 @@ function getAutoSlots(count) {
 }
 
 function getPositionLeftValue(position) {
-  if (position === "single") return 50;
-  if (position === "far-left") return 14;
-  if (position === "left") return 32;
-  if (position === "center") return 50;
-  if (position === "right") return 68;
-  if (position === "far-right") return 86;
-  return 50;
+  switch (position) {
+    case "single":
+      return 50;
+    case "far-left":
+      return 14;
+    case "left":
+      return 32;
+    case "center":
+      return 50;
+    case "right":
+      return 68;
+    case "far-right":
+      return 86;
+    default:
+      return 50;
+  }
+}
+
+function wrapOneLine(rawLine, limit = 30) {
+  if (!rawLine) return [""];
+
+  const result = [];
+  let current = "";
+
+  for (const char of rawLine) {
+    current += char;
+    if (current.length >= limit) {
+      result.push(current);
+      current = "";
+    }
+  }
+
+  if (current) {
+    result.push(current);
+  }
+
+  return result;
 }
 
 function wrapTextLines(lines, limit = 30) {
   const wrappedLines = [];
 
   for (const rawLine of lines) {
-    if (!rawLine) {
-      wrappedLines.push("");
-      continue;
-    }
-
-    let current = "";
-
-    for (const char of rawLine) {
-      current += char;
-
-      if (current.length >= limit) {
-        wrappedLines.push(current);
-        current = "";
-      }
-    }
-
-    if (current) {
-      wrappedLines.push(current);
-    }
+    const chunks = wrapOneLine(String(rawLine || ""), limit);
+    wrappedLines.push(...chunks);
   }
 
   return wrappedLines.join("\n");
