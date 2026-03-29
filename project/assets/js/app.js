@@ -6,8 +6,8 @@ const BG_BASE_PATH = "./assets/images/bg/";
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png",
-  ten: "./assets/images/chars/ten.png",
-  renga: "./assets/images/chars/renga.png"
+   // ten: "./assets/images/chars/ten.png",
+   // renga: "./assets/images/chars/kuguri.png"
 };
 
 const state = {
@@ -34,8 +34,12 @@ const el = {
   orientationOverlay: document.getElementById("orientationOverlay"),
   bgImage: document.getElementById("bgImage"),
   chars: [
-    document.getElementById("char1"),
-    document.getElementById("char2")
+chars: [
+  document.getElementById("char1"),
+  document.getElementById("char2"),
+  document.getElementById("char3"),
+  document.getElementById("char4")
+],
   ],
   speakerJa: document.getElementById("speakerJa"),
   speakerEn: document.getElementById("speakerEn"),
@@ -266,6 +270,7 @@ function parseChars(chars) {
 function parseCharacterShort(entry) {
   const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
   const id = parts[0];
+
   const result = {
     id,
     src: CHARACTER_SOURCES[id] || "",
@@ -273,6 +278,35 @@ function parseCharacterShort(entry) {
     bottom: 0,
     motion: {}
   };
+
+  parts.slice(1).forEach(part => {
+    if (part === "front" || part === "back") {
+      result.motion.depth = part;
+      return;
+    }
+    if (part.startsWith("scale=")) {
+      result.motion.scale = Number(part.replace("scale=", ""));
+      return;
+    }
+    if (part.startsWith("x=")) {
+      result.motion.x = Number(part.replace("x=", ""));
+      return;
+    }
+    if (part.startsWith("y=")) {
+      result.motion.y = Number(part.replace("y=", ""));
+      return;
+    }
+    if (part.startsWith("bottom=")) {
+      result.bottom = Number(part.replace("bottom=", ""));
+      return;
+    }
+    if (part === "hide") {
+      result.visible = false;
+    }
+  });
+
+  return result;
+}
 
   parts.slice(1).forEach(part => {
     if (part === "front" || part === "back") {
@@ -317,10 +351,11 @@ function parseCharacterObject(entry) {
 }
 
 function renderCharacters(characters) {
-  const slots = getSlots(characters.length);
+  const visibleCharacters = characters.filter(c => c && c.visible !== false && c.src);
+  const slots = getSlots(visibleCharacters.length);
 
   el.chars.forEach((img, index) => {
-    const data = characters[index];
+    const data = visibleCharacters[index];
 
     img.className = "char hidden";
     img.style.removeProperty("--char-scale");
@@ -328,9 +363,9 @@ function renderCharacters(characters) {
     img.style.removeProperty("bottom");
     img.style.display = "none";
 
-    if (!data || data.visible === false) return;
+    if (!data) return;
 
-    img.src = data.src || "";
+    img.src = data.src;
     img.style.display = "block";
 
     const slotClass = slots[index];
@@ -360,16 +395,20 @@ function renderCharacters(characters) {
 }
 
 function getSlots(count) {
+  if (count <= 0) return [];
   if (count === 1) return ["slot-single"];
   if (count === 2) return ["slot-left", "slot-right"];
-  return ["slot-left", "slot-center", "slot-right"];
+  if (count === 3) return ["slot-left", "slot-center", "slot-right"];
+  return ["slot-far-left", "slot-left", "slot-right", "slot-far-right"];
 }
 
 function getSlotLeftValue(slotClass) {
   if (slotClass === "slot-single") return 50;
-  if (slotClass === "slot-left") return 31.5;
+  if (slotClass === "slot-far-left") return 20;
+  if (slotClass === "slot-left") return 38;
   if (slotClass === "slot-center") return 50;
-  if (slotClass === "slot-right") return 68.5;
+  if (slotClass === "slot-right") return 62;
+  if (slotClass === "slot-far-right") return 80;
   return 50;
 }
 
