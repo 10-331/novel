@@ -158,11 +158,6 @@ img{
   transform: translateX(-50%) scale(var(--char-scale, 1));
 }
 
-.char.is-active{
-  opacity: 1;
-  filter: brightness(1);
-}
-
 .char.motion-front{
   --char-scale: 1.08;
 }
