@@ -11,6 +11,15 @@ const el = {
   next: document.getElementById("nextIndicator"),
   overlay: document.getElementById("orientationOverlay"),
 
+  menuBtn: document.getElementById("menuBtn"),
+  menuPanel: document.getElementById("menuPanel"),
+  backBtn: document.getElementById("backBtn"),
+  skipBtn: document.getElementById("skipBtn"),
+
+  endChoiceOverlay: document.getElementById("endChoiceOverlay"),
+  continueBtn: document.getElementById("continueBtn"),
+  finishBtn: document.getElementById("finishBtn"),
+
   chars: [
     document.getElementById("char1"),
     document.getElementById("char2"),
@@ -18,7 +27,6 @@ const el = {
     document.getElementById("char4")
   ]
 };
-
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png"
@@ -35,10 +43,15 @@ let currentFullText = "";
 let currentBg = "placeholder.jpg";
 let currentChars = [];
 
+let isMenuOpen = false;
+let isEpisodeEnded = false;
+
 window.addEventListener("DOMContentLoaded", async () => {
   await loadScript();
   fitStage();
   updateOrientation();
+  setupMenu();
+  setupEndChoice();
   renderLine();
 });
 
@@ -84,14 +97,15 @@ function renderLine() {
     index++;
   }
 
-  if (index >= script.length) {
-    el.nameMain.textContent = "";
-    el.nameSub.textContent = "";
-    el.text.textContent = "";
-    el.next.style.opacity = 0;
-    renderCharacters([]);
-    return;
-  }
+if (index >= script.length) {
+  el.nameMain.textContent = "";
+  el.nameSub.textContent = "";
+  el.text.textContent = "";
+  el.next.style.opacity = 0;
+  renderCharacters([]);
+  showEndChoice();
+  return;
+}
 
   const line = script[index];
 
@@ -293,7 +307,67 @@ function startTyping(lines) {
   step();
 }
 
+function setupMenu() {
+  if (!el.menuBtn || !el.menuPanel) return;
+
+  el.menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    isMenuOpen = !isMenuOpen;
+    el.menuBtn.classList.toggle("open", isMenuOpen);
+    el.menuPanel.classList.toggle("hidden", !isMenuOpen);
+  });
+
+  el.menuPanel.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  el.backBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (index > 0) {
+      index--;
+      renderLine();
+    }
+    isMenuOpen = false;
+    el.menuBtn.classList.remove("open");
+    el.menuPanel.classList.add("hidden");
+  });
+
+  el.skipBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    index = script.length;
+    renderLine();
+    isMenuOpen = false;
+    el.menuBtn.classList.remove("open");
+    el.menuPanel.classList.add("hidden");
+  });
+}
+
+function setupEndChoice() {
+  el.continueBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    alert("次の話への遷移先を設定してください");
+  });
+
+  el.finishBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    alert("終わりにした後の遷移先を設定してください");
+  });
+
+  el.endChoiceOverlay?.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+}
+
+function showEndChoice() {
+  isEpisodeEnded = true;
+  el.endChoiceOverlay?.classList.remove("hidden");
+}
+
 el.stage.addEventListener("click", () => {
+  if (isMenuOpen || isEpisodeEnded) {
+    return;
+  }
+
   if (isTyping) {
     clearTimeout(typingTimer);
     el.text.textContent = currentFullText;
@@ -335,3 +409,7 @@ document.getElementById("skipBtn")?.addEventListener("click", (e) => {
   index = script.length;
   renderLine();
 });
+
+function showEndChoice(){
+  document.getElementById("endChoiceOverlay").classList.remove("hidden");
+}
