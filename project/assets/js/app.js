@@ -76,7 +76,7 @@ function bindEvents() {
   });
 
   el.readNextBtn.addEventListener("click", () => {
-    alert("ここは次話読込処理に差し替え。今は試作なのでアラート。");
+    alert("ここを次話読込処理に差し替える");
   });
 
   el.closeStoryBtn.addEventListener("click", () => {
@@ -85,8 +85,8 @@ function bindEvents() {
 }
 
 function handleTap() {
-  if (el.menuPanel && !el.menuPanel.classList.contains("hidden")) return;
-  if (el.episodeEnd && !el.episodeEnd.classList.contains("hidden")) return;
+  if (!el.menuPanel.classList.contains("hidden")) return;
+  if (!el.episodeEnd.classList.contains("hidden")) return;
 
   if (state.isTyping) {
     completeCurrentLine();
