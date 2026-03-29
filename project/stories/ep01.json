@@ -25,5 +25,26 @@
       "\"たぶん\"と言っている時点で、自分の限界を把握できていない証拠だ。",
       "もうアウトに近い。"
     ]
-  }
+  },
+  {
+  "chars": [
+    "aya:back",
+    "rakuro:front",
+    "ten:back",
+    "renga:back"
+  ],
+  "speaker": "落露",
+  "speakerSub": "RAKURO",
+  "text": [
+    "四人並ぶ場合もある。"
+  ]
+},
+  {
+  "chars": ["aya", "rakuro"],
+  "speaker": "店員",
+  "speakerSub": "STAFF",
+  "text": [
+    "お飲み物、ラストオーダーです。"
+  ]
+}
 ]
