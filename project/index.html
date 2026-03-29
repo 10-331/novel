@@ -9,30 +9,28 @@
 <body>
   <div class="app">
     <div class="game-shell">
-      <div class="game-viewport" id="gameViewport">
-        <div class="game-stage" id="gameStage">
+      <div class="game-viewport">
+        <div class="game-stage" id="stage">
 
           <div class="bg-layer">
-            <img id="bgImage" src="./assets/images/bg/placeholder.jpg" alt="background" />
+            <img id="bg" src="./assets/images/bg/placeholder.jpg" alt="background" />
             <div class="bg-vignette"></div>
             <div class="bg-bottom-shadow"></div>
           </div>
 
-          <div class="char-layer" id="charLayer">
-<div class="char-layer" id="charLayer">
-  <img id="char1" class="char hidden" alt="character 1" />
-  <img id="char2" class="char hidden" alt="character 2" />
-  <img id="char3" class="char hidden" alt="character 3" />
-  <img id="char4" class="char hidden" alt="character 4" />
-</div>
+          <div class="char-layer">
+            <img id="char1" class="char hidden" alt="character 1" />
+            <img id="char2" class="char hidden" alt="character 2" />
+            <img id="char3" class="char hidden" alt="character 3" />
+            <img id="char4" class="char hidden" alt="character 4" />
           </div>
 
           <div class="top-ui">
-            <button class="icon-btn icon-left" id="locationBtn" aria-label="location">
+            <button class="icon-btn icon-left" type="button" aria-label="location">
               <img src="./assets/images/ui/location.png" alt="" />
             </button>
 
-            <button class="menu-toggle icon-right" id="menuBtn" aria-label="menu">
+            <button class="menu-toggle icon-right" type="button" aria-label="menu">
               <span></span>
               <span></span>
               <span></span>
@@ -41,8 +39,8 @@
 
           <div class="dialogue-area">
             <div class="name-row">
-              <div class="speaker-ja" id="speakerJa"></div>
-              <div class="speaker-en" id="speakerEn"></div>
+              <div class="speaker-ja" id="nameMain"></div>
+              <div class="speaker-en" id="nameSub"></div>
             </div>
 
             <div class="dialogue-line-image">
@@ -50,45 +48,12 @@
             </div>
 
             <div class="text-row">
-              <div class="dialogue-text" id="dialogueText"></div>
+              <div class="dialogue-text" id="text"></div>
             </div>
 
-            <button class="next-indicator hidden" id="nextBtn" aria-label="next">
+            <div class="next-indicator" id="nextIndicator" aria-hidden="true">
               <img src="./assets/images/ui/tap-next.png" alt="" />
               <span>NEXT</span>
-            </button>
-          </div>
-
-          <button class="tap-zone" id="tapZone" aria-label="tap to continue"></button>
-
-          <div class="skip-banner hidden" id="skipBanner">SKIP ON</div>
-
-          <div class="menu-panel hidden" id="menuPanel">
-            <div class="menu-card">
-              <button class="menu-close" id="menuClose" aria-label="close menu">×</button>
-              <h2>MENU</h2>
-
-              <label class="menu-item">
-                <span>ストーリースキップ</span>
-                <input type="checkbox" id="skipToggle" />
-              </label>
-
-              <label class="menu-item">
-                <span>タイプ速度</span>
-                <input type="range" id="speedRange" min="8" max="60" step="1" value="24" />
-              </label>
-
-              <button class="menu-btn" id="restartBtn">最初から読む</button>
-            </div>
-          </div>
-
-          <div class="episode-end hidden" id="episodeEnd">
-            <div class="episode-end-card">
-              <p>この話はここまで。</p>
-              <div class="episode-end-actions">
-                <button id="readNextBtn">次のストーリーを読む</button>
-                <button id="closeStoryBtn">読まない</button>
-              </div>
             </div>
           </div>
 
