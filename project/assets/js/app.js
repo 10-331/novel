@@ -245,7 +245,7 @@ function applyScene(line) {
   }
 
   const parsedCharacters = parseChars(line.chars || []);
-  renderCharacters(parsedCharacters, line.active || null);
+  renderCharacters(parsedCharacters);
 }
 
 function resolveBgPath(bg) {
