@@ -115,27 +115,6 @@ button{
   );
 }
 
-/* 上下の黒帯 */
-.game-stage::before,
-.game-stage::after{
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 52px;
-  z-index: 2;
-  pointer-events: none;
-  background: #0a0b10;
-}
-
-.game-stage::before{
-  top: 0;
-}
-
-.game-stage::after{
-  bottom: 0;
-}
-
 /* ===== 立ち絵 ===== */
 
 .char-layer{
