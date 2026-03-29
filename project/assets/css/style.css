@@ -377,3 +377,41 @@ button{
 .stage-gradient.white::after{
   background: linear-gradient(to top, rgba(255,255,255,0.75), rgba(255,255,255,0));
 }
+
+
+.menu-panel{
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.52);
+}
+
+.menu-card{
+  width: 320px;
+  max-width: calc(100% - 32px);
+  padding: 24px 20px;
+  border-radius: 16px;
+  background: rgba(20,22,30,.96);
+  box-shadow: 0 12px 36px rgba(0,0,0,.35);
+}
+
+.menu-close{
+  display: block;
+  margin-left: auto;
+  font-size: 28px;
+  line-height: 1;
+  color: #fff;
+}
+
+.menu-item-btn{
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  text-align: center;
+}
