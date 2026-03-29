@@ -4,7 +4,7 @@
     "characters": [
       {
         "id": "aya",
-        "src": "../assets/images/chars/aya.png",
+        "src": "../assets/images/chars/rakuro.png",
         "visible": true,
         "bottom": 0,
         "motion": {
@@ -13,10 +13,10 @@
         }
       }
     ],
-    "activeId": "aya",
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": "……ここ、どこだっけ。"
+    "activeId": "rakuro",
+    "speaker": " 落露",
+    "speakerSub": "RAKURO",
+    "text": "……今日、ちょっと飲みすぎじゃない？"
   },
   {
     "bg": "../assets/images/bg/office_day.jpg",
@@ -32,8 +32,8 @@
         }
       },
       {
-        "id": "ten",
-        "src": "../assets/images/chars/ten.png",
+        "id": "rakuro",
+        "src": "../assets/images/chars/rakuro.png",
         "visible": true,
         "bottom": 0,
         "motion": {
@@ -43,17 +43,17 @@
         }
       }
     ],
-    "activeId": "ten",
-    "speaker": "添",
-    "speakerSub": "TEN",
-    "text": "起きました？ <color=#d9ff3f>やっと</color>。"
+    "activeId": "aya",
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": "うん、んん？　そんなに飲んでないです～。  /n……たぶん。"
   },
   {
     "bg": "../assets/images/bg/office_day.jpg",
     "characters": [
       {
-        "id": "aya",
-        "src": "../assets/images/chars/aya.png",
+        "id": "rakuro",
+        "src": "../assets/images/chars/rakuro.png",
         "visible": true,
         "bottom": 0,
         "motion": {
@@ -83,9 +83,9 @@
         }
       }
     ],
-    "activeId": "aya",
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": "<size=1.08>そんな言い方、しなくてもいいでしょ。</size>"
+    "activeId": "rakuro",
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": "<size=1.08>"たぶん"と言っている辞典で、自分の限界を把握できていない証拠だ。/nもうアウトに近い。</size>"
   }
 ]
