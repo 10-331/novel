@@ -2,21 +2,36 @@ const STORY_PATH = "./stories/ep01.json";
 const BASE_WIDTH = 1600;
 const BASE_HEIGHT = 900;
 
+const BG_BASE_PATH = "./assets/images/bg/";
+const CHARACTER_SOURCES = {
+  aya: "./assets/images/chars/aya.png",
+  rakuro: "./assets/images/chars/rakuro.png",
+  ten: "./assets/images/chars/ten.png",
+  renga: "./assets/images/chars/renga.png"
+};
+
 const state = {
   story: [],
   index: 0,
   isTyping: false,
   isLineComplete: false,
   isAutoSkip: false,
-  typeSpeed: 28,
+  typeSpeed: 24,
   typingTimer: null,
   tokens: [],
-  currentTokenIndex: 0
+  currentTokenIndex: 0,
+  sceneState: {
+    bg: "placeholder.jpg",
+    chars: [],
+    speaker: "",
+    speakerSub: ""
+  }
 };
 
 const el = {
   gameViewport: document.getElementById("gameViewport"),
   gameStage: document.getElementById("gameStage"),
+  orientationOverlay: document.getElementById("orientationOverlay"),
   bgImage: document.getElementById("bgImage"),
   chars: [
     document.getElementById("char1"),
@@ -43,20 +58,32 @@ const el = {
 async function init() {
   try {
     const res = await fetch(STORY_PATH);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state.story = await res.json();
+
     bindEvents();
     fitStage();
+    updateOrientationOverlay();
     renderLine();
   } catch (error) {
     console.error("ストーリー読込失敗:", error);
-    el.dialogueText.textContent = "ストーリーの読み込みに失敗しました。";
+    if (el.dialogueText) {
+      el.dialogueText.textContent = "ストーリーの読み込みに失敗しました。";
+    }
   }
 }
 
 function bindEvents() {
-  window.addEventListener("resize", fitStage);
+  window.addEventListener("resize", () => {
+    fitStage();
+    updateOrientationOverlay();
+  });
+
   window.addEventListener("orientationchange", () => {
-    setTimeout(fitStage, 250);
+    setTimeout(() => {
+      fitStage();
+      updateOrientationOverlay();
+    }, 250);
   });
 
   el.tapZone.addEventListener("click", handleTap);
@@ -85,6 +112,12 @@ function bindEvents() {
   el.restartBtn.addEventListener("click", () => {
     clearTyping();
     state.index = 0;
+    state.sceneState = {
+      bg: "placeholder.jpg",
+      chars: [],
+      speaker: "",
+      speakerSub: ""
+    };
     el.episodeEnd.classList.add("hidden");
     el.menuPanel.classList.add("hidden");
     renderLine();
@@ -104,10 +137,16 @@ function fitStage() {
 
   const vw = el.gameViewport.clientWidth;
   const vh = el.gameViewport.clientHeight;
+  if (!vw || !vh) return;
 
   const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
-
   el.gameStage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+
+function updateOrientationOverlay() {
+  if (!el.orientationOverlay) return;
+  const isPortrait = window.innerHeight > window.innerWidth;
+  el.orientationOverlay.classList.toggle("show", isPortrait);
 }
 
 function handleTap() {
@@ -146,13 +185,16 @@ function showEpisodeEnd() {
 function renderLine() {
   clearTyping();
 
-  const line = state.story[state.index];
-  if (!line) return;
+  const rawLine = state.story[state.index];
+  if (!rawLine) return;
+
+  const line = normalizeLine(rawLine);
 
   applyScene(line);
   applySpeaker(line);
 
-  state.tokens = tokenizeRichText(line.text || "");
+  const normalizedText = normalizeText(line.text);
+  state.tokens = tokenizeRichText(normalizedText);
   state.currentTokenIndex = 0;
   state.isTyping = true;
   state.isLineComplete = false;
@@ -163,12 +205,116 @@ function renderLine() {
   typeNextToken();
 }
 
-function applyScene(line) {
-  if (line.bg) {
-    el.bgImage.src = line.bg;
+function normalizeLine(rawLine) {
+  const line = { ...rawLine };
+
+  if (line.bg == null) {
+    line.bg = state.sceneState.bg;
+  } else {
+    state.sceneState.bg = line.bg;
   }
 
-  renderCharacters(line.characters || [], line.activeId);
+  if (line.chars == null) {
+    line.chars = state.sceneState.chars;
+  } else {
+    state.sceneState.chars = structuredCloneSafe(line.chars);
+  }
+
+  if (line.speaker == null) {
+    line.speaker = state.sceneState.speaker;
+  } else {
+    state.sceneState.speaker = line.speaker;
+  }
+
+  if (line.speakerSub == null) {
+    line.speakerSub = state.sceneState.speakerSub;
+  } else {
+    state.sceneState.speakerSub = line.speakerSub;
+  }
+
+  return line;
+}
+
+function structuredCloneSafe(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function applyScene(line) {
+  if (line.bg) {
+    el.bgImage.src = resolveBgPath(line.bg);
+  }
+
+  const parsedCharacters = parseChars(line.chars || []);
+  renderCharacters(parsedCharacters, line.active || null);
+}
+
+function resolveBgPath(bg) {
+  if (bg.startsWith("./") || bg.startsWith("../") || bg.startsWith("http")) {
+    return bg;
+  }
+  return `${BG_BASE_PATH}${bg}`;
+}
+
+function parseChars(chars) {
+  return chars.map((entry) => {
+    if (typeof entry === "string") {
+      return parseCharacterShort(entry);
+    }
+    return parseCharacterObject(entry);
+  });
+}
+
+function parseCharacterShort(entry) {
+  const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
+  const id = parts[0];
+  const result = {
+    id,
+    src: CHARACTER_SOURCES[id] || "",
+    visible: true,
+    bottom: 0,
+    motion: {}
+  };
+
+  parts.slice(1).forEach(part => {
+    if (part === "front" || part === "back") {
+      result.motion.depth = part;
+      return;
+    }
+    if (part === "pop" || part === "float") {
+      result.motion.effect = part;
+      return;
+    }
+    if (part.startsWith("scale=")) {
+      result.motion.scale = Number(part.replace("scale=", ""));
+      return;
+    }
+    if (part.startsWith("x=")) {
+      result.motion.x = Number(part.replace("x=", ""));
+      return;
+    }
+    if (part.startsWith("y=")) {
+      result.motion.y = Number(part.replace("y=", ""));
+      return;
+    }
+    if (part.startsWith("bottom=")) {
+      result.bottom = Number(part.replace("bottom=", ""));
+    }
+  });
+
+  return result;
+}
+
+function parseCharacterObject(entry) {
+  const id = entry.id;
+  return {
+    id,
+    src: entry.src || CHARACTER_SOURCES[id] || "",
+    visible: entry.visible !== false,
+    bottom: entry.bottom ?? 0,
+    motion: {
+      ...(entry.motion || {})
+    }
+  };
 }
 
 function renderCharacters(characters, activeId) {
@@ -179,49 +325,46 @@ function renderCharacters(characters, activeId) {
 
     img.className = "char hidden";
     img.style.removeProperty("--char-scale");
+    img.style.removeProperty("left");
     img.style.removeProperty("bottom");
+    img.style.display = "none";
 
-    if (!data) return;
+    if (!data || data.visible === false) return;
 
     img.src = data.src || "";
-    img.style.display = data.visible === false ? "none" : "block";
-    img.style.bottom = `${data.bottom ?? 0}px`;
+    img.style.display = "block";
 
     const slotClass = slots[index];
     if (slotClass) img.classList.add(slotClass);
 
-    if (data.id && activeId && data.id === activeId) {
-      img.classList.add("is-active");
+    const baseBottom = data.bottom ?? 0;
+    const motion = data.motion || {};
+
+    img.style.bottom = `${baseBottom + (motion.y ?? 0)}px`;
+
+    if (typeof motion.scale === "number") {
+      img.style.setProperty("--char-scale", motion.scale);
     }
 
-    if (data.motion?.depth === "front") {
+    if (motion.depth === "front") {
       img.classList.add("motion-front");
-    }
-
-    if (data.motion?.depth === "back") {
+    } else if (motion.depth === "back") {
       img.classList.add("motion-back");
     }
 
-    if (data.motion?.effect === "pop") {
+    if (motion.effect === "pop") {
       img.classList.add("motion-pop");
-    }
-
-    if (data.motion?.effect === "float") {
+    } else if (motion.effect === "float") {
       img.classList.add("motion-float");
     }
 
-    if (typeof data.motion?.scale === "number") {
-      img.style.setProperty("--char-scale", data.motion.scale);
+    if (activeId && data.id === activeId) {
+      img.classList.add("is-active");
     }
 
-    if (typeof data.motion?.x === "number") {
-      const baseLeft = getSlotLeftValue(slotClass);
-      img.style.left = `calc(${baseLeft}% + ${data.motion.x}px)`;
-    }
-
-    if (typeof data.motion?.y === "number") {
-      img.style.bottom = `${(data.bottom ?? 0) + data.motion.y}px`;
-    }
+    const baseLeft = getSlotLeftValue(slotClass);
+    const offsetX = motion.x ?? 0;
+    img.style.left = `calc(${baseLeft}% + ${offsetX}px)`;
 
     img.classList.remove("hidden");
   });
@@ -244,6 +387,13 @@ function getSlotLeftValue(slotClass) {
 function applySpeaker(line) {
   el.speakerJa.textContent = line.speaker || "";
   el.speakerEn.textContent = line.speakerSub || "";
+}
+
+function normalizeText(text) {
+  if (Array.isArray(text)) {
+    return text.join("\n");
+  }
+  return text || "";
 }
 
 function typeNextToken() {
@@ -288,7 +438,9 @@ function finishTyping() {
 
   if (state.isAutoSkip) {
     setTimeout(() => {
-      if (state.isLineComplete) proceedToNext();
+      if (state.isLineComplete) {
+        proceedToNext();
+      }
     }, 450);
   }
 }
