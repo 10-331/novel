@@ -35,8 +35,7 @@ const el = {
   bgImage: document.getElementById("bgImage"),
   chars: [
     document.getElementById("char1"),
-    document.getElementById("char2"),
-    document.getElementById("char3")
+    document.getElementById("char2")
   ],
   speakerJa: document.getElementById("speakerJa"),
   speakerEn: document.getElementById("speakerEn"),
