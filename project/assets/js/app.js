@@ -56,7 +56,7 @@ window.addEventListener("orientationchange", () => {
 });
 
 async function loadScript() {
-  const res = await fetch("/data/ep01.json");
+  const res = await fetch("./assets/data/ep01.json");
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   script = await res.json();
 }
