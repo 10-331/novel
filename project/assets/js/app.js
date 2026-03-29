@@ -333,3 +333,17 @@ const el = {
     document.getElementById("char4")
   ]
 };
+
+const menuBtn = document.getElementById("menuBtn");
+const menuPanel = document.getElementById("menuPanel");
+
+let isMenuOpen = false;
+
+menuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  isMenuOpen = !isMenuOpen;
+
+  menuBtn.classList.toggle("open", isMenuOpen);
+  menuPanel.classList.toggle("hidden", !isMenuOpen);
+});
