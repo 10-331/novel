@@ -128,11 +128,9 @@ img{
   width: auto;
   max-height: 780px;
   object-fit: contain;
-  opacity: .88;
-  filter: brightness(.72);
+  opacity: 1;
+  filter: none;
   transition:
-    opacity .25s ease,
-    filter .25s ease,
     transform .28s ease,
     left .28s ease,
     bottom .28s ease;
