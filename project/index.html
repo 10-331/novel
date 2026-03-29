@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Novel Story Prototype</title>
-  <link rel="stylesheet" href="./assets/css/style.css" />
-</head>
 <body>
   <div class="app">
     <div class="game-shell">
       <div class="game-viewport" id="gameViewport">
         <div class="game-stage" id="stage">
-<div class="stage-gradient black" id="stageGradient"></div>
+          <div class="stage-gradient black" id="stageGradient"></div>
+
           <div class="bg-layer">
             <img id="bg" src="./assets/images/bg/placeholder.jpg" alt="background" />
             <div class="bg-vignette"></div>
@@ -30,19 +23,20 @@
               <img src="./assets/images/ui/location.png" alt="" />
             </button>
 
-<button class="menu-toggle icon-right" id="menuBtn" type="button" aria-label="menu">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
+            <button class="menu-toggle icon-right" id="menuBtn" type="button" aria-label="menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
 
-<div class="menu-panel hidden" id="menuPanel">
-  <div class="menu-card">
-    <h2>MENU</h2>
-    <button class="menu-item-btn" id="backBtn" type="button">戻る</button>
-    <button class="menu-item-btn" id="skipBtn" type="button">スキップ</button>
-  </div>
-</div>
+            <div class="menu-panel hidden" id="menuPanel">
+              <div class="menu-card">
+                <h2>MENU</h2>
+                <button class="menu-item-btn" id="backBtn" type="button">戻る</button>
+                <button class="menu-item-btn" id="skipBtn" type="button">スキップ</button>
+              </div>
+            </div>
+          </div>
 
           <div class="dialogue-area">
             <div class="name-row">
@@ -64,6 +58,14 @@
             </div>
           </div>
 
+          <div id="endChoiceOverlay" class="end-choice-overlay hidden">
+            <div class="end-choice-card">
+              <p class="end-choice-title">この先をどうする？</p>
+              <button id="continueBtn" type="button">続きを読む</button>
+              <button id="finishBtn" type="button">終わりにする</button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -74,12 +76,4 @@
   </div>
 
   <script src="./assets/js/app.js"></script>
-    <div id="endChoiceOverlay" class="end-choice-overlay hidden">
-  <div class="end-choice-card">
-    <p>この先をどうする？</p>
-    <button id="continueBtn">続きを読む</button>
-    <button id="finishBtn">終わりにする</button>
-  </div>
-</div>
 </body>
-</html>
