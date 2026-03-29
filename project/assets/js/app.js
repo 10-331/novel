@@ -305,3 +305,31 @@ el.stage.addEventListener("click", () => {
   index++;
   renderLine();
 });
+
+
+const el = {
+  viewport: document.getElementById("gameViewport"),
+  stage: document.getElementById("stage"),
+  bg: document.getElementById("bg"),
+  nameMain: document.getElementById("nameMain"),
+  nameSub: document.getElementById("nameSub"),
+  text: document.getElementById("text"),
+  next: document.getElementById("nextIndicator"),
+  overlay: document.getElementById("orientationOverlay"),
+
+  menuBtn: document.getElementById("menuBtn"),
+  menuPanel: document.getElementById("menuPanel"),
+  backBtn: document.getElementById("backBtn"),
+  skipBtn: document.getElementById("skipBtn"),
+
+  endChoiceOverlay: document.getElementById("endChoiceOverlay"),
+  continueBtn: document.getElementById("continueBtn"),
+  finishBtn: document.getElementById("finishBtn"),
+
+  chars: [
+    document.getElementById("char1"),
+    document.getElementById("char2"),
+    document.getElementById("char3"),
+    document.getElementById("char4")
+  ]
+};
