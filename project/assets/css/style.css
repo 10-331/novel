@@ -410,3 +410,25 @@ button{
 .menu-toggle.open span:nth-child(3){
   transform: translateY(-7px) rotate(-45deg);
 }
+
+.end-choice-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.6);
+}
+
+.end-choice-card{
+  background: #111;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.end-choice-card button{
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+}
