@@ -241,3 +241,9 @@ if (menuClose && menuPanel) {
     menuPanel.classList.add("hidden");
   });
 }
+
+
+if(line.disabled) {
+  next(); // または return だけでもOK
+  return;
+}
