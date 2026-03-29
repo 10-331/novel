@@ -1,7 +1,8 @@
-// ==========================
-// 要素取得
-// ==========================
+const BASE_WIDTH = 1600;
+const BASE_HEIGHT = 900;
+
 const el = {
+  viewport: document.getElementById("gameViewport"),
   stage: document.getElementById("stage"),
   bg: document.getElementById("bg"),
   nameMain: document.getElementById("nameMain"),
@@ -18,16 +19,12 @@ const el = {
   ]
 };
 
-// ==========================
-// キャラ画像
-// ==========================
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png"
   // 必要に応じて追加
 };
 
-// ==========================
 let script = [];
 let index = 0;
 
@@ -35,51 +32,75 @@ let isTyping = false;
 let typingTimer = null;
 let currentFullText = "";
 
-// ==========================
+// 行ごとの状態保持
+let currentBg = "placeholder.jpg";
+let currentChars = [];
+
 window.addEventListener("DOMContentLoaded", async () => {
   await loadScript();
+  fitStage();
   updateOrientation();
   renderLine();
 });
 
-window.addEventListener("resize", updateOrientation);
+window.addEventListener("resize", () => {
+  fitStage();
+  updateOrientation();
+});
 
-// ==========================
+window.addEventListener("orientationchange", () => {
+  setTimeout(() => {
+    fitStage();
+    updateOrientation();
+  }, 200);
+});
+
 async function loadScript() {
-  const res = await fetch("./assets/data/ep01.json");
+  const res = await fetch("./stories/ep01.json");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
   script = await res.json();
 }
 
-// ==========================
-function updateOrientation() {
-  if (!el.overlay) return;
+function fitStage() {
+  if (!el.viewport || !el.stage) return;
 
-  if (window.innerHeight > window.innerWidth) {
-    el.overlay.classList.add("show");
-  } else {
-    el.overlay.classList.remove("show");
-  }
+  const vw = el.viewport.clientWidth;
+  const vh = el.viewport.clientHeight;
+  if (!vw || !vh) return;
+
+  const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
+  el.stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
-// ==========================
+function updateOrientation() {
+  if (!el.overlay) return;
+  const isPortrait = window.innerHeight > window.innerWidth;
+  el.overlay.classList.toggle("show", isPortrait);
+}
+
 function renderLine() {
   const line = script[index];
   if (!line) return;
 
   if (line.bg) {
-    el.bg.src = `./assets/images/bg/${line.bg}`;
+    currentBg = line.bg;
   }
+
+  if (line.chars !== undefined) {
+    currentChars = line.chars;
+  }
+
+  el.bg.src = `./assets/images/bg/${currentBg}`;
 
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
 
-  const parsed = (line.chars || []).map(parseCharacter);
+  const parsed = (currentChars || []).map(parseCharacter);
   renderCharacters(parsed);
 
   startTyping(line.text || []);
 }
 
-// ==========================
 function parseCharacter(entry) {
   const parts = entry.split(":").map(v => v.trim()).filter(Boolean);
   const id = parts[0];
@@ -117,7 +138,6 @@ function parseCharacter(entry) {
   return data;
 }
 
-// ==========================
 function renderCharacters(chars) {
   const visible = chars.filter(c => c && c.visible !== false && c.src);
   const slots = getSlots(visible.length);
@@ -142,7 +162,7 @@ function renderCharacters(chars) {
     const motion = c.motion || {};
     const baseBottom = c.bottom ?? 0;
 
-    img.style.bottom = `${baseBottom + (motion.y ?? 0)}px`;
+    img.style.bottom = `${52 + baseBottom + (motion.y ?? 0)}px`;
 
     if (typeof motion.scale === "number") {
       img.style.setProperty("--char-scale", motion.scale);
@@ -156,7 +176,6 @@ function renderCharacters(chars) {
   });
 }
 
-// ==========================
 function getSlots(count) {
   if (count <= 0) return [];
   if (count === 1) return ["slot-single"];
@@ -175,7 +194,6 @@ function getSlotLeftValue(slot) {
   return 50;
 }
 
-// ==========================
 function startTyping(lines) {
   clearTimeout(typingTimer);
 
@@ -197,13 +215,12 @@ function startTyping(lines) {
 
     el.text.textContent += currentFullText[i];
     i++;
-    typingTimer = setTimeout(step, 28);
+    typingTimer = setTimeout(step, 26);
   }
 
   step();
 }
 
-// ==========================
 el.stage.addEventListener("click", () => {
   if (isTyping) {
     clearTimeout(typingTimer);
