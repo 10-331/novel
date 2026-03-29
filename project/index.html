@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Novel Story Prototype</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="game-shell" id="gameShell">
+      <div class="game-viewport" id="gameViewport">
+
+        <div class="bg-layer">
+          <img id="bgImage" src="./assets/images/bg/office_day.jpg" alt="background" />
+          <div class="bg-vignette"></div>
+          <div class="bg-bottom-shadow"></div>
+        </div>
+
+        <div class="char-layer" id="charLayer">
+          <img id="charLeft" class="char char-left" src="./assets/images/chars/left_char.png" alt="left character" />
+          <img id="charRight" class="char char-right" src="./assets/images/chars/right_char.png" alt="right character" />
+        </div>
+
+        <div class="top-ui">
+          <button class="icon-btn icon-left" id="locationBtn" aria-label="location">
+            <img src="./assets/images/ui/location.png" alt="" />
+          </button>
+
+          <button class="icon-btn icon-right" id="menuBtn" aria-label="menu">
+            <img src="./assets/images/ui/menu.png" alt="" />
+          </button>
+        </div>
+
+        <div class="dialogue-area" id="dialogueArea">
+          <div class="name-row">
+            <div class="speaker-ja" id="speakerJa">綾</div>
+            <div class="speaker-en" id="speakerEn">AYA</div>
+          </div>
+
+          <div class="dialogue-line"></div>
+
+          <div class="text-row">
+            <div class="dialogue-text" id="dialogueText"></div>
+
+            <button class="voice-btn" id="voiceBtn" aria-label="voice">
+              <span>🔊</span>
+            </button>
+          </div>
+
+          <button class="next-indicator hidden" id="nextBtn" aria-label="next">
+            <img src="./assets/images/ui/tap-next.png" alt="" />
+            <span>NEXT</span>
+          </button>
+        </div>
+
+        <button class="tap-zone" id="tapZone" aria-label="tap to continue"></button>
+
+        <div class="skip-banner hidden" id="skipBanner">SKIP ON</div>
+
+        <div class="menu-panel hidden" id="menuPanel">
+          <div class="menu-card">
+            <button class="menu-close" id="menuClose">×</button>
+            <h2>MENU</h2>
+
+            <label class="menu-item">
+              <span>ストーリースキップ</span>
+              <input type="checkbox" id="skipToggle" />
+            </label>
+
+            <label class="menu-item">
+              <span>タイプ速度</span>
+              <input type="range" id="speedRange" min="10" max="60" step="1" value="28" />
+            </label>
+
+            <button class="menu-btn" id="restartBtn">最初から読む</button>
+          </div>
+        </div>
+
+        <div class="episode-end hidden" id="episodeEnd">
+          <div class="episode-end-card">
+            <p>この話はここまで。</p>
+            <div class="episode-end-actions">
+              <button id="readNextBtn">次のストーリーを読む</button>
+              <button id="closeStoryBtn">読まない</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
