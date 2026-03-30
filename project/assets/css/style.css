@@ -132,6 +132,19 @@ button{
   opacity: 1;
 }
 
+.char.fade-out{
+  animation: charFadeOut .7s ease forwards;
+}
+
+@keyframes charFadeOut{
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+
 .char.fade-in{
   animation: charFadeIn 1s ease forwards;
 }
