@@ -67,7 +67,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     updateOrientation();
     setupMenu();
     setupEndChoice();
-    renderLine();
+    await renderLine();
   } catch (err) {
     console.error(err);
     alert("シナリオの読み込みに失敗しました");
@@ -134,8 +134,12 @@ async function renderLine() {
 
   const line = script[index];
 
-  if (line.bg) currentBg = line.bg;
-  if (line.chars !== undefined) currentChars = line.chars;
+  if (line.bg) {
+    currentBg = line.bg;
+  }
+  if (line.chars !== undefined) {
+    currentChars = line.chars;
+  }
 
   el.bg.src = `./assets/images/bg/${currentBg}`;
 
@@ -150,19 +154,22 @@ async function renderLine() {
       getToken: () => lineRenderToken
     });
 
-if (Array.isArray(line.motions) && line.motions.length > 0) {
-  await runMotions({
-    motions: line.motions,
-    state: characterState,
-    renderCharacters,
-    parseCharacter,
-    wait,
-    token,
-    getToken: () => lineRenderToken
-  });
+    if (token !== lineRenderToken) return;
+  } else if (Array.isArray(currentChars)) {
+    clearCharacters(characterState);
 
-  if (token !== lineRenderToken) return;
-}
+    const parsed = currentChars.map(parseCharacter);
+    parsed.forEach((c) => {
+      if (c.visible !== false) {
+        setCharacter(characterState, c);
+      }
+    });
+
+    renderCharacters(getVisibleCharacters(characterState));
+  } else {
+    clearCharacters(characterState);
+    renderCharacters([]);
+  }
 
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
@@ -257,13 +264,20 @@ function getAutoSlots(count) {
 
 function getPositionLeftValue(position) {
   switch (position) {
-    case "single": return 50;
-    case "far-left": return 14;
-    case "left": return 32;
-    case "center": return 50;
-    case "right": return 68;
-    case "far-right": return 86;
-    default: return 50;
+    case "single":
+      return 50;
+    case "far-left":
+      return 14;
+    case "left":
+      return 32;
+    case "center":
+      return 50;
+    case "right":
+      return 68;
+    case "far-right":
+      return 86;
+    default:
+      return 50;
   }
 }
 
@@ -315,7 +329,7 @@ function showEndChoice() {
   isEpisodeEnded = true;
 }
 
-el.stage.addEventListener("click", () => {
+el.stage.addEventListener("click", async () => {
   if (isMenuOpen || isEpisodeEnded) return;
 
   const now = Date.now();
@@ -331,5 +345,5 @@ el.stage.addEventListener("click", () => {
   }
 
   index++;
-  renderLine();
+  await renderLine();
 });
