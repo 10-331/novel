@@ -117,6 +117,13 @@ button{
 
 /* ===== 立ち絵 ===== */
 
+.char{
+  position: absolute;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
+  transform-origin: bottom center;
+  transition: transform .4s ease, opacity .4s ease;
+}
+
 .char-layer{
   z-index: 5;
   pointer-events: none;
