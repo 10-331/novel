@@ -46,7 +46,13 @@ export async function runMotions({
         const fadeIds = [];
 
         for (const t of motion.targets || []) {
-          const parsed = parseCharacter(`${t.id}:${t.to || "center"}`);
+          const parts = [t.id, t.to || "center"];
+
+          if (t.x !== undefined) parts.push(`x=${t.x}`);
+          if (t.y !== undefined) parts.push(`y=${t.y}`);
+          if (t.scale !== undefined) parts.push(`scale=${t.scale}`);
+
+          const parsed = parseCharacter(parts.join(":"));
           setCharacter(state, parsed);
           fadeIds.push(t.id);
         }
@@ -63,7 +69,10 @@ export async function runMotions({
 
           setCharacter(state, {
             ...current,
-            position: t.to ?? current.position
+            position: t.to ?? current.position,
+            x: t.x ?? current.x,
+            y: t.y ?? current.y,
+            scale: t.scale ?? current.scale
           });
         }
 
