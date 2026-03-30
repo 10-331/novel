@@ -21,7 +21,7 @@
       {
         "type": "move",
         "targets": [
-          { "id": "rakuro", "to": "left", "scale": 0.1 }
+          { "id": "rakuro", "to": "left", "scale": 0.075 }
         ],
         "duration": 500
       },
@@ -43,8 +43,7 @@
       "うん、んん？　まだそんなに飲んでないです～。",
       "……たぶん。"
     ]
-  }
-],
+  },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
