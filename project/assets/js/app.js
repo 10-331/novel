@@ -49,7 +49,6 @@ let isMenuOpen = false;
 let isEpisodeEnded = false;
 
 let skipAdvanceUntil = 0;
-
 let prevVisibleCharKeys = [];
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -195,8 +194,8 @@ function renderCharacters(chars) {
   const visible = chars.filter(c => c && c.visible !== false && c.src);
   const hasExplicitPosition = visible.some(c => c.position);
 
-  const currentKeys = visible.map((c) => {
-    const pos = c.position || "";
+  const currentKeys = visible.map((c, i) => {
+    const pos = c.position || (hasExplicitPosition ? "" : getAutoSlots(visible.length)[i]);
     const x = c.x || 0;
     const y = c.y || 0;
     return `${c.id}|${pos}|${x}|${y}`;
@@ -271,24 +270,6 @@ function renderCharacters(chars) {
   });
 
   prevVisibleCharKeys = currentKeys;
-}
-
-  const slots = getAutoSlots(visible.length);
-
-  visible.forEach((c, i) => {
-    const img = el.chars[i];
-    if (!img) return;
-
-    img.src = c.src;
-    img.style.display = "block";
-    img.classList.add("char");
-
-    const left = getPositionLeftValue(slots[i]);
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.transform = "translateX(-50%)";
-    img.classList.remove("hidden");
-  });
 }
 
 function getAutoSlots(count) {
