@@ -66,8 +66,10 @@ let typingTimer = null;
 let currentFullText = "";
 
 let currentBg = "placeholder.jpg";
+let currentChars = [];
 let prevBg = null;
 let isFlashbackActive = false;
+let hasInitialRenderCompleted = false;
 let isMotionPlaying = false;
 
 let isMenuOpen = false;
@@ -80,12 +82,19 @@ const flashOverlay = document.getElementById("flashOverlay");
 const flashFrame = document.getElementById("flashFrame");
 
 window.addEventListener("DOMContentLoaded", async () => {
-  await loadScript();
-  fitStage();
-  setupMenu();
-  setupEndChoice();
-  await renderLine();
-  el.stage?.classList.add("is-ready");
+  try {
+    await loadScript();
+    fitStage();
+    setupMenu();
+    setupEndChoice();
+    await renderLine();
+
+    hasInitialRenderCompleted = true;
+    el.stage?.classList.add("is-ready");
+  } catch (err) {
+    console.error(err);
+    alert("シナリオの読み込みに失敗しました");
+  }
 });
 
 async function loadScript() {
@@ -149,15 +158,40 @@ async function renderLine() {
   startTyping(line.text || []);
 }
 
+function parseCharacter(entry) {
+  const parts = String(entry).split(":").map(v => v.trim()).filter(Boolean);
+  const id = parts[0];
+
+  const data = {
+    id,
+    src: CHARACTER_SOURCES[id] || "",
+    visible: true,
+    position: null,
+    x: 0,
+    y: 0,
+    scale: 1
+  };
+
+  for (const p of parts.slice(1)) {
+    if (["left", "right", "center"].includes(p)) {
+      data.position = p;
+    } else if (p.startsWith("scale=")) {
+      data.scale = Number(p.replace("scale=", "")) || 1;
+    }
+  }
+
+  return data;
+}
+
 function renderCharacters(chars, options = {}) {
   const { fadeIds = [], exitIds = [] } = options;
 
-  Object.values(charMap).forEach(img => {
+  Object.values(charMap).forEach((img) => {
     img.className = "char hidden";
     img.style.display = "none";
   });
 
-  chars.forEach(c => {
+  chars.forEach((c) => {
     const img = charMap[c.id];
     if (!img) return;
 
@@ -169,7 +203,7 @@ function renderCharacters(chars, options = {}) {
 
     img.classList.remove("hidden", "fade-in", "fade-out");
 
-    // ★ フェード時間統一
+    // ★ここだけ変更（時間統一＋分岐復元）
     img.style.setProperty("--char-fade-duration", "1000ms");
 
     if (fadeIds.includes(c.id)) {
@@ -187,7 +221,7 @@ function renderCharacters(chars, options = {}) {
 }
 
 function moveCharacters(chars) {
-  chars.forEach(c => {
+  chars.forEach((c) => {
     const img = charMap[c.id];
     if (!img) return;
 
@@ -202,16 +236,6 @@ function getPositionLeftValue(pos) {
     case "right": return 70;
     default: return 50;
   }
-}
-
-function parseCharacter(entry) {
-  const [id, pos] = entry.split(":");
-  return {
-    id,
-    src: CHARACTER_SOURCES[id],
-    position: pos || "center",
-    scale: 1
-  };
 }
 
 function startTyping(lines) {
