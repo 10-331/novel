@@ -13,6 +13,7 @@ const CHARACTER_BOTTOM = -28;
 const el = {
   viewport: document.getElementById("gameViewport"),
   stage: document.getElementById("stage"),
+  stageGradient: document.getElementById("stageGradient"),
   bg: document.getElementById("bg"),
   nameMain: document.getElementById("nameMain"),
   nameSub: document.getElementById("nameSub"),
@@ -153,6 +154,24 @@ function updateOrientation() {
   el.overlay.classList.toggle("show", isPortrait);
 }
 
+function setFlashbackMode(isOn) {
+  if (el.bg) {
+    el.bg.classList.toggle("flashback", isOn);
+  }
+
+  if (el.stageGradient) {
+    el.stageGradient.classList.toggle("white", isOn);
+    el.stageGradient.classList.toggle("black", !isOn);
+  }
+
+  if (el.nameRow) el.nameRow.classList.toggle("is-flashback", isOn);
+  if (el.lineImage) el.lineImage.classList.toggle("is-flashback", isOn);
+  if (el.textRow) el.textRow.classList.toggle("is-flashback", isOn);
+  if (el.text) el.text.classList.toggle("is-flashback", isOn);
+  if (el.nameMain) el.nameMain.classList.toggle("is-flashback", isOn);
+  if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isOn);
+}
+
 async function renderLine() {
   const token = ++lineRenderToken;
 
@@ -166,8 +185,6 @@ async function renderLine() {
   el.text.textContent = "";
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
-  
-  stageGradient: document.getElementById("stageGradient"),
 
   [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
     if (!node) return;
@@ -539,7 +556,7 @@ async function playFlashback(bgName) {
   prevBg = currentBg;
 
   el.bg.src = `./assets/images/bg/${bgName}`;
-  el.bg.classList.add("flashback");
+  setFlashbackMode(true);
   flashFrame.classList.add("active");
 
   flashOverlay.classList.remove("active");
@@ -553,7 +570,7 @@ async function endFlashback() {
   await wait(300);
 
   el.bg.src = `./assets/images/bg/${prevBg || currentBg}`;
-  el.bg.classList.remove("flashback");
+  setFlashbackMode(false);
   flashFrame.classList.remove("active");
 
   flashOverlay.classList.remove("active");
