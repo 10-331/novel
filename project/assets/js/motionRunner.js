@@ -110,5 +110,5 @@ case "flashback":
   break;
 
 case "flashbackEnd":
-  await endFlashback(motion.bg);
+  await endFlashback();
   break;
