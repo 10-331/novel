@@ -5,7 +5,7 @@
       {
         "type": "enter",
         "targets": [
-    { "id": "rakuro", "to": "center", "scale": 0.78 }
+    { "id": "rakuro", "to": "center", "scale": 0.5 }
         ],
         "duration": 1200
       }
