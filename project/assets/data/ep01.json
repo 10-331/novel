@@ -1,6 +1,6 @@
 [
   {
-    "bg": "placeholder.jpg",
+    "bg": "bar.jpg",
     "motions": [
       {
         "type": "enter",
@@ -163,6 +163,7 @@
 },
 {
   "motions": [
+    { "type": "flashback", "bg": "placeholder.jpg" },
     {
       "type": "enter",
       "targets": [
