@@ -170,20 +170,18 @@ async function renderLine() {
     });
 
     if (token !== lineRenderToken) return;
-  } else if (Array.isArray(currentChars)) {
-    clearCharacters(characterState);
+ } else if (Array.isArray(line.chars)) {
+  clearCharacters(characterState);
 
-    const parsed = currentChars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
+  const parsed = line.chars.map(parseCharacter);
+  parsed.forEach((c) => {
+    if (c.visible !== false) {
+      setCharacter(characterState, c);
+    }
+  });
 
-    renderCharacters(getVisibleCharacters(characterState));
-  } else {
-    renderCharacters(getVisibleCharacters(characterState));
-  }
+  renderCharacters(getVisibleCharacters(characterState));
+}
 
   const shouldFadeUi = usedMotions && !hadCharactersBefore;
 
@@ -483,6 +481,3 @@ el.stage.addEventListener("click", async () => {
   index++;
   await renderLine();
 });
-
-
-console.log(getVisibleCharacters(characterState));
