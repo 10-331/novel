@@ -98,6 +98,7 @@ let currentBg = "placeholder.jpg";
 let currentChars = [];
 let prevBg = null;
 let isFlashbackActive = false;
+let hasInitialRenderCompleted = false;
 let isMotionPlaying = false;
 
 let isMenuOpen = false;
@@ -118,6 +119,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     setupMenu();
     setupEndChoice();
     await renderLine();
+
+    hasInitialRenderCompleted = true;
     el.stage?.classList.add("is-ready");
   } catch (err) {
     console.error(err);
@@ -303,18 +306,16 @@ function renderCharacters(chars, options = {}) {
   const hasExplicitPosition = visible.some(c => c.position);
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
-  Object.values(charMap).forEach((img) => {
+  Object.entries(charMap).forEach(([id, img]) => {
     if (!img) return;
-    img.className = "char hidden";
-    img.style.display = "none";
-    img.style.left = "";
-    img.style.bottom = "";
-    img.style.opacity = "";
-    img.style.removeProperty("--char-scale");
-    img.style.removeProperty("--char-fade-duration");
-  });
 
-  if (visible.length === 0) return;
+    const isStillUsed = visible.some(c => c.id === id);
+
+    if (!isStillUsed && !exitIds.includes(id)) {
+      img.style.display = "none";
+      img.classList.add("hidden");
+    }
+  });
 
   visible.forEach((c, i) => {
     const img = charMap[c.id];
@@ -330,10 +331,11 @@ function renderCharacters(chars, options = {}) {
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.setProperty("--char-scale", c.scale || 1);
 
-    img.classList.remove("hidden", "fade-in", "fade-out");
+    img.classList.remove("hidden");
+
+    img.style.setProperty("--char-fade-duration", "1000ms");
 
     if (fadeIds.includes(c.id)) {
-      img.style.setProperty("--char-fade-duration", "1000ms");
       img.classList.remove("fade-in");
       img.style.opacity = "0";
 
@@ -346,7 +348,6 @@ function renderCharacters(chars, options = {}) {
     }
 
     if (exitIds.includes(c.id)) {
-      img.style.setProperty("--char-fade-duration", "1000ms");
       img.classList.remove("fade-out");
       void img.offsetWidth;
       img.classList.add("fade-out");
