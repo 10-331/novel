@@ -272,14 +272,14 @@ function renderCharacters(chars, options = {}) {
   const hasExplicitPosition = visible.some(c => c.position);
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
-  el.chars.forEach((img) => {
-    img.className = "char hidden";
-    img.style.display = "none";
-    img.style.left = "";
-    img.style.bottom = "";
-    img.style.setProperty("--char-scale", c.scale || 1);
-    img.style.opacity = "";
-  });
+el.chars.forEach((img) => {
+  img.className = "char hidden";
+  img.style.display = "none";
+  img.style.left = "";
+  img.style.bottom = "";
+  img.style.opacity = "";
+  img.style.removeProperty("--char-scale");
+});
 
   if (visible.length === 0) {
     return;
