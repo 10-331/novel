@@ -1,7 +1,6 @@
 export function createCharacterState() {
   return {
-    active: new Map(),   // id -> { id, position, x, y, visible, src }
-    previousKeys: []
+    active: new Map()
   };
 }
 
@@ -14,11 +13,11 @@ export function removeCharacter(state, id) {
 }
 
 export function getCharacter(state, id) {
-  return state.active.get(id);
+  return state.active.get(id) || null;
 }
 
 export function getVisibleCharacters(state) {
-  return [...state.active.values()].filter(c => c.visible !== false);
+  return Array.from(state.active.values()).filter(c => c && c.visible !== false);
 }
 
 export function clearCharacters(state) {
