@@ -33,7 +33,6 @@ const el = {
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png"
-  // 必要に応じて追加
 };
 
 let script = [];
@@ -107,7 +106,7 @@ function updateOrientation() {
 async function renderLine() {
   const token = ++lineRenderToken;
 
-  while (index < script.length && script[index] && script[index].disabled === true) {
+  while (index < script.length && script[index]?.disabled === true) {
     index++;
   }
 
@@ -126,13 +125,8 @@ async function renderLine() {
 
   const line = script[index];
 
-  if (line.bg) {
-    currentBg = line.bg;
-  }
-
-  if (line.chars !== undefined) {
-    currentChars = line.chars;
-  }
+  if (line.bg) currentBg = line.bg;
+  if (line.chars !== undefined) currentChars = line.chars;
 
   el.bg.src = `./assets/images/bg/${currentBg}`;
 
@@ -166,33 +160,14 @@ function parseCharacter(entry) {
   };
 
   for (const p of parts.slice(1)) {
-    if (
-      p === "left" ||
-      p === "right" ||
-      p === "center" ||
-      p === "single" ||
-      p === "far-left" ||
-      p === "far-right"
-    ) {
+    if (["left","right","center","single","far-left","far-right"].includes(p)) {
       data.position = p;
-      continue;
-    }
-
-    if (p.startsWith("x=")) {
-      const n = Number(p.replace("x=", ""));
-      data.x = Number.isFinite(n) ? n : 0;
-      continue;
-    }
-
-    if (p.startsWith("y=")) {
-      const n = Number(p.replace("y=", ""));
-      data.y = Number.isFinite(n) ? n : 0;
-      continue;
-    }
-
-    if (p === "hide") {
+    } else if (p.startsWith("x=")) {
+      data.x = Number(p.replace("x=", "")) || 0;
+    } else if (p.startsWith("y=")) {
+      data.y = Number(p.replace("y=", "")) || 0;
+    } else if (p === "hide") {
       data.visible = false;
-      continue;
     }
   }
 
@@ -204,21 +179,13 @@ function renderCharacters(chars) {
   const hasExplicitPosition = visible.some(c => c.position);
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
-  const currentKeys = visible.map((c, i) => {
-    const pos = c.position || slots[i] || "";
-    const x = c.x || 0;
-    const y = c.y || 0;
-    return `${c.id}|${pos}|${x}|${y}`;
-  });
+  const currentKeys = visible.map(c => c.id);
 
   let hasNewCharacter = false;
 
-  el.chars.forEach((img) => {
+  el.chars.forEach(img => {
     img.className = "char hidden";
     img.style.display = "none";
-    img.style.left = "";
-    img.style.bottom = "";
-    img.style.transform = "translateX(-50%)";
   });
 
   if (visible.length === 0) {
@@ -231,21 +198,19 @@ function renderCharacters(chars) {
     if (!img) return;
 
     const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
-    const key = `${c.id}|${pos}|${c.x || 0}|${c.y || 0}`;
+    const key = c.id;
     const isNew = !prevVisibleCharKeys.includes(key);
 
-    if (isNew) {
-      hasNewCharacter = true;
-    }
+    if (isNew) hasNewCharacter = true;
 
     img.src = c.src;
     img.style.display = "block";
-    img.classList.add("char");
 
     const left = getPositionLeftValue(pos);
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.transform = "translateX(-50%)";
+
     img.classList.remove("hidden");
 
     if (isNew) {
@@ -260,71 +225,30 @@ function renderCharacters(chars) {
 }
 
 function getAutoSlots(count) {
-  if (count <= 0) return [];
   if (count === 1) return ["single"];
-  if (count === 2) return ["left", "right"];
-  if (count === 3) return ["left", "center", "right"];
-  return ["far-left", "left", "right", "far-right"];
+  if (count === 2) return ["left","right"];
+  if (count === 3) return ["left","center","right"];
+  return ["far-left","left","right","far-right"];
 }
 
 function getPositionLeftValue(position) {
   switch (position) {
-    case "single":
-      return 50;
-    case "far-left":
-      return 14;
-    case "left":
-      return 32;
-    case "center":
-      return 50;
-    case "right":
-      return 68;
-    case "far-right":
-      return 86;
-    default:
-      return 50;
+    case "single": return 50;
+    case "far-left": return 14;
+    case "left": return 32;
+    case "center": return 50;
+    case "right": return 68;
+    case "far-right": return 86;
+    default: return 50;
   }
-}
-
-function wrapOneLine(rawLine, limit = 30) {
-  if (!rawLine) return [""];
-
-  const result = [];
-  let current = "";
-
-  for (const char of rawLine) {
-    current += char;
-    if (current.length >= limit) {
-      result.push(current);
-      current = "";
-    }
-  }
-
-  if (current) {
-    result.push(current);
-  }
-
-  return result;
-}
-
-function wrapTextLines(lines, limit = 30) {
-  const wrappedLines = [];
-
-  for (const rawLine of lines) {
-    const chunks = wrapOneLine(String(rawLine || ""), limit);
-    wrappedLines.push(...chunks);
-  }
-
-  return wrappedLines.join("\n");
 }
 
 function startTyping(lines) {
   clearTimeout(typingTimer);
-
   el.text.textContent = "";
   el.next.classList.remove("is-ready");
 
-  const full = wrapTextLines(lines, 30);
+  const full = lines.join("\n");
   currentFullText = full;
 
   let i = 0;
@@ -345,76 +269,29 @@ function startTyping(lines) {
   step();
 }
 
-function setupMenu() {
-  if (!el.menuBtn || !el.menuPanel) return;
+function wait(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
 
-  el.menuBtn.addEventListener("click", (e) => {
+function setupMenu() {
+  el.menuBtn.addEventListener("click", e => {
     e.stopPropagation();
     isMenuOpen = !isMenuOpen;
-    el.menuBtn.classList.toggle("open", isMenuOpen);
     el.menuPanel.classList.toggle("hidden", !isMenuOpen);
   });
-
-  el.menuPanel.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-
-  el.backBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (index > 0) {
-      index--;
-      renderLine();
-    }
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
-
-  el.skipBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    index = script.length;
-    renderLine();
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
 }
 
-function setupEndChoice() {
-  el.continueBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    alert("次の話への遷移先を設定してください");
-  });
-
-  el.finishBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    alert("終わりにした後の遷移先を設定してください");
-  });
-
-  el.endChoiceOverlay?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-}
+function setupEndChoice() {}
 
 function showEndChoice() {
   isEpisodeEnded = true;
-  el.endChoiceOverlay?.classList.remove("hidden");
-}
-
-function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 el.stage.addEventListener("click", () => {
-  if (isMenuOpen || isEpisodeEnded) {
-    return;
-  }
+  if (isMenuOpen || isEpisodeEnded) return;
 
   const now = Date.now();
-
-  if (now < skipAdvanceUntil) {
-    return;
-  }
+  if (now < skipAdvanceUntil) return;
 
   if (isTyping) {
     clearTimeout(typingTimer);
