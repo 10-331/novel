@@ -98,6 +98,7 @@ let currentBg = "placeholder.jpg";
 let currentChars = [];
 let prevBg = null;
 let isFlashbackActive = false;
+let hasInitialRenderCompleted = false;
 
 let isMenuOpen = false;
 let isEpisodeEnded = false;
@@ -117,6 +118,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     setupMenu();
     setupEndChoice();
     await renderLine();
+
+    hasInitialRenderCompleted = true;
+    el.stage?.classList.add("is-ready");
   } catch (err) {
     console.error(err);
     alert("シナリオの読み込みに失敗しました");
@@ -304,6 +308,7 @@ function renderCharacters(chars, options = {}) {
     img.style.bottom = "";
     img.style.opacity = "";
     img.style.removeProperty("--char-scale");
+    img.style.removeProperty("--char-fade-duration");
   });
 
   if (visible.length === 0) return;
@@ -325,6 +330,11 @@ function renderCharacters(chars, options = {}) {
     img.classList.remove("hidden", "fade-in", "fade-out");
 
     if (fadeIds.includes(c.id)) {
+      img.style.setProperty(
+        "--char-fade-duration",
+        isFlashbackActive ? "180ms" : "800ms"
+      );
+
       img.classList.remove("fade-in");
       img.style.opacity = "0";
 
@@ -337,6 +347,11 @@ function renderCharacters(chars, options = {}) {
     }
 
     if (exitIds.includes(c.id)) {
+      img.style.setProperty(
+        "--char-fade-duration",
+        isFlashbackActive ? "180ms" : "600ms"
+      );
+
       img.classList.remove("fade-out");
       void img.offsetWidth;
       img.classList.add("fade-out");
