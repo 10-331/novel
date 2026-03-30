@@ -18,10 +18,20 @@ const el = {
   nameSub: document.getElementById("nameSub"),
   text: document.getElementById("text"),
   next: document.getElementById("nextIndicator"),
+  overlay: document.getElementById("orientationOverlay"),
 
   nameRow: document.querySelector(".name-row"),
   lineImage: document.querySelector(".dialogue-line-image"),
   textRow: document.querySelector(".text-row"),
+
+  menuBtn: document.getElementById("menuBtn"),
+  menuPanel: document.getElementById("menuPanel"),
+  backBtn: document.getElementById("backBtn"),
+  skipBtn: document.getElementById("skipBtn"),
+
+  endChoiceOverlay: document.getElementById("endChoiceOverlay"),
+  continueBtn: document.getElementById("continueBtn"),
+  finishBtn: document.getElementById("finishBtn"),
 
   chars: [
     document.getElementById("char1"),
@@ -46,47 +56,107 @@ let typingTimer = null;
 let currentFullText = "";
 
 let currentBg = "placeholder.jpg";
+let currentChars = [];
+
+let isMenuOpen = false;
+let isEpisodeEnded = false;
+
+let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
 
 window.addEventListener("DOMContentLoaded", async () => {
-  await loadScript();
-  fitStage();
-  renderLine();
+  try {
+    await loadScript();
+    fitStage();
+    updateOrientation();
+    setupMenu();
+    setupEndChoice();
+    await renderLine();
+  } catch (err) {
+    console.error(err);
+    alert("シナリオの読み込みに失敗しました");
+  }
 });
 
-window.addEventListener("resize", fitStage);
+window.addEventListener("resize", () => {
+  fitStage();
+  updateOrientation();
+});
+
+window.addEventListener("orientationchange", () => {
+  setTimeout(() => {
+    fitStage();
+    updateOrientation();
+  }, 200);
+});
 
 async function loadScript() {
   const res = await fetch("./assets/data/ep01.json");
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
   script = await res.json();
 }
 
 function fitStage() {
+  if (!el.viewport || !el.stage) return;
+
   const vw = el.viewport.clientWidth;
   const vh = el.viewport.clientHeight;
+  if (!vw || !vh) return;
+
   const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
   el.stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
+
+function updateOrientation() {
+  if (!el.overlay) return;
+  const isPortrait = window.innerHeight > window.innerWidth;
+  el.overlay.classList.toggle("show", isPortrait);
 }
 
 async function renderLine() {
   const token = ++lineRenderToken;
 
+  while (index < script.length && script[index]?.disabled === true) {
+    index++;
+  }
+
   clearTimeout(typingTimer);
   isTyping = false;
-  el.text.textContent = "";
   el.next.classList.remove("is-ready");
+  el.text.textContent = "";
+  el.nameMain.textContent = "";
+  el.nameSub.textContent = "";
 
-  if (index >= script.length) return;
+  [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
+    if (!node) return;
+    node.classList.remove("ui-fade-in");
+  });
+
+  if (index >= script.length) {
+    clearCharacters(characterState);
+    renderCharacters([]);
+    showEndChoice();
+    return;
+  }
 
   const line = script[index];
 
-  if (line.bg) currentBg = line.bg;
+  if (line.bg) {
+    currentBg = line.bg;
+  }
+  if (line.chars !== undefined) {
+    currentChars = line.chars;
+  }
+
   el.bg.src = `./assets/images/bg/${currentBg}`;
 
-  let usedMotion = false;
+  const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
+  let usedMotions = false;
 
-  if (Array.isArray(line.motions)) {
-    usedMotion = true;
+  if (Array.isArray(line.motions) && line.motions.length > 0) {
+    usedMotions = true;
 
     await runMotions({
       motions: line.motions,
@@ -100,26 +170,36 @@ async function renderLine() {
     });
 
     if (token !== lineRenderToken) return;
+  } else if (Array.isArray(currentChars)) {
+    clearCharacters(characterState);
+
+    const parsed = currentChars.map(parseCharacter);
+    parsed.forEach((c) => {
+      if (c.visible !== false) {
+        setCharacter(characterState, c);
+      }
+    });
+
+    renderCharacters(getVisibleCharacters(characterState));
+  } else {
+    renderCharacters(getVisibleCharacters(characterState));
   }
 
-  // UIフェード
-  const shouldFade = usedMotion;
-
-  [el.nameRow, el.lineImage, el.textRow].forEach(node => {
-    node.classList.remove("ui-fade-in");
-    void node.offsetWidth;
-  });
+  const shouldFadeUi = usedMotions && !hadCharactersBefore;
 
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
 
-  if (shouldFade) {
-    [el.nameRow, el.lineImage, el.textRow].forEach(node => {
+  if (shouldFadeUi) {
+    [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
+      if (!node) return;
+      node.classList.remove("ui-fade-in");
+      void node.offsetWidth;
       node.classList.add("ui-fade-in");
     });
   }
 
-  startTyping(line.text || []);
+  startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
 }
 
 function parseCharacter(entry) {
@@ -136,82 +216,131 @@ function parseCharacter(entry) {
   };
 
   for (const p of parts.slice(1)) {
-    if (["left", "right", "center", "single"].includes(p)) data.position = p;
+    if (["left", "right", "center", "single", "far-left", "far-right"].includes(p)) {
+      data.position = p;
+    } else if (p.startsWith("x=")) {
+      data.x = Number(p.replace("x=", "")) || 0;
+    } else if (p.startsWith("y=")) {
+      data.y = Number(p.replace("y=", "")) || 0;
+    } else if (p === "hide") {
+      data.visible = false;
+    }
   }
 
   return data;
 }
 
-/* ===== 通常描画（フェード含む） ===== */
 function renderCharacters(chars, options = {}) {
   const { fadeIds = [], exitIds = [] } = options;
 
-  const visible = chars.filter(c => c && c.visible !== false);
+  const visible = chars.filter(c => c && c.visible !== false && c.src);
+  const hasExplicitPosition = visible.some(c => c.position);
+  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
+
+  el.chars.forEach((img) => {
+    img.className = "char hidden";
+    img.style.display = "none";
+    img.style.left = "";
+    img.style.bottom = "";
+    img.style.transform = "translateX(-50%)";
+    img.style.opacity = "";
+  });
+
+  if (visible.length === 0) {
+    return;
+  }
 
   visible.forEach((c, i) => {
     const img = el.chars[i];
     if (!img) return;
 
+    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
+
     img.src = c.src;
     img.style.display = "block";
 
-    const left = getLeft(c.position);
-    img.style.left = `${left}%`;
-    img.style.bottom = `${CHARACTER_BOTTOM}px`;
+    const left = getPositionLeftValue(pos);
+    img.style.left = `calc(${left}% + ${c.x}px)`;
+    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
+    img.style.transform = "translateX(-50%)";
 
     img.classList.remove("hidden", "fade-in", "fade-out");
 
     if (fadeIds.includes(c.id)) {
+      img.classList.remove("fade-in");
       void img.offsetWidth;
       img.classList.add("fade-in");
     }
 
     if (exitIds.includes(c.id)) {
+      img.classList.remove("fade-out");
       void img.offsetWidth;
       img.classList.add("fade-out");
     }
   });
 }
 
-/* ===== 移動専用（消さない） ===== */
 function moveCharacters(chars) {
-  const visible = chars.filter(c => c && c.visible !== false);
+  const visible = chars.filter(c => c && c.visible !== false && c.src);
+  const hasExplicitPosition = visible.some(c => c.position);
+  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
   visible.forEach((c, i) => {
     const img = el.chars[i];
     if (!img) return;
 
-    const left = getLeft(c.position);
+    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
+    const left = getPositionLeftValue(pos);
 
-    img.style.left = `${left}%`;
-    img.style.bottom = `${CHARACTER_BOTTOM}px`;
+    img.style.display = "block";
+    img.src = c.src;
+    img.style.left = `calc(${left}% + ${c.x}px)`;
+    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
+    img.style.transform = "translateX(-50%)";
+    img.classList.remove("hidden");
   });
 }
 
-function getLeft(pos) {
-  switch (pos) {
-    case "left": return 30;
-    case "right": return 70;
+function getAutoSlots(count) {
+  if (count <= 0) return [];
+  if (count === 1) return ["single"];
+  if (count === 2) return ["left", "right"];
+  if (count === 3) return ["left", "center", "right"];
+  return ["far-left", "left", "right", "far-right"];
+}
+
+function getPositionLeftValue(position) {
+  switch (position) {
+    case "single": return 50;
+    case "far-left": return 14;
+    case "left": return 32;
     case "center": return 50;
+    case "right": return 68;
+    case "far-right": return 86;
     default: return 50;
   }
 }
 
 function startTyping(lines) {
-  const text = lines.join("\n");
-  currentFullText = text;
+  clearTimeout(typingTimer);
+  el.text.textContent = "";
+  el.next.classList.remove("is-ready");
+
+  const full = lines.join("\n");
+  currentFullText = full;
 
   let i = 0;
   isTyping = true;
 
   function step() {
-    if (i >= text.length) {
+    if (i >= currentFullText.length) {
       isTyping = false;
       el.next.classList.add("is-ready");
       return;
     }
 
-    el.text.textContent += text[i++];
+    el.text.textContent += currentFullText[i];
+    i++;
     typingTimer = setTimeout(step, 30);
   }
 
@@ -219,17 +348,138 @@ function startTyping(lines) {
 }
 
 function wait(ms) {
-  return new Promise(res => setTimeout(res, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-el.stage.addEventListener("click", () => {
+function setupMenu() {
+  if (!el.menuBtn || !el.menuPanel) return;
+
+  el.menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    isMenuOpen = !isMenuOpen;
+    el.menuBtn.classList.toggle("open", isMenuOpen);
+    el.menuPanel.classList.toggle("hidden", !isMenuOpen);
+  });
+
+  el.menuPanel?.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  el.backBtn?.addEventListener("click", async (e) => {
+    e.stopPropagation();
+
+    if (index > 0) {
+      index--;
+      clearCharacters(characterState);
+      currentChars = [];
+      currentBg = "placeholder.jpg";
+      lineRenderToken++;
+
+      // 最初から再構築
+      const targetIndex = index;
+      index = 0;
+      isEpisodeEnded = false;
+
+      while (index < targetIndex) {
+        await renderLineWithoutTyping();
+        index++;
+      }
+
+      await renderLine();
+    }
+
+    isMenuOpen = false;
+    el.menuBtn.classList.remove("open");
+    el.menuPanel.classList.add("hidden");
+  });
+
+  el.skipBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    index = script.length;
+    renderLine();
+    isMenuOpen = false;
+    el.menuBtn.classList.remove("open");
+    el.menuPanel.classList.add("hidden");
+  });
+}
+
+async function renderLineWithoutTyping() {
+  const token = ++lineRenderToken;
+
+  if (index >= script.length) return;
+
+  const line = script[index];
+
+  if (line.bg) currentBg = line.bg;
+  if (line.chars !== undefined) currentChars = line.chars;
+
+  el.bg.src = `./assets/images/bg/${currentBg}`;
+
+  if (Array.isArray(line.motions) && line.motions.length > 0) {
+    await runMotions({
+      motions: line.motions,
+      state: characterState,
+      renderCharacters,
+      moveCharacters,
+      parseCharacter,
+      wait,
+      token,
+      getToken: () => lineRenderToken
+    });
+
+    if (token !== lineRenderToken) return;
+  } else if (Array.isArray(currentChars)) {
+    clearCharacters(characterState);
+
+    const parsed = currentChars.map(parseCharacter);
+    parsed.forEach((c) => {
+      if (c.visible !== false) {
+        setCharacter(characterState, c);
+      }
+    });
+
+    renderCharacters(getVisibleCharacters(characterState));
+  }
+}
+
+function setupEndChoice() {
+  el.continueBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    el.endChoiceOverlay?.classList.add("hidden");
+    isEpisodeEnded = false;
+  });
+
+  el.finishBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    el.endChoiceOverlay?.classList.add("hidden");
+    isEpisodeEnded = true;
+  });
+
+  el.endChoiceOverlay?.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+}
+
+function showEndChoice() {
+  isEpisodeEnded = true;
+  el.endChoiceOverlay?.classList.remove("hidden");
+}
+
+el.stage.addEventListener("click", async () => {
+  if (isMenuOpen || isEpisodeEnded) return;
+
+  const now = Date.now();
+  if (now < skipAdvanceUntil) return;
+
   if (isTyping) {
     clearTimeout(typingTimer);
     el.text.textContent = currentFullText;
     isTyping = false;
+    el.next.classList.add("is-ready");
+    skipAdvanceUntil = now + 220;
     return;
   }
 
   index++;
-  renderLine();
+  await renderLine();
 });
