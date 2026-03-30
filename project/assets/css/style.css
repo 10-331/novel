@@ -287,9 +287,9 @@ button{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 5px;
   pointer-events: none;
-  animation: nextPrompt 1.8s ease-in-out infinite;
+  animation: nextPrompt 2.15s linear infinite;
   will-change: transform, opacity;
 }
 
@@ -450,39 +450,9 @@ button{
   padding: 10px 20px;
 }
 
-/* ===== モバイル微調整 ===== */
-
+/* ===== モバイル ===== */
+/* PCと同じ見え方を優先。会話欄は触らない */
 @media screen and (max-width: 768px){
-  .dialogue-area{
-    height: 238px;
-    padding: 0 44px 22px;
-  }
-
-  .name-row{
-    margin: 0 0 6px 410px;
-    min-height: 32px;
-  }
-
-  .speaker-ja{
-    font-size: 31px;
-  }
-
-  .speaker-en{
-    font-size: 16px;
-  }
-
-  .dialogue-line-image{
-    margin: 0 280px 14px 350px;
-  }
-
-  .dialogue-text{
-    margin-left: 410px;
-    width: 28ic;
-    max-width: 28ic;
-    min-height: calc(1.62em * 3);
-    font-size: 23px;
-  }
-
   .next-indicator{
     right: 24px;
     bottom: 14px;
