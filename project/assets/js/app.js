@@ -27,6 +27,7 @@ const el = {
     document.getElementById("char4")
   ]
 };
+
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png"
@@ -47,12 +48,17 @@ let isMenuOpen = false;
 let isEpisodeEnded = false;
 
 window.addEventListener("DOMContentLoaded", async () => {
-  await loadScript();
-  fitStage();
-  updateOrientation();
-  setupMenu();
-  setupEndChoice();
-  renderLine();
+  try {
+    await loadScript();
+    fitStage();
+    updateOrientation();
+    setupMenu();
+    setupEndChoice();
+    renderLine();
+  } catch (err) {
+    console.error(err);
+    alert("シナリオの読み込みに失敗しました");
+  }
 });
 
 window.addEventListener("resize", () => {
@@ -97,15 +103,17 @@ function renderLine() {
     index++;
   }
 
-if (index >= script.length) {
-  el.nameMain.textContent = "";
-  el.nameSub.textContent = "";
-  el.text.textContent = "";
-  el.next.style.opacity = 0;
-  renderCharacters([]);
-  showEndChoice();
-  return;
-}
+  if (index >= script.length) {
+    el.nameMain.textContent = "";
+    el.nameSub.textContent = "";
+    el.text.textContent = "";
+    el.next.classList.remove("is-ready");
+    renderCharacters([]);
+    showEndChoice();
+    return;
+  }
+
+  el.next.classList.remove("is-ready");
 
   const line = script[index];
 
@@ -284,7 +292,7 @@ function startTyping(lines) {
   clearTimeout(typingTimer);
 
   el.text.textContent = "";
-  el.next.style.opacity = 0;
+  el.next.classList.remove("is-ready");
 
   const full = wrapTextLines(lines, 30);
   currentFullText = full;
@@ -295,7 +303,7 @@ function startTyping(lines) {
   function step() {
     if (i >= currentFullText.length) {
       isTyping = false;
-      el.next.style.opacity = 1;
+      el.next.classList.add("is-ready");
       return;
     }
 
@@ -372,7 +380,7 @@ el.stage.addEventListener("click", () => {
     clearTimeout(typingTimer);
     el.text.textContent = currentFullText;
     isTyping = false;
-    el.next.style.opacity = 1;
+    el.next.classList.add("is-ready");
     return;
   }
 
