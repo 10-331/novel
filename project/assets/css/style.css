@@ -187,6 +187,19 @@ button{
   height: 2px;
   border-radius: 999px;
   background: #ffffff;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.menu-toggle.open span:nth-child(1){
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2){
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3){
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ===== 会話欄 ===== */
@@ -272,9 +285,15 @@ button{
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  opacity: 0;
+  opacity: .38;
   pointer-events: none;
-  transition: opacity .1s linear;
+  transform: translateY(0);
+  animation: nextFloat 1.9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.next-indicator.is-ready{
+  opacity: .92;
 }
 
 .next-indicator img{
@@ -289,6 +308,27 @@ button{
   color: var(--accent);
   font-weight: 700;
   letter-spacing: .08em;
+}
+
+@keyframes nextFloat{
+  0%{
+    transform: translateY(0);
+    opacity: .18;
+  }
+  20%{
+    opacity: .92;
+  }
+  50%{
+    transform: translateY(5px);
+    opacity: .52;
+  }
+  80%{
+    opacity: .92;
+  }
+  100%{
+    transform: translateY(0);
+    opacity: .18;
+  }
 }
 
 /* ===== 縦向き案内 ===== */
@@ -310,7 +350,6 @@ button{
 .orientation-overlay.show{
   display: grid;
 }
-
 
 /* ===== 上下グラデーション ===== */
 
@@ -357,7 +396,6 @@ button{
   background: linear-gradient(to top, rgba(255,255,255,0.75), rgba(255,255,255,0));
 }
 
-
 .menu-panel{
   position: absolute;
   inset: 0;
@@ -393,22 +431,6 @@ button{
   background: rgba(255,255,255,.08);
   color: #fff;
   text-align: center;
-}
-
-.menu-toggle span{
-  transition: transform .2s ease, opacity .2s ease;
-}
-
-.menu-toggle.open span:nth-child(1){
-  transform: translateY(7px) rotate(45deg);
-}
-
-.menu-toggle.open span:nth-child(2){
-  opacity: 0;
-}
-
-.menu-toggle.open span:nth-child(3){
-  transform: translateY(-7px) rotate(-45deg);
 }
 
 .end-choice-overlay{
