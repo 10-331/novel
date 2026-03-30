@@ -345,9 +345,9 @@ function getPositionLeftValue(position) {
   switch (position) {
     case "single": return 50;
     case "far-left": return 14;
-    case "left": return 32;
+    case "left": return 38;
     case "center": return 50;
-    case "right": return 68;
+    case "right": return 62;
     case "far-right": return 86;
     default: return 50;
   }
