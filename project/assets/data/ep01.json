@@ -83,12 +83,12 @@
   {
     "speaker": "綾",
     "speakerSub": "AYA",
-    "text": ["う、冗談ですって～……"]
+    "text": ["う、冗談ですって～……。"]
   },
     {
     "speaker": "綾",
     "speakerSub": "AYA",
-    "text": ["あ～あ、なんで人もバグも言うこと聞いてくれなんだろう"]
+    "text": ["あ～あ、なんで人もバグも言うこと聞いてくれなんだろう。"]
   },
   {
     "speaker": "落露",
@@ -124,6 +124,43 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["また\"たぶん\""]
+    "text": ["また\"たぶん\"。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["便利な言葉なのに。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["逃げ道とも言うだろう。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["あは、手厳しい。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["それで、今日は何から逃げているんだ？"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "えっ逃げてる前提なんですか？"
+    ]
+  },
+    {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text":[
+　　　"………………あ～～、えっと。"
+      "まあ、くだらないことなんですけど、その。"
+　　　]
   }
+
+
 ]
