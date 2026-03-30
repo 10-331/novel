@@ -95,12 +95,16 @@ let currentFullText = "";
 
 let currentBg = "placeholder.jpg";
 let currentChars = [];
+let prevBg = null;
 
 let isMenuOpen = false;
 let isEpisodeEnded = false;
 
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
+
+const flashOverlay = document.getElementById("flashOverlay");
+const flashFrame = document.getElementById("flashFrame");
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -188,7 +192,18 @@ async function renderLine() {
   if (Array.isArray(line.motions) && line.motions.length > 0) {
     usedMotions = true;
 
-unMotions({
+    await runMotions({
+      motions: line.motions,
+      state: characterState,
+      renderCharacters,
+      moveCharacters,
+      parseCharacter,
+      wait,
+      token,
+      getToken: () => lineRenderToken,
+      playFlashback,
+      endFlashback
+    });
 
     if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
@@ -400,6 +415,7 @@ function setupMenu() {
       clearCharacters(characterState);
       currentChars = [];
       currentBg = "placeholder.jpg";
+      prevBg = null;
       lineRenderToken++;
 
       const targetIndex = index;
@@ -450,7 +466,9 @@ async function renderLineWithoutTyping() {
       parseCharacter,
       wait,
       token,
-      getToken: () => lineRenderToken
+      getToken: () => lineRenderToken,
+      playFlashback,
+      endFlashback
     });
 
     if (token !== lineRenderToken) return;
@@ -510,17 +528,14 @@ el.stage.addEventListener("click", async () => {
   await renderLine();
 });
 
-const flashOverlay = document.getElementById("flashOverlay");
-const flashFrame = document.getElementById("flashFrame");
-
 async function playFlashback(bgName) {
+  if (!flashOverlay || !flashFrame) return;
+
   flashOverlay.classList.add("active");
   await wait(300);
 
-  // 現在背景を保存
   prevBg = currentBg;
 
-  // 回想背景に変更（currentBgは変えない）
   el.bg.src = `./assets/images/bg/${bgName}`;
   el.bg.classList.add("flashback");
   flashFrame.classList.add("active");
@@ -529,12 +544,12 @@ async function playFlashback(bgName) {
   await wait(300);
 }
 
-
 async function endFlashback() {
+  if (!flashOverlay || !flashFrame) return;
+
   flashOverlay.classList.add("active");
   await wait(300);
 
-  // 元に戻す
   el.bg.src = `./assets/images/bg/${prevBg || currentBg}`;
   el.bg.classList.remove("flashback");
   flashFrame.classList.remove("active");
