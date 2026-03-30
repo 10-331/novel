@@ -41,6 +41,11 @@ const el = {
   ]
 };
 
+const charMap = {
+  rakuro: el.chars[0],
+  aya: el.chars[1]
+};
+
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png"
@@ -131,7 +136,6 @@ async function loadScript() {
 function fitStage() {
   const vw = el.viewport.clientWidth;
   const vh = el.viewport.clientHeight;
-
   const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
   el.stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
@@ -154,11 +158,6 @@ async function renderLine() {
   el.text.textContent = "";
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
-
-  const charMap = {
-  rakuro: el.chars[0],
-  aya: el.chars[1]
-};
 
   [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
     if (!node) return;
@@ -266,6 +265,7 @@ function renderCharacters(chars, options = {}) {
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
   Object.values(charMap).forEach((img) => {
+    if (!img) return;
     img.className = "char hidden";
     img.style.display = "none";
     img.style.left = "";
@@ -276,9 +276,9 @@ function renderCharacters(chars, options = {}) {
 
   if (visible.length === 0) return;
 
-visible.forEach((c) => {
-  const img = charMap[c.id];
-  if (!img) return;
+  visible.forEach((c, i) => {
+    const img = charMap[c.id];
+    if (!img) return;
 
     const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
 
@@ -317,9 +317,9 @@ function moveCharacters(chars) {
   const hasExplicitPosition = visible.some(c => c.position);
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
-visible.forEach((c) => {
-  const img = charMap[c.id];
-  if (!img) return;
+  visible.forEach((c, i) => {
+    const img = charMap[c.id];
+    if (!img) return;
 
     const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
     const left = getPositionLeftValue(pos);
