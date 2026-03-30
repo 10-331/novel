@@ -5,10 +5,7 @@
       {
         "type": "enter",
         "targets": [
-          {
-            "id": "rakuro",
-            "to": "center"
-          }
+          { "id": "rakuro", "to": "center" }
         ],
         "duration": 1200
       }
@@ -18,29 +15,26 @@
     "text": [
       "……今日、ちょっと飲みすぎじゃない？"
     ]
-  }
-],
-{
-  "motions": [
-    {
-      "type": "preset",
-      "name": "addRightAfterShift",
-      "params": {
-        "existing": "rakuro",
-        "newChar": "aya"
+  },
+  {
+    "motions": [
+      {
+        "type": "preset",
+        "name": "addRightAfterShift",
+        "params": {
+          "existing": "rakuro",
+          "newChar": "aya"
+        }
       }
-    }
-  ],
-  "chars": ["rakuro:left", "aya:right"],
-  "speaker": "綾",
-  "speakerSub": "AYA",
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
     "text": [
       "うん、んん？　まだそんなに飲んでないです～。",
       "……たぶん。"
     ]
-},
+  },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
@@ -49,7 +43,6 @@
     ]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -58,55 +51,36 @@
     ]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "……。"
-    ]
+    "text": ["……。"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "エンジニアは大変だね。"
-    ]
+    "text": ["エンジニアは大変だね。"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
-    "text": [
-      "あ、そういうことしちゃうんだ～！？　悪い子！"
-    ]
+    "text": ["あ、そういうことしちゃうんだ～！？　悪い子！"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
-    "text": [
-      "え～～、どうして人もバグも言うこと聞いてくれないのかなあ？"
-    ]
+    "text": ["え～～、どうして人もバグも言うこと聞いてくれないのかなあ？"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "人間は元から聞かないだろう。"
-    ]
+    "text": ["人間は元から聞かないだろう。"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
-    "text": [
-      "すぐそう言う。"
-    ]
+    "text": ["すぐそう言う。"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -115,15 +89,11 @@
     ]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "そういうこと言って、あとで恥ずかしくなっても知らないぞ。"
-    ]
+    "text": ["そういうこと言って、あとで恥ずかしくなっても知らないぞ。"]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -132,11 +102,8 @@
     ]
   },
   {
-    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "また\"たぶん\""
-    ]
+    "text": ["また\"たぶん\""]
   }
 ]
