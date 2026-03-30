@@ -122,16 +122,7 @@ button{
   pointer-events: none;
 }
 
-.char{
-  position: absolute;
-  transform: translateX(-50%) translateZ(0);
-  transition:
-    left .45s ease,
-    bottom .45s ease,
-    opacity .45s ease;
-  will-change: transform, opacity, left;
-  backface-visibility: hidden;
-}
+", "scale": 0.78 
 
 .char.fade-in{
   animation: charFadeIn .8s ease forwards;
