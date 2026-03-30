@@ -64,8 +64,11 @@ let isEpisodeEnded = false;
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
 
+
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
+    await preloadCharacterImages();
     await loadScript();
     fitStage();
     updateOrientation();
@@ -213,6 +216,37 @@ function parseCharacter(entry) {
     y: 0
   };
 
+const imageCache = new Map();
+
+async function preloadCharacterImages() {
+  const entries = Object.entries(CHARACTER_SOURCES);
+
+  await Promise.all(entries.map(([id, src]) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = src;
+
+      const done = () => {
+        imageCache.set(id, src);
+        resolve();
+      };
+
+      img.onload = async () => {
+        try {
+          if (img.decode) {
+            await img.decode();
+          }
+        } catch (e) {
+          // decode失敗は無視
+        }
+        done();
+      };
+
+      img.onerror = done;
+    });
+  }));
+}
+  
   for (const p of parts.slice(1)) {
     if (["left", "right", "center", "single", "far-left", "far-right"].includes(p)) {
       data.position = p;
@@ -264,11 +298,17 @@ function renderCharacters(chars, options = {}) {
 
     img.classList.remove("hidden", "fade-in", "fade-out");
 
-    if (fadeIds.includes(c.id)) {
-      img.classList.remove("fade-in");
-      void img.offsetWidth;
+if (fadeIds.includes(c.id)) {
+  img.classList.remove("fade-in");
+  img.style.opacity = "0";
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
       img.classList.add("fade-in");
-    }
+      img.style.opacity = "";
+    });
+  });
+}
 
     if (exitIds.includes(c.id)) {
       img.classList.remove("fade-out");
