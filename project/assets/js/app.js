@@ -150,22 +150,19 @@ async function renderLine() {
       getToken: () => lineRenderToken
     });
 
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(currentChars)) {
-    clearCharacters(characterState);
+if (Array.isArray(line.motions) && line.motions.length > 0) {
+  await runMotions({
+    motions: line.motions,
+    state: characterState,
+    renderCharacters,
+    parseCharacter,
+    wait,
+    token,
+    getToken: () => lineRenderToken
+  });
 
-    const parsed = currentChars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
-
-    renderCharacters(getVisibleCharacters(characterState));
-  } else {
-    clearCharacters(characterState);
-    renderCharacters([]);
-  }
+  if (token !== lineRenderToken) return;
+}
 
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
