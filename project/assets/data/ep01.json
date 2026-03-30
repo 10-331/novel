@@ -161,21 +161,32 @@
     "まあ、くだらないことなんですけど、その。"
   ]
 },
-  {
+{
   "motions": [
-    { "type": "flashback", "bg": "placeholder.jpg" }
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "aya", "to": "center", "scale": 0.45 }
+      ],
+      "duration": 400
+    }
   ],
   "speaker": "綾",
   "speakerSub": "AYA",
-  "text": [
-    "福岡？"
-  ]
+  "text": ["福岡？"]
 },
 {
+  "motions": [
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "ten", "to": "center", "scale": 0.45 }
+      ],
+      "duration": 400
+    }
+  ],
   "speaker": "添",
-  "text": [
-    "そ。お土産とかいります？"
-  ]
+  "text": ["そ。お土産とかいります？"]
 }
 
 
