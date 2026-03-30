@@ -309,7 +309,7 @@ function startTyping(lines) {
 
     el.text.textContent += currentFullText[i];
     i++;
-    typingTimer = setTimeout(step, 26);
+    typingTimer = setTimeout(step, 35);
   }
 
   step();
