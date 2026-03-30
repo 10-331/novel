@@ -46,6 +46,39 @@ const CHARACTER_SOURCES = {
   rakuro: "./assets/images/chars/rakuro.png"
 };
 
+const imageCache = new Map();
+
+async function preloadCharacterImages() {
+  const entries = Object.entries(CHARACTER_SOURCES);
+
+  await Promise.all(
+    entries.map(([id, src]) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = src;
+
+        const done = () => {
+          imageCache.set(id, src);
+          resolve();
+        };
+
+        img.onload = async () => {
+          try {
+            if (img.decode) {
+              await img.decode();
+            }
+          } catch (e) {
+            // decode失敗は無視
+          }
+          done();
+        };
+
+        img.onerror = done;
+      });
+    })
+  );
+}
+
 const characterState = createCharacterState();
 
 let script = [];
@@ -63,8 +96,6 @@ let isEpisodeEnded = false;
 
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
-
-
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -173,18 +204,18 @@ async function renderLine() {
     });
 
     if (token !== lineRenderToken) return;
- } else if (Array.isArray(line.chars)) {
-  clearCharacters(characterState);
+  } else if (Array.isArray(line.chars)) {
+    clearCharacters(characterState);
 
-  const parsed = line.chars.map(parseCharacter);
-  parsed.forEach((c) => {
-    if (c.visible !== false) {
-      setCharacter(characterState, c);
-    }
-  });
+    const parsed = line.chars.map(parseCharacter);
+    parsed.forEach((c) => {
+      if (c.visible !== false) {
+        setCharacter(characterState, c);
+      }
+    });
 
-  renderCharacters(getVisibleCharacters(characterState));
-}
+    renderCharacters(getVisibleCharacters(characterState));
+  }
 
   const shouldFadeUi = usedMotions && !hadCharactersBefore;
 
@@ -216,35 +247,6 @@ function parseCharacter(entry) {
     y: 0
   };
 
-const imageCache = new Map();
-
-async function preloadCharacterImages() {
-  const entries = Object.entries(CHARACTER_SOURCES);
-
-  await Promise.all(entries.map(([id, src]) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = src;
-
-      const done = () => {
-        imageCache.set(id, src);
-        resolve();
-      };
-
-      img.onload = async () => {
-        try {
-          if (img.decode) {
-            await img.decode();
-          }
-        } catch (e) {}
-        done();
-      };
-
-      img.onerror = done;
-    });
-  }));
-}
-  
   for (const p of parts.slice(1)) {
     if (["left", "right", "center", "single", "far-left", "far-right"].includes(p)) {
       data.position = p;
@@ -296,17 +298,17 @@ function renderCharacters(chars, options = {}) {
 
     img.classList.remove("hidden", "fade-in", "fade-out");
 
-if (fadeIds.includes(c.id)) {
-  img.classList.remove("fade-in");
-  img.style.opacity = "0";
+    if (fadeIds.includes(c.id)) {
+      img.classList.remove("fade-in");
+      img.style.opacity = "0";
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      img.classList.add("fade-in");
-      img.style.opacity = "";
-    });
-  });
-}
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          img.classList.add("fade-in");
+          img.style.opacity = "";
+        });
+      });
+    }
 
     if (exitIds.includes(c.id)) {
       img.classList.remove("fade-out");
@@ -411,7 +413,6 @@ function setupMenu() {
       currentBg = "placeholder.jpg";
       lineRenderToken++;
 
-      // 最初から再構築
       const targetIndex = index;
       index = 0;
       isEpisodeEnded = false;
@@ -464,10 +465,10 @@ async function renderLineWithoutTyping() {
     });
 
     if (token !== lineRenderToken) return;
-  } else if (Array.isArray(currentChars)) {
+  } else if (Array.isArray(line.chars)) {
     clearCharacters(characterState);
 
-    const parsed = currentChars.map(parseCharacter);
+    const parsed = line.chars.map(parseCharacter);
     parsed.forEach((c) => {
       if (c.visible !== false) {
         setCharacter(characterState, c);
