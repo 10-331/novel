@@ -160,6 +160,22 @@
     "………………あ～～、えっと。",
     "まあ、くだらないことなんですけど、その。"
   ]
+},
+  {
+  "motions": [
+    { "type": "flashback", "bg": "placeholder.jpg" }
+  ],
+  "speaker": "綾",
+  "speakerSub": "AYA",
+  "text": [
+    "福岡？"
+  ]
+},
+{
+  "speaker": "添",
+  "text": [
+    "そ。お土産とかいります？"
+  ]
 }
 
 
