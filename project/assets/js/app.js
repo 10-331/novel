@@ -236,9 +236,7 @@ async function preloadCharacterImages() {
           if (img.decode) {
             await img.decode();
           }
-        } catch (e) {
-          // decode失敗は無視
-        }
+        } catch (e) {}
         done();
       };
 
