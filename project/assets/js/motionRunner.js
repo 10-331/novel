@@ -104,3 +104,11 @@ export async function runMotions({
     }
   }
 }
+
+case "flashback":
+  await playFlashback(motion.bg);
+  break;
+
+case "flashbackEnd":
+  await endFlashback(motion.bg);
+  break;
