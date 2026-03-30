@@ -47,6 +47,8 @@ let currentChars = [];
 let isMenuOpen = false;
 let isEpisodeEnded = false;
 
+let skipAdvanceUntil = 0;
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     await loadScript();
@@ -309,7 +311,7 @@ function startTyping(lines) {
 
     el.text.textContent += currentFullText[i];
     i++;
-    typingTimer = setTimeout(step, 35);
+    typingTimer = setTimeout(step, 30);
   }
 
   step();
@@ -371,8 +373,14 @@ function showEndChoice() {
   el.endChoiceOverlay?.classList.remove("hidden");
 }
 
-el.stage.addEventListener("click", () => {
+el.stage.addEventListener("click", (e) => {
   if (isMenuOpen || isEpisodeEnded) {
+    return;
+  }
+
+  const now = Date.now();
+
+  if (now < skipAdvanceUntil) {
     return;
   }
 
@@ -381,6 +389,9 @@ el.stage.addEventListener("click", () => {
     el.text.textContent = currentFullText;
     isTyping = false;
     el.next.classList.add("is-ready");
+
+    /* 同じタップで次のシーンへ進まないように少しだけロック */
+    skipAdvanceUntil = now + 220;
     return;
   }
 
