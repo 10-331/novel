@@ -9,7 +9,7 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -18,7 +18,7 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
@@ -27,7 +27,7 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -36,15 +36,15 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-   　 "……。"
+      "……。"
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
@@ -52,15 +52,15 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
-      "あ、そういうことしちゃうんだ～！？　悪い子！",
+      "あ、そういうことしちゃうんだ～！？　悪い子！"
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -68,7 +68,7 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
@@ -76,7 +76,7 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -84,7 +84,7 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -93,14 +93,15 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
       "そういうこと言って、あとで恥ずかしくなっても知らないぞ。"
-    ],
+    ]
+  },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
@@ -109,15 +110,11 @@
     ]
   },
   {
-"chars": ["rakuro:left","aya:right"],
+    "chars": ["rakuro:left", "aya:right"],
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
       "また\"たぶん\""
     ]
   }
-  
-
-
-
 ]
