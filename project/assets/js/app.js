@@ -188,16 +188,7 @@ async function renderLine() {
   if (Array.isArray(line.motions) && line.motions.length > 0) {
     usedMotions = true;
 
-    await runMotions({
-      motions: line.motions,
-      state: characterState,
-      renderCharacters,
-      moveCharacters,
-      parseCharacter,
-      wait,
-      token,
-      getToken: () => lineRenderToken
-    });
+unMotions({
 
     if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
