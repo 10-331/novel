@@ -277,7 +277,7 @@ function renderCharacters(chars, options = {}) {
     img.style.display = "none";
     img.style.left = "";
     img.style.bottom = "";
-    img.style.transform = "translateX(-50%)";
+    img.style.setProperty("--char-scale", c.scale || 1);
     img.style.opacity = "";
   });
 
