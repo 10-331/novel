@@ -491,3 +491,16 @@ button{
     height: 24px;
   }
 }
+
+.ui-fade-in{
+  animation: uiFadeIn .6s ease forwards;
+}
+
+@keyframes uiFadeIn{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
