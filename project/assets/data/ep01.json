@@ -163,13 +163,21 @@
 },
 {
   "motions": [
-    { "type": "flashback", "bg": "placeholder.jpg" },
+    {
+      "type": "exit",
+      "targets": ["rakuro", "aya"],
+      "duration": 220
+    },
+    {
+      "type": "flashback",
+      "bg": "placeholder.jpg"
+    },
     {
       "type": "enter",
       "targets": [
         { "id": "aya", "to": "center", "scale": 0.45 }
       ],
-      "duration": 400
+      "duration": 220
     }
   ],
   "speaker": "綾",
@@ -179,15 +187,42 @@
 {
   "motions": [
     {
+      "type": "exit",
+      "targets": ["aya"],
+      "duration": 180
+    },
+    {
       "type": "enter",
       "targets": [
         { "id": "ten", "to": "center", "scale": 0.45 }
       ],
-      "duration": 400
+      "duration": 180
     }
   ],
   "speaker": "添",
-  "text": ["そ。お土産とかいります？"]
+  "speakerSub": "TEN",
+  "text": [
+    "て言っても仕事ですけどね。",
+    "お土産とかいります？"]
+},
+  {
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["ten"],
+      "duration": 180
+    },
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "aya", "to": "center", "scale": 0.45 }
+      ],
+      "duration": 180
+    }
+  ],
+  "speaker": "綾",
+  "speakerSub": "AYA",
+  "text": ["時間ありそうなら、あると嬉しいかも。"]
 }
 
 
