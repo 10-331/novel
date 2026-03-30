@@ -99,6 +99,7 @@ let currentChars = [];
 let prevBg = null;
 let isFlashbackActive = false;
 let hasInitialRenderCompleted = false;
+let isMotionPlaying = false;
 
 let isMenuOpen = false;
 let isEpisodeEnded = false;
@@ -217,19 +218,24 @@ async function renderLine() {
 
   if (Array.isArray(line.motions) && line.motions.length > 0) {
     usedMotions = true;
+    isMotionPlaying = true;
 
-    await runMotions({
-      motions: line.motions,
-      state: characterState,
-      renderCharacters,
-      moveCharacters,
-      parseCharacter,
-      wait,
-      token,
-      getToken: () => lineRenderToken,
-      playFlashback,
-      endFlashback
-    });
+    try {
+      await runMotions({
+        motions: line.motions,
+        state: characterState,
+        renderCharacters,
+        moveCharacters,
+        parseCharacter,
+        wait,
+        token,
+        getToken: () => lineRenderToken,
+        playFlashback,
+        endFlashback
+      });
+    } finally {
+      isMotionPlaying = false;
+    }
 
     if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
@@ -499,18 +505,24 @@ async function renderLineWithoutTyping() {
   }
 
   if (Array.isArray(line.motions) && line.motions.length > 0) {
-    await runMotions({
-      motions: line.motions,
-      state: characterState,
-      renderCharacters,
-      moveCharacters,
-      parseCharacter,
-      wait,
-      token,
-      getToken: () => lineRenderToken,
-      playFlashback,
-      endFlashback
-    });
+    isMotionPlaying = true;
+
+    try {
+      await runMotions({
+        motions: line.motions,
+        state: characterState,
+        renderCharacters,
+        moveCharacters,
+        parseCharacter,
+        wait,
+        token,
+        getToken: () => lineRenderToken,
+        playFlashback,
+        endFlashback
+      });
+    } finally {
+      isMotionPlaying = false;
+    }
 
     if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
@@ -551,7 +563,7 @@ function showEndChoice() {
 }
 
 el.stage.addEventListener("click", async () => {
-  if (isMenuOpen || isEpisodeEnded) return;
+  if (isMenuOpen || isEpisodeEnded || isMotionPlaying) return;
 
   const now = Date.now();
   if (now < skipAdvanceUntil) return;
