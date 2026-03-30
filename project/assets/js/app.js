@@ -122,8 +122,23 @@ async function renderLine() {
   isTyping = false;
   el.next.classList.remove("is-ready");
   el.text.textContent = "";
-  el.nameMain.textContent = "";
-  el.nameSub.textContent = "";
+const shouldFadeUi = Array.isArray(line.motions) && line.motions.length > 0;
+
+[el.nameRow, el.lineImage, el.textRow].forEach(node => {
+  if (!node) return;
+  node.classList.remove("ui-fade-in");
+  void node.offsetWidth;
+});
+
+el.nameMain.textContent = line.speaker || "";
+el.nameSub.textContent = line.speakerSub || "";
+
+if (shouldFadeUi) {
+  [el.nameRow, el.lineImage, el.textRow].forEach(node => {
+    if (!node) return;
+    node.classList.add("ui-fade-in");
+  });
+}
   
 nameRow: document.querySelector(".name-row"),
 lineImage: document.querySelector(".dialogue-line-image"),
