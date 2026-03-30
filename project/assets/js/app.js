@@ -155,6 +155,11 @@ async function renderLine() {
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
 
+  const charMap = {
+  rakuro: el.chars[0],
+  aya: el.chars[1]
+};
+
   [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
     if (!node) return;
     node.classList.remove("ui-fade-in");
@@ -260,7 +265,7 @@ function renderCharacters(chars, options = {}) {
   const hasExplicitPosition = visible.some(c => c.position);
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
-  el.chars.forEach((img) => {
+  Object.values(charMap).forEach((img) => {
     img.className = "char hidden";
     img.style.display = "none";
     img.style.left = "";
@@ -271,9 +276,9 @@ function renderCharacters(chars, options = {}) {
 
   if (visible.length === 0) return;
 
-  visible.forEach((c, i) => {
-    const img = el.chars[i];
-    if (!img) return;
+visible.forEach((c) => {
+  const img = charMap[c.id];
+  if (!img) return;
 
     const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
 
@@ -312,9 +317,9 @@ function moveCharacters(chars) {
   const hasExplicitPosition = visible.some(c => c.position);
   const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
-  visible.forEach((c, i) => {
-    const img = el.chars[i];
-    if (!img) return;
+visible.forEach((c) => {
+  const img = charMap[c.id];
+  if (!img) return;
 
     const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
     const left = getPositionLeftValue(pos);
