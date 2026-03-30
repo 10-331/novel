@@ -166,6 +166,8 @@ async function renderLine() {
   el.text.textContent = "";
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
+  
+  stageGradient: document.getElementById("stageGradient"),
 
   [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
     if (!node) return;
