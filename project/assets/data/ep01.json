@@ -5,7 +5,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "rakuro", "to": "center", "scale": 1.0 }
+          { "id": "rakuro", "to": "center", "scale": 0.1 }
         ],
         "duration": 1200
       }
@@ -21,7 +21,7 @@
       {
         "type": "move",
         "targets": [
-          { "id": "rakuro", "to": "left", "scale": 0.75 }
+          { "id": "rakuro", "to": "left", "scale": 0.1 }
         ],
         "duration": 500
       },
@@ -32,7 +32,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "aya", "to": "right", "scale": 0.1 }
+          { "id": "aya", "to": "right", "scale": 0.075 }
         ],
         "duration": 1000
       }
