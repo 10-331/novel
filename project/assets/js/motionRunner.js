@@ -15,8 +15,8 @@ export async function runMotions({
   wait,
   token,
   getToken,
-  playFlashback,     // ←追加
-  endFlashback       // ←追加
+  playFlashback,   // ←追加
+  endFlashback     // ←追加
 }) {
   for (const motion of motions) {
     if (token !== getToken()) return;
@@ -103,7 +103,7 @@ export async function runMotions({
         await wait(motion.duration || 300);
         break;
 
-      // ★追加ここから
+      // ★ここ！！switchの中！！
       case "flashback":
         if (playFlashback) {
           await playFlashback(motion.bg);
@@ -115,7 +115,6 @@ export async function runMotions({
           await endFlashback();
         }
         break;
-      // ★ここまで
 
       default:
         console.warn(`Unknown motion type: ${motion.type}`);
