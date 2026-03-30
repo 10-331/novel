@@ -124,7 +124,7 @@ button{
 
 .char{
   position: absolute;
-  bottom: 0px;
+  bottom: -20px;
   width: auto;
   max-height: 670px;
   transform: translateX(-50%);
