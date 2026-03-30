@@ -140,7 +140,7 @@ function fitStage() {
   if (!vw || !vh) return;
 
   const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
-  el.stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  img.style.setProperty("--char-scale", c.scale || 1);
 }
 
 function updateOrientation() {
