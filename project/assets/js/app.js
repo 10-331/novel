@@ -244,7 +244,8 @@ function parseCharacter(entry) {
     visible: true,
     position: null,
     x: 0,
-    y: 0
+    y: 0,
+    scale: 1
   };
 
   for (const p of parts.slice(1)) {
@@ -254,6 +255,8 @@ function parseCharacter(entry) {
       data.x = Number(p.replace("x=", "")) || 0;
     } else if (p.startsWith("y=")) {
       data.y = Number(p.replace("y=", "")) || 0;
+    } else if (p.startsWith("scale=")) {
+      data.scale = Number(p.replace("scale=", "")) || 1;
     } else if (p === "hide") {
       data.visible = false;
     }
@@ -294,7 +297,7 @@ function renderCharacters(chars, options = {}) {
     const left = getPositionLeftValue(pos);
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.transform = "translateX(-50%)";
+    img.style.transform = `translateX(-50%) scale(${c.scale || 1})`;
 
     img.classList.remove("hidden", "fade-in", "fade-out");
 
@@ -334,7 +337,7 @@ function moveCharacters(chars) {
     img.src = c.src;
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.transform = "translateX(-50%)";
+    img.style.transform = `translateX(-50%) scale(${c.scale || 1})`;
     img.classList.remove("hidden");
   });
 }
