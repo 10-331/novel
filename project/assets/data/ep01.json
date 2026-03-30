@@ -32,7 +32,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "aya", "to": "right", "scale": 0.5 }
+          { "id": "aya", "to": "right", "scale": 0.35 }
         ],
         "duration": 1000
       }
