@@ -122,18 +122,22 @@ button{
   transition:
     left .45s ease,
     bottom .45s ease,
-    opacity .45s ease,
     transform .45s ease;
   will-change: transform, opacity, left;
   backface-visibility: hidden;
 }
 
+.char.fade-in,
+.char.fade-out{
+  transition: none !important;
+}
+
 .char.fade-in{
-  animation: charFadeIn .8s ease forwards;
+  animation: charFadeIn .22s ease forwards;
 }
 
 .char.fade-out{
-  animation: charFadeOut .6s ease forwards;
+  animation: charFadeOut .18s ease forwards;
 }
 
 @keyframes charFadeIn{
@@ -442,7 +446,6 @@ button{
   padding: 10px 20px;
 }
 
-/* 回想オーバーレイ */
 #flashOverlay{
   position: absolute;
   inset: 0;
@@ -476,7 +479,6 @@ button{
   filter: brightness(1.08) saturate(0.86) blur(1px);
 }
 
-/* 回想中の文字 */
 .name-row.is-flashback .speaker-ja,
 .name-row.is-flashback .speaker-en,
 .text-row.is-flashback .dialogue-text,
