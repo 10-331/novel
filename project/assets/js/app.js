@@ -483,3 +483,6 @@ el.stage.addEventListener("click", async () => {
   index++;
   await renderLine();
 });
+
+
+console.log(getVisibleCharacters(characterState));
