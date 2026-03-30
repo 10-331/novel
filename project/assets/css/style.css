@@ -124,13 +124,28 @@ button{
 
 .char{
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   width: auto;
   max-height: 670px;
   transform: translateX(-50%);
   transform-origin: bottom center;
   opacity: 1;
 }
+
+.char.fade-in{
+  animation: charFadeIn 1s ease forwards;
+}
+
+@keyframes charFadeIn{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+
 
 /* 完全横並び。前後感なし */
 .char.slot-single{ left: 50%; }
