@@ -1,70 +1,172 @@
+import {
+  setCharacter,
+  removeCharacter,
+  getCharacter,
+  getVisibleCharacters
+} from "./characterState.js";
 import { MOTION_PRESETS } from "./motionPresets.js";
-import { setCharacter, removeCharacter, getCharacter, getVisibleCharacters } from "./characterState.js";
 
 export async function runMotions({
   motions,
-  token,
-  getToken,
   state,
   renderCharacters,
   parseCharacter,
-  wait
+  wait,
+  token,
+  getToken
 }) {
+  if (!Array.isArray(motions) || motions.length === 0) return;
+
   for (const motion of motions) {
     if (token !== getToken()) return;
 
-    if (motion.type === "wait") {
-      await wait(motion.duration || 0);
-      continue;
-    }
+    if (!motion || !motion.type) continue;
 
-    if (motion.type === "preset") {
-      const preset = MOTION_PRESETS[motion.name];
-      if (!preset) continue;
-      const expanded = preset(motion.params || {});
-      await runMotions({ motions: expanded, token, getToken, state, renderCharacters, parseCharacter, wait });
-      continue;
-    }
+    switch (motion.type) {
+      case "wait":
+        await wait(motion.duration || 0);
+        break;
 
-    if (motion.type === "enter") {
-      for (const target of motion.targets || []) {
-        const parsed = parseCharacter(`${target.id}:${target.to || "center"}${target.x ? `:x=${target.x}` : ""}${target.y ? `:y=${target.y}` : ""}`);
-        setCharacter(state, parsed);
-      }
+      case "preset": {
+        const presetFn = MOTION_PRESETS[motion.name];
+        if (!presetFn) {
+          console.warn(`Unknown motion preset: ${motion.name}`);
+          break;
+        }
 
-      renderCharacters(getVisibleCharacters(state), { fadeIds: (motion.targets || []).map(t => t.id) });
-      await wait(motion.duration || 1000);
-      continue;
-    }
-
-    if (motion.type === "move") {
-      for (const target of motion.targets || []) {
-        const current = getCharacter(state, target.id);
-        if (!current) continue;
-        setCharacter(state, {
-          ...current,
-          position: target.to ?? current.position,
-          x: target.x ?? current.x,
-          y: target.y ?? current.y
+        const expanded = presetFn(motion.params || {});
+        await runMotions({
+          motions: expanded,
+          state,
+          renderCharacters,
+          parseCharacter,
+          wait,
+          token,
+          getToken
         });
+        break;
       }
 
-      renderCharacters(getVisibleCharacters(state));
-      await wait(motion.duration || 500);
-      continue;
-    }
+      case "enter":
+        await runEnterMotion({
+          motion,
+          state,
+          renderCharacters,
+          parseCharacter,
+          wait,
+          token,
+          getToken
+        });
+        break;
 
-    if (motion.type === "exit") {
-      const ids = motion.targets || [];
-      renderCharacters(getVisibleCharacters(state), { exitIds: ids });
+      case "move":
+        await runMoveMotion({
+          motion,
+          state,
+          renderCharacters,
+          wait,
+          token,
+          getToken
+        });
+        break;
 
-      await wait(motion.duration || 700);
+      case "exit":
+        await runExitMotion({
+          motion,
+          state,
+          renderCharacters,
+          wait,
+          token,
+          getToken
+        });
+        break;
 
-      for (const id of ids) {
-        removeCharacter(state, id);
-      }
-
-      renderCharacters(getVisibleCharacters(state));
+      default:
+        console.warn(`Unknown motion type: ${motion.type}`);
+        break;
     }
   }
+}
+
+async function runEnterMotion({
+  motion,
+  state,
+  renderCharacters,
+  parseCharacter,
+  wait,
+  token,
+  getToken
+}) {
+  const targets = Array.isArray(motion.targets) ? motion.targets : [];
+  const fadeIds = [];
+
+  for (const target of targets) {
+    if (!target?.id) continue;
+
+    const parts = [target.id];
+
+    if (target.to) parts.push(target.to);
+    if (target.x !== undefined) parts.push(`x=${target.x}`);
+    if (target.y !== undefined) parts.push(`y=${target.y}`);
+
+    const parsed = parseCharacter(parts.join(":"));
+    setCharacter(state, parsed);
+    fadeIds.push(target.id);
+  }
+
+  renderCharacters(getVisibleCharacters(state), { fadeIds });
+
+  await wait(motion.duration || 1000);
+  if (token !== getToken()) return;
+}
+
+async function runMoveMotion({
+  motion,
+  state,
+  renderCharacters,
+  wait,
+  token,
+  getToken
+}) {
+  const targets = Array.isArray(motion.targets) ? motion.targets : [];
+
+  for (const target of targets) {
+    if (!target?.id) continue;
+
+    const current = getCharacter(state, target.id);
+    if (!current) continue;
+
+    setCharacter(state, {
+      ...current,
+      position: target.to ?? current.position,
+      x: target.x ?? current.x,
+      y: target.y ?? current.y,
+      visible: true
+    });
+  }
+
+  renderCharacters(getVisibleCharacters(state));
+  await wait(motion.duration || 500);
+  if (token !== getToken()) return;
+}
+
+async function runExitMotion({
+  motion,
+  state,
+  renderCharacters,
+  wait,
+  token,
+  getToken
+}) {
+  const ids = Array.isArray(motion.targets) ? motion.targets : [];
+
+  renderCharacters(getVisibleCharacters(state), { exitIds: ids });
+  await wait(motion.duration || 700);
+  if (token !== getToken()) return;
+
+  for (const id of ids) {
+    removeCharacter(state, id);
+  }
+
+  renderCharacters(getVisibleCharacters(state));
 }
