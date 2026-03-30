@@ -194,7 +194,7 @@
     {
       "type": "enter",
       "targets": [
-        { "id": "ten", "to": "center", "scale": 0.45 }
+        { "id": "ten", "to": "center", "scale": 0.1 }
       ],
       "duration": 180
     }
