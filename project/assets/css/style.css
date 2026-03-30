@@ -68,6 +68,12 @@ button{
   transform-origin: center center;
   overflow: hidden;
   background: #000;
+  opacity: 0;
+}
+
+.game-stage.is-ready{
+  opacity: 1;
+  transition: opacity .18s ease;
 }
 
 .bg-layer,
@@ -133,11 +139,11 @@ button{
 }
 
 .char.fade-in{
-  animation: charFadeIn .22s ease forwards;
+  animation: charFadeIn var(--char-fade-duration, 800ms) ease forwards;
 }
 
 .char.fade-out{
-  animation: charFadeOut .18s ease forwards;
+  animation: charFadeOut var(--char-fade-duration, 600ms) ease forwards;
 }
 
 @keyframes charFadeIn{
@@ -480,12 +486,16 @@ button{
 }
 
 .name-row.is-flashback .speaker-ja,
-.name-row.is-flashback .speaker-en,
 .text-row.is-flashback .dialogue-text,
 .dialogue-text.is-flashback,
-.speaker-ja.is-flashback,
-.speaker-en.is-flashback{
+.speaker-ja.is-flashback{
   color: #1a1a1a;
+  text-shadow: 0 1px 6px rgba(255,255,255,.35);
+}
+
+.name-row.is-flashback .speaker-en,
+.speaker-en.is-flashback{
+  color: var(--accent);
   text-shadow: 0 1px 6px rgba(255,255,255,.35);
 }
 
