@@ -14,13 +14,16 @@ export async function runMotions({
   parseCharacter,
   wait,
   token,
-  getToken
+  getToken,
+  playFlashback,     // ←追加
+  endFlashback       // ←追加
 }) {
   for (const motion of motions) {
     if (token !== getToken()) return;
     if (!motion || !motion.type) continue;
 
     switch (motion.type) {
+
       case "preset": {
         const presetFn = MOTION_PRESETS[motion.name];
         if (!presetFn) {
@@ -37,7 +40,9 @@ export async function runMotions({
           parseCharacter,
           wait,
           token,
-          getToken
+          getToken,
+          playFlashback,
+          endFlashback
         });
         break;
       }
@@ -98,17 +103,23 @@ export async function runMotions({
         await wait(motion.duration || 300);
         break;
 
+      // ★追加ここから
+      case "flashback":
+        if (playFlashback) {
+          await playFlashback(motion.bg);
+        }
+        break;
+
+      case "flashbackEnd":
+        if (endFlashback) {
+          await endFlashback();
+        }
+        break;
+      // ★ここまで
+
       default:
         console.warn(`Unknown motion type: ${motion.type}`);
         break;
     }
   }
 }
-
-case "flashback":
-  await playFlashback(motion.bg);
-  break;
-
-case "flashbackEnd":
-  await endFlashback();
-  break;
