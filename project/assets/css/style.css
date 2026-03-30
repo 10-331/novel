@@ -289,26 +289,25 @@ button{
   align-items: center;
   gap: 2px;
   pointer-events: none;
+  animation: nextPrompt 1.8s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
-/* ▼だけ動かす */
 .next-indicator img{
   width: 26px;
   height: 26px;
   object-fit: contain;
-  animation: nextPrompt 1.2s linear infinite;
 }
 
 .next-indicator span{
   font-size: 12px;
   line-height: 1;
   color: var(--accent);
-  opacity: .6;
   font-weight: 700;
   letter-spacing: .08em;
 }
 
-.next-indicator.is-ready img{
+.next-indicator.is-ready{
   opacity: 1;
 }
 
@@ -319,7 +318,7 @@ button{
   }
   50%{
     transform: translateY(4px);
-    opacity: 0.25;
+    opacity: 0.28;
   }
   100%{
     transform: translateY(0);
