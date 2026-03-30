@@ -335,11 +335,7 @@ function renderCharacters(chars, options = {}) {
 
     img.classList.remove("hidden", "fade-in", "fade-out");
 
-    if (fadeIds.includes(c.id)) {
-      img.style.setProperty(
-        "--char-fade-duration",
-        isFlashbackActive ? "180ms" : "800ms"
-      );
+    img.style.setProperty("--char-fade-duration", "1000ms");
 
       img.classList.remove("fade-in");
       img.style.opacity = "0";
@@ -352,11 +348,7 @@ function renderCharacters(chars, options = {}) {
       });
     }
 
-    if (exitIds.includes(c.id)) {
-      img.style.setProperty(
-        "--char-fade-duration",
-        isFlashbackActive ? "180ms" : "600ms"
-      );
+    img.style.setProperty("--char-fade-duration", "1000ms");
 
       img.classList.remove("fade-out");
       void img.offsetWidth;
