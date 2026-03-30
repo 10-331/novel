@@ -41,8 +41,6 @@ button{
   display: none !important;
 }
 
-/* ===== 全体 ===== */
-
 .app{
   width: 100vw;
   height: 100dvh;
@@ -60,7 +58,6 @@ button{
   overflow: hidden;
 }
 
-/* 1600x900 固定ステージ */
 .game-stage{
   position: absolute;
   left: 50%;
@@ -72,8 +69,6 @@ button{
   overflow: hidden;
   background: #000;
 }
-
-/* ===== 背景 ===== */
 
 .bg-layer,
 .char-layer,
@@ -117,19 +112,23 @@ button{
 
 /* ===== 立ち絵 ===== */
 
-.char{
-  position: absolute;
-  transform: translateX(-50%) scale(var(--char-scale, 1));
-  transform-origin: bottom center;
-  transition: transform .4s ease, opacity .4s ease;
-}
-
 .char-layer{
   z-index: 5;
   pointer-events: none;
 }
 
-", "scale": 0.78 
+.char{
+  position: absolute;
+  transform: translateX(-50%) scale(var(--char-scale, 1));
+  transform-origin: bottom center;
+  transition:
+    left .45s ease,
+    bottom .45s ease,
+    opacity .45s ease,
+    transform .45s ease;
+  will-change: transform, opacity, left;
+  backface-visibility: hidden;
+}
 
 .char.fade-in{
   animation: charFadeIn .8s ease forwards;
@@ -140,32 +139,14 @@ button{
 }
 
 @keyframes charFadeIn{
-  from{
-    opacity: 0;
-  }
-  to{
-    opacity: 1;
-  }
+  from{ opacity: 0; }
+  to{ opacity: 1; }
 }
 
 @keyframes charFadeOut{
-  from{
-    opacity: 1;
-  }
-  to{
-    opacity: 0;
-  }
+  from{ opacity: 1; }
+  to{ opacity: 0; }
 }
-
-
-
-/* 完全横並び。前後感なし */
-.char.slot-single{ left: 50%; }
-.char.slot-far-left{ left: 14%; }
-.char.slot-left{ left: 32%; }
-.char.slot-center{ left: 50%; }
-.char.slot-right{ left: 68%; }
-.char.slot-far-right{ left: 86%; }
 
 /* ===== 上部UI ===== */
 
@@ -242,7 +223,6 @@ button{
   pointer-events: none;
 }
 
-/* 名前位置 */
 .name-row{
   display: flex;
   align-items: baseline;
@@ -270,7 +250,6 @@ button{
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* ライン位置 */
 .dialogue-line-image{
   margin: 0 300px 16px 365px;
   min-height: 12px;
@@ -283,7 +262,6 @@ button{
   opacity: .96;
 }
 
-/* 本文。位置と幅を分離する */
 .text-row{
   display: block;
   min-height: calc(1.62em * 3);
@@ -302,6 +280,15 @@ button{
   white-space: pre-wrap;
   word-break: normal;
   overflow-wrap: break-word;
+}
+
+.ui-fade-in{
+  animation: uiFadeIn .6s ease forwards;
+}
+
+@keyframes uiFadeIn{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
 }
 
 /* ===== NEXT ===== */
@@ -382,7 +369,6 @@ button{
   z-index: 15;
 }
 
-/* 上 */
 .stage-gradient::before{
   content: "";
   position: absolute;
@@ -392,7 +378,6 @@ button{
   height: 140px;
 }
 
-/* 下 */
 .stage-gradient::after{
   content: "";
   position: absolute;
@@ -402,18 +387,18 @@ button{
   height: 240px;
 }
 
-/* 黒グラデーション */
 .stage-gradient.black::before{
   background: linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0));
 }
+
 .stage-gradient.black::after{
   background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
 }
 
-/* 白グラデーション */
 .stage-gradient.white::before{
   background: linear-gradient(to bottom, rgba(255,255,255,0.65), rgba(255,255,255,0));
 }
+
 .stage-gradient.white::after{
   background: linear-gradient(to top, rgba(255,255,255,0.75), rgba(255,255,255,0));
 }
@@ -434,14 +419,6 @@ button{
   border-radius: 16px;
   background: rgba(20,22,30,.96);
   box-shadow: 0 12px 36px rgba(0,0,0,.35);
-}
-
-.menu-close{
-  display: block;
-  margin-left: auto;
-  font-size: 28px;
-  line-height: 1;
-  color: #fff;
 }
 
 .menu-item-btn{
@@ -477,8 +454,6 @@ button{
   padding: 10px 20px;
 }
 
-/* ===== モバイル ===== */
-/* PCと同じ見え方を優先。会話欄は触らない */
 @media screen and (max-width: 768px){
   .next-indicator{
     right: 24px;
@@ -489,51 +464,4 @@ button{
     width: 24px;
     height: 24px;
   }
-}
-
-.ui-fade-in{
-  animation: uiFadeIn .6s ease forwards;
-}
-
-@keyframes uiFadeIn{
-  0%{
-    opacity: 0;
-  }
-  100%{
-    opacity: 1;
-  }
-}
-
-.char {
-  position: absolute;
-  transform: translateX(-50%);
-  transition: left 0.4s ease, bottom 0.4s ease, opacity 0.4s ease;
-}
-
-.char.fade-in {
-  animation: fadeIn 0.8s ease forwards;
-}
-
-.char.fade-out {
-  animation: fadeOut 0.6s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-/* UIフェード */
-.ui-fade-in {
-  animation: uiFade 0.6s ease forwards;
-}
-
-@keyframes uiFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
