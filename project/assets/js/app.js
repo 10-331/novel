@@ -124,7 +124,11 @@ async function renderLine() {
   el.text.textContent = "";
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
-
+  
+nameRow: document.querySelector(".name-row"),
+lineImage: document.querySelector(".dialogue-line-image"),
+textRow: document.querySelector(".text-row"),
+  
   if (index >= script.length) {
     clearCharacters(characterState);
     renderCharacters([]);
