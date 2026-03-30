@@ -1,5 +1,6 @@
 const BASE_WIDTH = 1600;
 const BASE_HEIGHT = 900;
+const CHARACTER_BOTTOM = -28;
 
 const el = {
   viewport: document.getElementById("gameViewport"),
@@ -148,7 +149,8 @@ function parseCharacter(entry) {
     src: CHARACTER_SOURCES[id] || "",
     visible: true,
     position: null,
-    x: 0
+    x: 0,
+    y: 0
   };
 
   for (const p of parts.slice(1)) {
@@ -170,12 +172,18 @@ function parseCharacter(entry) {
       continue;
     }
 
+    if (p.startsWith("y=")) {
+      const n = Number(p.replace("y=", ""));
+      data.y = Number.isFinite(n) ? n : 0;
+      continue;
+    }
+
     if (p === "hide") {
       data.visible = false;
       continue;
     }
 
-    // front/back/scale/y/bottom などは無視
+    // front/back/scale/bottom などは無視
   }
 
   return data;
@@ -206,7 +214,7 @@ function renderCharacters(chars) {
 
       const left = getPositionLeftValue(c.position || "center");
       img.style.left = `calc(${left}% + ${c.x}px)`;
-      img.style.bottom = "52px";
+      img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
       img.style.transform = "translateX(-50%)";
       img.classList.remove("hidden");
     });
@@ -225,7 +233,7 @@ function renderCharacters(chars) {
 
     const left = getPositionLeftValue(slots[i]);
     img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = "52px";
+    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.transform = "translateX(-50%)";
     img.classList.remove("hidden");
   });
@@ -373,7 +381,7 @@ function showEndChoice() {
   el.endChoiceOverlay?.classList.remove("hidden");
 }
 
-el.stage.addEventListener("click", (e) => {
+el.stage.addEventListener("click", () => {
   if (isMenuOpen || isEpisodeEnded) {
     return;
   }
@@ -389,8 +397,6 @@ el.stage.addEventListener("click", (e) => {
     el.text.textContent = currentFullText;
     isTyping = false;
     el.next.classList.add("is-ready");
-
-    /* 同じタップで次のシーンへ進まないように少しだけロック */
     skipAdvanceUntil = now + 220;
     return;
   }
