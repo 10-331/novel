@@ -43,12 +43,16 @@ const el = {
 
 const charMap = {
   rakuro: el.chars[0],
-  aya: el.chars[1]
+  aya: el.chars[1],
+  ten: el.chars[2],
+  kuguri: el.chars[3]
 };
 
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
   rakuro: "./assets/images/chars/rakuro.png"
+  ten: "./assets/images/chars/ten.png",
+  kuguri: "./assets/images/chars/kuguri.png"
 };
 
 const imageCache = new Map();
