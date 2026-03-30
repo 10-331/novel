@@ -1,6 +1,7 @@
 const BASE_WIDTH = 1600;
 const BASE_HEIGHT = 900;
 const CHARACTER_BOTTOM = -28;
+const CHARACTER_FADE_DURATION = 1000;
 
 const el = {
   viewport: document.getElementById("gameViewport"),
@@ -50,6 +51,7 @@ let isEpisodeEnded = false;
 
 let skipAdvanceUntil = 0;
 let prevVisibleCharKeys = [];
+let lineRenderToken = 0;
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -102,22 +104,25 @@ function updateOrientation() {
   el.overlay.classList.toggle("show", isPortrait);
 }
 
-function renderLine() {
+async function renderLine() {
+  const token = ++lineRenderToken;
+
   while (index < script.length && script[index] && script[index].disabled === true) {
     index++;
   }
 
+  clearTimeout(typingTimer);
+  isTyping = false;
+  el.next.classList.remove("is-ready");
+  el.text.textContent = "";
+  el.nameMain.textContent = "";
+  el.nameSub.textContent = "";
+
   if (index >= script.length) {
-    el.nameMain.textContent = "";
-    el.nameSub.textContent = "";
-    el.text.textContent = "";
-    el.next.classList.remove("is-ready");
     renderCharacters([]);
     showEndChoice();
     return;
   }
-
-  el.next.classList.remove("is-ready");
 
   const line = script[index];
 
@@ -130,14 +135,20 @@ function renderLine() {
   }
 
   el.bg.src = `./assets/images/bg/${currentBg}`;
-  el.nameMain.textContent = line.speaker || "";
-  el.nameSub.textContent = line.speakerSub || "";
 
   const parsed = Array.isArray(currentChars)
     ? currentChars.map(parseCharacter)
     : [];
 
-  renderCharacters(parsed);
+  const hasNewCharacter = renderCharacters(parsed);
+
+  if (hasNewCharacter) {
+    await wait(CHARACTER_FADE_DURATION);
+    if (token !== lineRenderToken) return;
+  }
+
+  el.nameMain.textContent = line.speaker || "";
+  el.nameSub.textContent = line.speakerSub || "";
   startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
 }
 
@@ -183,8 +194,6 @@ function parseCharacter(entry) {
       data.visible = false;
       continue;
     }
-
-    // front/back/scale/bottom などは無視
   }
 
   return data;
@@ -193,13 +202,16 @@ function parseCharacter(entry) {
 function renderCharacters(chars) {
   const visible = chars.filter(c => c && c.visible !== false && c.src);
   const hasExplicitPosition = visible.some(c => c.position);
+  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
 
   const currentKeys = visible.map((c, i) => {
-    const pos = c.position || (hasExplicitPosition ? "" : getAutoSlots(visible.length)[i]);
+    const pos = c.position || slots[i] || "";
     const x = c.x || 0;
     const y = c.y || 0;
     return `${c.id}|${pos}|${x}|${y}`;
   });
+
+  let hasNewCharacter = false;
 
   el.chars.forEach((img) => {
     img.className = "char hidden";
@@ -211,52 +223,26 @@ function renderCharacters(chars) {
 
   if (visible.length === 0) {
     prevVisibleCharKeys = [];
-    return;
+    return false;
   }
-
-  if (hasExplicitPosition) {
-    visible.forEach((c, i) => {
-      const img = el.chars[i];
-      if (!img) return;
-
-      const key = `${c.id}|${c.position || ""}|${c.x || 0}|${c.y || 0}`;
-      const isNew = !prevVisibleCharKeys.includes(key);
-
-      img.src = c.src;
-      img.style.display = "block";
-      img.classList.add("char");
-
-      const left = getPositionLeftValue(c.position || "center");
-      img.style.left = `calc(${left}% + ${c.x}px)`;
-      img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-      img.style.transform = "translateX(-50%)";
-      img.classList.remove("hidden");
-
-      if (isNew) {
-        img.classList.remove("fade-in");
-        void img.offsetWidth;
-        img.classList.add("fade-in");
-      }
-    });
-
-    prevVisibleCharKeys = currentKeys;
-    return;
-  }
-
-  const slots = getAutoSlots(visible.length);
 
   visible.forEach((c, i) => {
     const img = el.chars[i];
     if (!img) return;
 
-    const key = `${c.id}|${slots[i]}|${c.x || 0}|${c.y || 0}`;
+    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
+    const key = `${c.id}|${pos}|${c.x || 0}|${c.y || 0}`;
     const isNew = !prevVisibleCharKeys.includes(key);
+
+    if (isNew) {
+      hasNewCharacter = true;
+    }
 
     img.src = c.src;
     img.style.display = "block";
     img.classList.add("char");
 
-    const left = getPositionLeftValue(slots[i]);
+    const left = getPositionLeftValue(pos);
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.transform = "translateX(-50%)";
@@ -270,6 +256,7 @@ function renderCharacters(chars) {
   });
 
   prevVisibleCharKeys = currentKeys;
+  return hasNewCharacter;
 }
 
 function getAutoSlots(count) {
@@ -412,6 +399,10 @@ function setupEndChoice() {
 function showEndChoice() {
   isEpisodeEnded = true;
   el.endChoiceOverlay?.classList.remove("hidden");
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 el.stage.addEventListener("click", () => {
