@@ -97,6 +97,7 @@ let currentFullText = "";
 let currentBg = "placeholder.jpg";
 let currentChars = [];
 let prevBg = null;
+let isFlashbackActive = false;
 
 let isMenuOpen = false;
 let isEpisodeEnded = false;
@@ -203,7 +204,9 @@ async function renderLine() {
   if (line.bg) currentBg = line.bg;
   if (line.chars !== undefined) currentChars = line.chars;
 
-  el.bg.src = `./assets/images/bg/${currentBg}`;
+  if (!isFlashbackActive) {
+    el.bg.src = `./assets/images/bg/${currentBg}`;
+  }
 
   const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
   let usedMotions = false;
@@ -435,6 +438,8 @@ function setupMenu() {
       currentChars = [];
       currentBg = "placeholder.jpg";
       prevBg = null;
+      isFlashbackActive = false;
+      setFlashbackMode(false);
       lineRenderToken++;
 
       const targetIndex = index;
@@ -474,7 +479,9 @@ async function renderLineWithoutTyping() {
   if (line.bg) currentBg = line.bg;
   if (line.chars !== undefined) currentChars = line.chars;
 
-  el.bg.src = `./assets/images/bg/${currentBg}`;
+  if (!isFlashbackActive) {
+    el.bg.src = `./assets/images/bg/${currentBg}`;
+  }
 
   if (Array.isArray(line.motions) && line.motions.length > 0) {
     await runMotions({
@@ -554,6 +561,7 @@ async function playFlashback(bgName) {
   await wait(300);
 
   prevBg = currentBg;
+  isFlashbackActive = true;
 
   el.bg.src = `./assets/images/bg/${bgName}`;
   setFlashbackMode(true);
@@ -569,6 +577,7 @@ async function endFlashback() {
   flashOverlay.classList.add("active");
   await wait(300);
 
+  isFlashbackActive = false;
   el.bg.src = `./assets/images/bg/${prevBg || currentBg}`;
   setFlashbackMode(false);
   flashFrame.classList.remove("active");
