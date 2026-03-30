@@ -223,7 +223,29 @@
   "speaker": "綾",
   "speakerSub": "AYA",
   "text": ["時間ありそうなら、あると嬉しいかも。"]
+},
+{
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["aya", "ten"],
+      "duration": 180
+    },
+    {
+      "type": "flashbackEnd"
+    },
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "rakuro", "to": "left", "scale": 0.5 },
+        { "id": "aya", "to": "right", "scale": 0.42 }
+      ],
+      "duration": 260
+    }
+  ],
+  "speaker": "綾",
+  "speakerSub": "AYA",
+  "text": ["……って感じで。"]
 }
-
 
 ]
