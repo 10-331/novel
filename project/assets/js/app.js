@@ -514,3 +514,33 @@ el.stage.addEventListener("click", async () => {
   index++;
   await renderLine();
 });
+
+const flashOverlay = document.getElementById("flashOverlay");
+const flashFrame = document.getElementById("flashFrame");
+
+async function playFlashback(bgName) {
+  // 白くする
+  flashOverlay.classList.add("active");
+  await wait(400);
+
+  // 背景切り替え
+  el.bg.src = `./assets/images/bg/${bgName}`;
+  el.bg.classList.add("flashback");
+  flashFrame.classList.add("active");
+
+  // 白戻す
+  flashOverlay.classList.remove("active");
+  await wait(400);
+}
+
+async function endFlashback(bgName) {
+  flashOverlay.classList.add("active");
+  await wait(400);
+
+  el.bg.src = `./assets/images/bg/${bgName}`;
+  el.bg.classList.remove("flashback");
+  flashFrame.classList.remove("active");
+
+  flashOverlay.classList.remove("active");
+  await wait(400);
+}
