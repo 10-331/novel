@@ -64,12 +64,8 @@ async function preloadCharacterImages() {
 
         img.onload = async () => {
           try {
-            if (img.decode) {
-              await img.decode();
-            }
-          } catch (e) {
-            // decode失敗は無視
-          }
+            if (img.decode) await img.decode();
+          } catch {}
           done();
         };
 
@@ -89,7 +85,6 @@ let typingTimer = null;
 let currentFullText = "";
 
 let currentBg = "placeholder.jpg";
-let currentChars = [];
 
 let isMenuOpen = false;
 let isEpisodeEnded = false;
@@ -98,18 +93,13 @@ let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
 
 window.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await preloadCharacterImages();
-    await loadScript();
-    fitStage();
-    updateOrientation();
-    setupMenu();
-    setupEndChoice();
-    await renderLine();
-  } catch (err) {
-    console.error(err);
-    alert("シナリオの読み込みに失敗しました");
-  }
+  await preloadCharacterImages();
+  await loadScript();
+  fitStage();
+  updateOrientation();
+  setupMenu();
+  setupEndChoice();
+  await renderLine();
 });
 
 window.addEventListener("resize", () => {
@@ -117,81 +107,42 @@ window.addEventListener("resize", () => {
   updateOrientation();
 });
 
-window.addEventListener("orientationchange", () => {
-  setTimeout(() => {
-    fitStage();
-    updateOrientation();
-  }, 200);
-});
-
-async function loadScript() {
-  const res = await fetch("./assets/data/ep01.json");
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-  script = await res.json();
-}
-
 function fitStage() {
-  if (!el.viewport || !el.stage) return;
-
   const vw = el.viewport.clientWidth;
   const vh = el.viewport.clientHeight;
-  if (!vw || !vh) return;
 
   const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
-  img.style.setProperty("--char-scale", c.scale || 1);
+  el.stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
 function updateOrientation() {
-  if (!el.overlay) return;
   const isPortrait = window.innerHeight > window.innerWidth;
   el.overlay.classList.toggle("show", isPortrait);
+}
+
+async function loadScript() {
+  const res = await fetch("./assets/data/ep01.json");
+  script = await res.json();
 }
 
 async function renderLine() {
   const token = ++lineRenderToken;
 
-  while (index < script.length && script[index]?.disabled === true) {
-    index++;
-  }
-
   clearTimeout(typingTimer);
   isTyping = false;
-  el.next.classList.remove("is-ready");
   el.text.textContent = "";
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
+  el.next.classList.remove("is-ready");
 
-  [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
-    if (!node) return;
-    node.classList.remove("ui-fade-in");
-  });
-
-  if (index >= script.length) {
-    clearCharacters(characterState);
-    renderCharacters([]);
-    showEndChoice();
-    return;
-  }
+  if (index >= script.length) return;
 
   const line = script[index];
 
-  if (line.bg) {
-    currentBg = line.bg;
-  }
-  if (line.chars !== undefined) {
-    currentChars = line.chars;
-  }
-
+  if (line.bg) currentBg = line.bg;
   el.bg.src = `./assets/images/bg/${currentBg}`;
 
-  const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
-  let usedMotions = false;
-
-  if (Array.isArray(line.motions) && line.motions.length > 0) {
-    usedMotions = true;
-
+  if (Array.isArray(line.motions)) {
     await runMotions({
       motions: line.motions,
       state: characterState,
@@ -202,45 +153,21 @@ async function renderLine() {
       token,
       getToken: () => lineRenderToken
     });
-
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(line.chars)) {
-    clearCharacters(characterState);
-
-    const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
-
-    renderCharacters(getVisibleCharacters(characterState));
   }
-
-  const shouldFadeUi = usedMotions && !hadCharactersBefore;
 
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
-
-  if (shouldFadeUi) {
-    [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
-      if (!node) return;
-      node.classList.remove("ui-fade-in");
-      void node.offsetWidth;
-      node.classList.add("ui-fade-in");
-    });
-  }
 
   startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
 }
 
 function parseCharacter(entry) {
-  const parts = String(entry).split(":").map(v => v.trim()).filter(Boolean);
+  const parts = entry.split(":");
   const id = parts[0];
 
   const data = {
     id,
-    src: CHARACTER_SOURCES[id] || "",
+    src: CHARACTER_SOURCES[id],
     visible: true,
     position: null,
     x: 0,
@@ -249,16 +176,10 @@ function parseCharacter(entry) {
   };
 
   for (const p of parts.slice(1)) {
-    if (["left", "right", "center", "single", "far-left", "far-right"].includes(p)) {
+    if (p.startsWith("scale=")) {
+      data.scale = Number(p.replace("scale=", ""));
+    } else if (p === "left" || p === "right" || p === "center") {
       data.position = p;
-    } else if (p.startsWith("x=")) {
-      data.x = Number(p.replace("x=", "")) || 0;
-    } else if (p.startsWith("y=")) {
-      data.y = Number(p.replace("y=", "")) || 0;
-    } else if (p.startsWith("scale=")) {
-      data.scale = Number(p.replace("scale=", "")) || 1;
-    } else if (p === "hide") {
-      data.visible = false;
     }
   }
 
@@ -266,122 +187,61 @@ function parseCharacter(entry) {
 }
 
 function renderCharacters(chars, options = {}) {
-  const { fadeIds = [], exitIds = [] } = options;
+  const { fadeIds = [] } = options;
 
-  const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const hasExplicitPosition = visible.some(c => c.position);
-  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
+  el.chars.forEach(img => {
+    img.style.display = "none";
+    img.style.removeProperty("--char-scale");
+  });
 
-el.chars.forEach((img) => {
-  img.className = "char hidden";
-  img.style.display = "none";
-  img.style.left = "";
-  img.style.bottom = "";
-  img.style.opacity = "";
-  img.style.removeProperty("--char-scale");
-});
-
-  if (visible.length === 0) {
-    return;
-  }
-
-  visible.forEach((c, i) => {
+  chars.forEach((c, i) => {
     const img = el.chars[i];
     if (!img) return;
-
-    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
 
     img.src = c.src;
     img.style.display = "block";
 
-    const left = getPositionLeftValue(pos);
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.transform = `translateX(-50%) scale(${c.scale || 1})`;
+    img.style.left = "50%";
+    img.style.bottom = `${CHARACTER_BOTTOM}px`;
 
-    img.classList.remove("hidden", "fade-in", "fade-out");
+    img.style.setProperty("--char-scale", c.scale || 1);
 
     if (fadeIds.includes(c.id)) {
-      img.classList.remove("fade-in");
       img.style.opacity = "0";
-
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          img.classList.add("fade-in");
-          img.style.opacity = "";
-        });
+        img.style.opacity = "1";
       });
-    }
-
-    if (exitIds.includes(c.id)) {
-      img.classList.remove("fade-out");
-      void img.offsetWidth;
-      img.classList.add("fade-out");
     }
   });
 }
 
 function moveCharacters(chars) {
-  const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const hasExplicitPosition = visible.some(c => c.position);
-  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
-
-  visible.forEach((c, i) => {
+  chars.forEach((c, i) => {
     const img = el.chars[i];
     if (!img) return;
 
-    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
-    const left = getPositionLeftValue(pos);
-
-    img.style.display = "block";
-    img.src = c.src;
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.transform = `translateX(-50%) scale(${c.scale || 1})`;
-    img.classList.remove("hidden");
+    img.style.setProperty("--char-scale", c.scale || 1);
   });
-}
-
-function getAutoSlots(count) {
-  if (count <= 0) return [];
-  if (count === 1) return ["single"];
-  if (count === 2) return ["left", "right"];
-  if (count === 3) return ["left", "center", "right"];
-  return ["far-left", "left", "right", "far-right"];
-}
-
-function getPositionLeftValue(position) {
-  switch (position) {
-    case "single": return 50;
-    case "far-left": return 14;
-    case "left": return 32;
-    case "center": return 50;
-    case "right": return 68;
-    case "far-right": return 86;
-    default: return 50;
-  }
 }
 
 function startTyping(lines) {
   clearTimeout(typingTimer);
-  el.text.textContent = "";
-  el.next.classList.remove("is-ready");
 
   const full = lines.join("\n");
   currentFullText = full;
 
   let i = 0;
   isTyping = true;
+  el.text.textContent = "";
 
   function step() {
-    if (i >= currentFullText.length) {
+    if (i >= full.length) {
       isTyping = false;
       el.next.classList.add("is-ready");
       return;
     }
 
-    el.text.textContent += currentFullText[i];
-    i++;
+    el.text.textContent += full[i++];
     typingTimer = setTimeout(step, 30);
   }
 
@@ -389,134 +249,21 @@ function startTyping(lines) {
 }
 
 function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(r => setTimeout(r, ms));
 }
 
 function setupMenu() {
-  if (!el.menuBtn || !el.menuPanel) return;
-
-  el.menuBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    isMenuOpen = !isMenuOpen;
-    el.menuBtn.classList.toggle("open", isMenuOpen);
-    el.menuPanel.classList.toggle("hidden", !isMenuOpen);
-  });
-
-  el.menuPanel?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-
-  el.backBtn?.addEventListener("click", async (e) => {
-    e.stopPropagation();
-
-    if (index > 0) {
-      index--;
-      clearCharacters(characterState);
-      currentChars = [];
-      currentBg = "placeholder.jpg";
-      lineRenderToken++;
-
-      const targetIndex = index;
-      index = 0;
-      isEpisodeEnded = false;
-
-      while (index < targetIndex) {
-        await renderLineWithoutTyping();
-        index++;
-      }
-
-      await renderLine();
-    }
-
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
-
-  el.skipBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    index = script.length;
-    renderLine();
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
+  el.menuBtn.addEventListener("click", () => {
+    el.menuPanel.classList.toggle("hidden");
   });
 }
 
-async function renderLineWithoutTyping() {
-  const token = ++lineRenderToken;
-
-  if (index >= script.length) return;
-
-  const line = script[index];
-
-  if (line.bg) currentBg = line.bg;
-  if (line.chars !== undefined) currentChars = line.chars;
-
-  el.bg.src = `./assets/images/bg/${currentBg}`;
-
-  if (Array.isArray(line.motions) && line.motions.length > 0) {
-    await runMotions({
-      motions: line.motions,
-      state: characterState,
-      renderCharacters,
-      moveCharacters,
-      parseCharacter,
-      wait,
-      token,
-      getToken: () => lineRenderToken
-    });
-
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(line.chars)) {
-    clearCharacters(characterState);
-
-    const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
-
-    renderCharacters(getVisibleCharacters(characterState));
-  }
-}
-
-function setupEndChoice() {
-  el.continueBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = false;
-  });
-
-  el.finishBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = true;
-  });
-
-  el.endChoiceOverlay?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-}
-
-function showEndChoice() {
-  isEpisodeEnded = true;
-  el.endChoiceOverlay?.classList.remove("hidden");
-}
+function setupEndChoice() {}
 
 el.stage.addEventListener("click", async () => {
-  if (isMenuOpen || isEpisodeEnded) return;
-
-  const now = Date.now();
-  if (now < skipAdvanceUntil) return;
-
   if (isTyping) {
-    clearTimeout(typingTimer);
     el.text.textContent = currentFullText;
     isTyping = false;
-    el.next.classList.add("is-ready");
-    skipAdvanceUntil = now + 220;
     return;
   }
 
