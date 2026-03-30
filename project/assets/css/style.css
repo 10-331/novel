@@ -285,15 +285,15 @@ button{
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  opacity: .38;
+  opacity: .32;
   pointer-events: none;
   transform: translateY(0);
-  animation: nextFloat 1.9s ease-in-out infinite;
+  animation: nextPrompt 1.35s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
 .next-indicator.is-ready{
-  opacity: .92;
+  opacity: .88;
 }
 
 .next-indicator img{
@@ -310,24 +310,18 @@ button{
   letter-spacing: .08em;
 }
 
-@keyframes nextFloat{
+@keyframes nextPrompt{
   0%{
     transform: translateY(0);
-    opacity: .18;
-  }
-  20%{
-    opacity: .92;
+    opacity: .82;
   }
   50%{
-    transform: translateY(5px);
-    opacity: .52;
-  }
-  80%{
-    opacity: .92;
+    transform: translateY(4px);
+    opacity: .28;
   }
   100%{
     transform: translateY(0);
-    opacity: .18;
+    opacity: .82;
   }
 }
 
