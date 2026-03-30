@@ -50,7 +50,7 @@ const charMap = {
 
 const CHARACTER_SOURCES = {
   aya: "./assets/images/chars/aya.png",
-  rakuro: "./assets/images/chars/rakuro.png"
+  rakuro: "./assets/images/chars/rakuro.png",
   ten: "./assets/images/chars/ten.png",
   kuguri: "./assets/images/chars/kuguri.png"
 };
@@ -523,28 +523,30 @@ const flashOverlay = document.getElementById("flashOverlay");
 const flashFrame = document.getElementById("flashFrame");
 
 async function playFlashback(bgName) {
-  // 白くする
   flashOverlay.classList.add("active");
-  await wait(400);
+  await wait(300);
 
-  // 背景切り替え
+  // 現在背景を保存
+  prevBg = currentBg;
+
+  // 回想背景に変更（currentBgは変えない）
   el.bg.src = `./assets/images/bg/${bgName}`;
   el.bg.classList.add("flashback");
   flashFrame.classList.add("active");
 
-  // 白戻す
   flashOverlay.classList.remove("active");
-  await wait(400);
+  await wait(300);
 }
 
-async function endFlashback(bgName) {
+async function endFlashback() {
   flashOverlay.classList.add("active");
-  await wait(400);
+  await wait(300);
 
-  el.bg.src = `./assets/images/bg/${bgName}`;
+  // 元に戻す
+  el.bg.src = `./assets/images/bg/${prevBg || currentBg}`;
   el.bg.classList.remove("flashback");
   flashFrame.classList.remove("active");
 
   flashOverlay.classList.remove("active");
-  await wait(400);
+  await wait(300);
 }
