@@ -654,3 +654,5 @@ async function endFlashback() {
   flashOverlay.classList.remove("active");
   await wait(300);
 }
+
+let currentDisplayedBg = "";
