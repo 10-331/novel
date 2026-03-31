@@ -92,6 +92,14 @@ async function preloadCharacterImages() {
 function changeBackground(src, immediate = false) {
   if (!el.bgA || !el.bgB) return;
 
+  // ★ 初期状態リセット
+currentDisplayedBg = `./assets/images/bg/${currentBg}`;
+
+if (el.bgA) el.bgA.classList.remove("flashback");
+if (el.bgB) el.bgB.classList.remove("flashback");
+
+setFlashbackMode(false);
+
   const next = activeBg === "A" ? el.bgB : el.bgA;
   const current = activeBg === "A" ? el.bgA : el.bgB;
 
