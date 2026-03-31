@@ -169,8 +169,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     setupMenu();
     setupEndChoice();
 
-    changeBackground(`./assets/images/bg/${currentBg}`, true);
-
     if (window.innerHeight > window.innerWidth) {
       return;
     }
@@ -206,9 +204,23 @@ async function startGame() {
   if (isOrientationReady) return;
   isOrientationReady = true;
 
-await renderLine();
-el.stage?.classList.add("is-ready");
+  // 先に背景を確定させる
+  const firstLine = script[0];
+  if (firstLine?.bg) {
+    currentBg = firstLine.bg;
+  }
 
+  changeBackground(`./assets/images/bg/${currentBg}`, true);
+
+  // まだ見せない状態で1フレーム待つ
+  await new Promise(requestAnimationFrame);
+
+  // 初回描画
+  await renderLine();
+
+  // 最後に表示解禁
+  el.stage?.classList.add("is-ready");
+}
 async function loadScript() {
   const res = await fetch("./assets/data/ep01.json");
   if (!res.ok) {
