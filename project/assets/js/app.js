@@ -735,11 +735,3 @@ async function endFlashback() {
 
 let currentDisplayedBg = "";
 
-/* 初期チラ見え防止 */
-.bg-layer img{
-  opacity: 0;
-}
-
-.game-stage.is-ready .bg.active{
-  opacity: 1;
-}
