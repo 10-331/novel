@@ -118,10 +118,18 @@ window.addEventListener("DOMContentLoaded", async () => {
     updateOrientation();
     setupMenu();
     setupEndChoice();
+
+    // 初期の不要背景ちら見え防止
+    if (el.bg) {
+      el.bg.removeAttribute("src");
+    }
+
+    // 最初のフェードインを見せるため、先にstageを表示
+    el.stage?.classList.add("is-ready");
+
     await renderLine();
 
     hasInitialRenderCompleted = true;
-    el.stage?.classList.add("is-ready");
   } catch (err) {
     console.error(err);
     alert("シナリオの読み込みに失敗しました");
@@ -331,7 +339,8 @@ function renderCharacters(chars, options = {}) {
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.setProperty("--char-scale", c.scale || 1);
 
-    img.classList.remove("hidden");
+    // ★ ここが重要：move前にfade系クラスを外す
+    img.classList.remove("hidden", "fade-in", "fade-out");
 
     img.style.setProperty("--char-fade-duration", "1000ms");
 
@@ -366,6 +375,9 @@ function moveCharacters(chars) {
 
     const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
     const left = getPositionLeftValue(pos);
+
+    // ★ ここも重要：fade-in残留を消してtransitionを有効化
+    img.classList.remove("fade-in", "fade-out");
 
     img.style.display = "block";
     img.src = c.src;
