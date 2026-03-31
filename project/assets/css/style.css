@@ -248,38 +248,70 @@ button{
   pointer-events: none;
 }
 
-.dialogue-line-image{
-  margin: 0 300px 16px 365px;
-  height: 12px;
-  min-height: 12px;
+/* ★ 基準を統一 */
+.name-row,
+.dialogue-line-image,
+.text-row{
+  margin-left: 430px;
 }
 
+/* 名前 */
+.name-row{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+  min-height: 36px;
+}
+
+.speaker-ja{
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .03em;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+
+.speaker-en{
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .03em;
+  color: var(--accent);
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+
+/* 線 */
+.dialogue-line-image{
+  margin-bottom: 12px;
+  height: 12px;
+}
+
+.dialogue-line-image img{
+  width: 30ic;
+  height: 12px;
+  object-fit: fill;
+  opacity: .96;
+}
+
+/* テキスト */
 .text-row{
-  display: block;
   height: calc(1.62em * 3);
-  min-height: calc(1.62em * 3);
-  max-height: calc(1.62em * 3);
   overflow: hidden;
 }
 
 .dialogue-text{
-  margin-left: 430px;
   width: 30ic;
-  max-width: 30ic;
   height: calc(1.62em * 3);
-  min-height: calc(1.62em * 3);
-  max-height: calc(1.62em * 3);
-  padding-left: 0;
   font-size: 24px;
   line-height: 1.62;
   letter-spacing: .01em;
+  color: #ffffff;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   white-space: pre-wrap;
-  word-break: normal;
-  overflow-wrap: break-word;
   overflow: hidden;
 }
-
 .next-indicator{
   position: absolute;
   right: 28px;
