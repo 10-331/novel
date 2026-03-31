@@ -92,9 +92,56 @@ async function preloadCharacterImages() {
 function changeBackground(src, immediate = false) {
   if (!el.bgA || !el.bgB) return;
 
-// ★ 初期状態リセット
-currentDisplayedBg = `./assets/images/bg/${currentBg}`;
+function changeBackground(src, immediate = false) {
+  if (!el.bgA || !el.bgB) return;
 
+  const next = activeBg === "A" ? el.bgB : el.bgA;
+  const current = activeBg === "A" ? el.bgA : el.bgB;
+
+  // 初回だけ現在背景を設定
+  if (!currentDisplayedBg) {
+    currentDisplayedBg = src;
+    current.src = src;
+    current.classList.add("active");
+    return;
+  }
+
+  if (el.bgA) el.bgA.classList.remove("flashback");
+  if (el.bgB) el.bgB.classList.remove("flashback");
+
+  setFlashbackMode(false);
+
+  if (!current.src) current.src = src;
+  if (!next.src) next.src = src;
+
+  if (currentDisplayedBg === src) {
+    current.classList.add("active");
+    next.classList.remove("active");
+    return;
+  }
+
+  next.src = src;
+  currentDisplayedBg = src;
+
+  if (immediate) {
+    next.classList.add("active");
+    current.classList.remove("active");
+    activeBg = activeBg === "A" ? "B" : "A";
+    return;
+  }
+
+  next.classList.remove("active");
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      next.classList.add("active");
+      current.classList.remove("active");
+    });
+  });
+
+  activeBg = activeBg === "A" ? "B" : "A";
+}
+  
 if (el.bgA) el.bgA.classList.remove("flashback");
 if (el.bgB) el.bgB.classList.remove("flashback");
 
