@@ -412,3 +412,7 @@ button{
 .game-stage.is-ready .bg.active{
   opacity: 1;
 }
+
+.game-stage:not(.is-ready) .bg{
+  opacity: 0 !important;
+}
