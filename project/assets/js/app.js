@@ -91,19 +91,21 @@ async function preloadCharacterImages() {
 
 function changeBackground(src, immediate = false) {
   if (!el.bgA || !el.bgB) return;
+  if (currentDisplayedBg === src) return;
 
   const next = activeBg === "A" ? el.bgB : el.bgA;
   const current = activeBg === "A" ? el.bgA : el.bgB;
 
+  next.src = src;
+  currentDisplayedBg = src;
+
   if (immediate) {
-    next.src = src;
     next.classList.add("active");
     current.classList.remove("active");
     activeBg = activeBg === "A" ? "B" : "A";
     return;
   }
 
-  next.src = src;
   next.classList.remove("active");
 
   requestAnimationFrame(() => {
