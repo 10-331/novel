@@ -91,10 +91,20 @@ async function preloadCharacterImages() {
 
 function changeBackground(src, immediate = false) {
   if (!el.bgA || !el.bgB) return;
-  if (currentDisplayedBg === src) return;
 
   const next = activeBg === "A" ? el.bgB : el.bgA;
   const current = activeBg === "A" ? el.bgA : el.bgB;
+
+  // ★ 両方に画像を保証する
+  if (!current.src) current.src = src;
+  if (!next.src) next.src = src;
+
+  // ★ 同じ背景なら何もしない（ただし表示は保証）
+  if (currentDisplayedBg === src) {
+    current.classList.add("active");
+    next.classList.remove("active");
+    return;
+  }
 
   next.src = src;
   currentDisplayedBg = src;
