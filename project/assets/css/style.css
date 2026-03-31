@@ -425,3 +425,22 @@ button{
 .game-stage.is-ready .bg.active{
   opacity: 1;
 }
+
+/* ===== 回想中の文字色変更 ===== */
+
+/* メイン名前（日本語） */
+#nameMain.is-flashback{
+  color: #111;
+  text-shadow: none;
+}
+
+/* サブ名前（英語）はそのまま緑維持 */
+#nameSub.is-flashback{
+  color: var(--accent);
+}
+
+/* セリフ */
+.dialogue-text.is-flashback{
+  color: #111;
+  text-shadow: none;
+}
