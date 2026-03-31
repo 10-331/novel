@@ -1,794 +1,201 @@
-import {
-  createCharacterState,
-  getVisibleCharacters,
-  clearCharacters,
-  setCharacter
-} from "./characterState.js";
-import { runMotions } from "./motionRunner.js";
-
-const BASE_WIDTH = 1600;
-const BASE_HEIGHT = 900;
-const CHARACTER_BOTTOM = -28;
-
-const el = {
-  viewport: document.getElementById("gameViewport"),
-  stage: document.getElementById("stage"),
-  stageGradient: document.getElementById("stageGradient"),
-
-  bgA: document.getElementById("bgA"),
-  bgB: document.getElementById("bgB"),
-
-  nameMain: document.getElementById("nameMain"),
-  nameSub: document.getElementById("nameSub"),
-  text: document.getElementById("text"),
-  next: document.getElementById("nextIndicator"),
-  overlay: document.getElementById("orientationOverlay"),
-
-  nameRow: document.querySelector(".name-row"),
-  lineImage: document.querySelector(".dialogue-line-image"),
-  textRow: document.querySelector(".text-row"),
-
-  menuBtn: document.getElementById("menuBtn"),
-  menuPanel: document.getElementById("menuPanel"),
-  backBtn: document.getElementById("backBtn"),
-  skipBtn: document.getElementById("skipBtn"),
-
-  endChoiceOverlay: document.getElementById("endChoiceOverlay"),
-  continueBtn: document.getElementById("continueBtn"),
-  finishBtn: document.getElementById("finishBtn"),
-
-  chars: [
-    document.getElementById("char1"),
-    document.getElementById("char2"),
-    document.getElementById("char3"),
-    document.getElementById("char4")
-  ]
-};
-
-const charMap = {
-  rakuro: el.chars[0],
-  aya: el.chars[1],
-  ten: el.chars[2],
-  kuguri: el.chars[3]
-};
-
-const CHARACTER_SOURCES = {
-  aya: "./assets/images/chars/aya.png",
-  rakuro: "./assets/images/chars/rakuro.png",
-  ten: "./assets/images/chars/ten.png",
-  kuguri: "./assets/images/chars/kuguri.png"
-};
-
-const imageCache = new Map();
-let activeBg = "A";
-
-async function preloadCharacterImages() {
-  const entries = Object.entries(CHARACTER_SOURCES);
-
-  await Promise.all(
-    entries.map(([id, src]) => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = src;
-
-        const done = () => {
-          imageCache.set(id, src);
-          resolve();
-        };
-
-        img.onload = async () => {
-          try {
-            if (img.decode) await img.decode();
-          } catch {}
-          done();
-        };
-
-        img.onerror = done;
-      });
-    })
-  );
+/* ===== ベース ===== */
+html, body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  background:#000;
 }
 
-function changeBackground(src, immediate = false) {
-  if (!el.bgA || !el.bgB) return;
-
-function changeBackground(src, immediate = false) {
-  if (!el.bgA || !el.bgB) return;
-
-  const next = activeBg === "A" ? el.bgB : el.bgA;
-  const current = activeBg === "A" ? el.bgA : el.bgB;
-
-  // 初回だけ現在背景を設定
-  if (!currentDisplayedBg) {
-    currentDisplayedBg = src;
-    current.src = src;
-    current.classList.add("active");
-    return;
-  }
-
-  if (el.bgA) el.bgA.classList.remove("flashback");
-  if (el.bgB) el.bgB.classList.remove("flashback");
-
-  setFlashbackMode(false);
-
-  if (!current.src) current.src = src;
-  if (!next.src) next.src = src;
-
-  if (currentDisplayedBg === src) {
-    current.classList.add("active");
-    next.classList.remove("active");
-    return;
-  }
-
-  next.src = src;
-  currentDisplayedBg = src;
-
-  if (immediate) {
-    next.classList.add("active");
-    current.classList.remove("active");
-    activeBg = activeBg === "A" ? "B" : "A";
-    return;
-  }
-
-  next.classList.remove("active");
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      next.classList.add("active");
-      current.classList.remove("active");
-    });
-  });
-
-  activeBg = activeBg === "A" ? "B" : "A";
-}
-  
-if (el.bgA) el.bgA.classList.remove("flashback");
-if (el.bgB) el.bgB.classList.remove("flashback");
-
-setFlashbackMode(false);
-
-  const next = activeBg === "A" ? el.bgB : el.bgA;
-  const current = activeBg === "A" ? el.bgA : el.bgB;
-
-  // ★ 両方に画像を保証する
-  if (!current.src) current.src = src;
-  if (!next.src) next.src = src;
-
-  // ★ 同じ背景なら何もしない（ただし表示は保証）
-  if (currentDisplayedBg === src) {
-    current.classList.add("active");
-    next.classList.remove("active");
-    return;
-  }
-
-  next.src = src;
-  currentDisplayedBg = src;
-
-  if (immediate) {
-    next.classList.add("active");
-    current.classList.remove("active");
-    activeBg = activeBg === "A" ? "B" : "A";
-    return;
-  }
-
-  next.classList.remove("active");
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      next.classList.add("active");
-      current.classList.remove("active");
-    });
-  });
-
-  activeBg = activeBg === "A" ? "B" : "A";
+/* ===== ビューポート ===== */
+.app{
+  width:100vw;
+  height:100vh;
 }
 
-const characterState = createCharacterState();
-
-let script = [];
-let index = 0;
-
-let isTyping = false;
-let typingTimer = null;
-let currentFullText = "";
-
-let currentBg = "placeholder.jpg";
-let prevBg = null;
-let isFlashbackActive = false;
-let isMotionPlaying = false;
-let isOrientationReady = false;
-
-let isMenuOpen = false;
-let isEpisodeEnded = false;
-
-let skipAdvanceUntil = 0;
-let lineRenderToken = 0;
-
-const flashOverlay = document.getElementById("flashOverlay");
-const flashFrame = document.getElementById("flashFrame");
-
-window.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await preloadCharacterImages();
-    await loadScript();
-    fitStage();
-    updateOrientation();
-    setupMenu();
-    setupEndChoice();
-
-    if (window.innerHeight > window.innerWidth) {
-      return;
-    }
-
-    await startGame();
-  } catch (err) {
-    console.error(err);
-    alert("シナリオの読み込みに失敗しました");
-  }
-});
-
-window.addEventListener("resize", () => {
-  fitStage();
-  updateOrientation();
-
-  if (!isOrientationReady && window.innerWidth > window.innerHeight) {
-    startGame();
-  }
-});
-
-window.addEventListener("orientationchange", () => {
-  setTimeout(() => {
-    fitStage();
-    updateOrientation();
-
-    if (!isOrientationReady && window.innerWidth > window.innerHeight) {
-      startGame();
-    }
-  }, 200);
-});
-
-async function startGame() {
-  if (isOrientationReady) return;
-  isOrientationReady = true;
-
-  // 先に背景を確定させる
-  const firstLine = script[0];
-  if (firstLine?.bg) {
-    currentBg = firstLine.bg;
-  }
-
-  changeBackground(`./assets/images/bg/${currentBg}`, true);
-
-  // まだ見せない状態で1フレーム待つ
-  await new Promise(requestAnimationFrame);
-
-  // 初回描画
-  await renderLine();
-
-  // 最後に表示解禁
-  el.stage?.classList.add("is-ready");
-}
-async function loadScript() {
-  const res = await fetch("./assets/data/ep01.json");
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-  script = await res.json();
+.game-shell{
+  width:100%;
+  height:100%;
+  position:relative;
 }
 
-function fitStage() {
-  const vw = el.viewport.clientWidth;
-  const vh = el.viewport.clientHeight;
-  const scale = Math.min(vw / BASE_WIDTH, vh / BASE_HEIGHT);
-  el.stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+.game-viewport{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  position:relative;
 }
 
-function updateOrientation() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  el.overlay.classList.toggle("show", isPortrait);
+/* ===== ステージ ===== */
+.game-stage{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:1600px;
+  height:900px;
+  transform:translate(-50%,-50%) scale(1);
+  transform-origin:center;
+  overflow:hidden;
+  opacity:0;
 }
 
-function setFlashbackMode(isOn) {
-  if (el.bgA) el.bgA.classList.toggle("flashback", isOn);
-  if (el.bgB) el.bgB.classList.toggle("flashback", isOn);
-
-  if (el.stageGradient) {
-    el.stageGradient.classList.toggle("white", isOn);
-    el.stageGradient.classList.toggle("black", !isOn);
-  }
-
-  if (el.nameRow) el.nameRow.classList.toggle("is-flashback", isOn);
-  if (el.lineImage) el.lineImage.classList.toggle("is-flashback", isOn);
-  if (el.textRow) el.textRow.classList.toggle("is-flashback", isOn);
-  if (el.text) el.text.classList.toggle("is-flashback", isOn);
-  if (el.nameMain) el.nameMain.classList.toggle("is-flashback", isOn);
-  if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isOn);
+.game-stage.is-ready{
+  opacity:1;
 }
 
-async function renderLine() {
-  const token = ++lineRenderToken;
-
-  while (index < script.length && script[index]?.disabled === true) {
-    index++;
-  }
-
-  clearTimeout(typingTimer);
-  isTyping = false;
-  el.next.classList.remove("is-ready");
-  el.text.textContent = "";
-  el.nameMain.textContent = "";
-  el.nameSub.textContent = "";
-
-  [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
-    if (!node) return;
-    node.classList.remove("ui-fade-in");
-  });
-
-  if (index >= script.length) {
-    clearCharacters(characterState);
-    renderCharacters([]);
-    showEndChoice();
-    return;
-  }
-
-  const line = script[index];
-
-  if (line.bg) currentBg = line.bg;
-
-  if (!isFlashbackActive) {
-    changeBackground(`./assets/images/bg/${currentBg}`);
-  }
-
-  const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
-  let usedMotions = false;
-
-  if (Array.isArray(line.motions) && line.motions.length > 0) {
-    usedMotions = true;
-    isMotionPlaying = true;
-
-    try {
-      await runMotions({
-        motions: line.motions,
-        state: characterState,
-        renderCharacters,
-        moveCharacters,
-        parseCharacter,
-        wait,
-        token,
-        getToken: () => lineRenderToken,
-        playFlashback,
-        endFlashback
-      });
-    } finally {
-      isMotionPlaying = false;
-    }
-
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(line.chars)) {
-    clearCharacters(characterState);
-
-    const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
-
-    renderCharacters(getVisibleCharacters(characterState));
-  }
-
-  const shouldFadeUi = usedMotions && !hadCharactersBefore;
-
-  el.nameMain.textContent = line.speaker || "";
-  el.nameSub.textContent = line.speakerSub || "";
-
-  if (shouldFadeUi) {
-    [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
-      if (!node) return;
-      node.classList.remove("ui-fade-in");
-      void node.offsetWidth;
-      node.classList.add("ui-fade-in");
-    });
-  }
-
-  startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
+/* ===== 背景 ===== */
+.bg-layer{
+  position:absolute;
+  inset:0;
 }
 
-function parseCharacter(entry) {
-  const parts = String(entry).split(":").map(v => v.trim()).filter(Boolean);
-  const id = parts[0];
-
-  const data = {
-    id,
-    src: CHARACTER_SOURCES[id] || "",
-    visible: true,
-    position: null,
-    x: 0,
-    y: 0,
-    scale: 1
-  };
-
-  for (const p of parts.slice(1)) {
-    if (["left", "right", "center", "single", "far-left", "far-right"].includes(p)) {
-      data.position = p;
-    } else if (p.startsWith("x=")) {
-      data.x = Number(p.replace("x=", "")) || 0;
-    } else if (p.startsWith("y=")) {
-      data.y = Number(p.replace("y=", "")) || 0;
-    } else if (p.startsWith("scale=")) {
-      data.scale = Number(p.replace("scale=", "")) || 1;
-    } else if (p === "hide") {
-      data.visible = false;
-    }
-  }
-
-  return data;
+.bg-layer img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 0.6s ease;
 }
 
-function renderCharacters(chars, options = {}) {
-  const { fadeIds = [], exitIds = [] } = options;
-
-  const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const hasExplicitPosition = visible.some(c => c.position);
-  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
-
-  Object.entries(charMap).forEach(([id, img]) => {
-    if (!img) return;
-
-    const isStillUsed = visible.some(c => c.id === id);
-
-    if (!isStillUsed && !exitIds.includes(id)) {
-      img.style.display = "none";
-      img.classList.add("hidden");
-      img.classList.remove("fade-in", "fade-out");
-      img.style.opacity = "";
-    }
-  });
-
-  visible.forEach((c, i) => {
-    const img = charMap[c.id];
-    if (!img) return;
-
-    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
-
-    img.src = c.src;
-    img.style.display = "block";
-
-    const left = getPositionLeftValue(pos);
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.setProperty("--char-scale", c.scale || 1);
-
-    img.classList.remove("hidden");
-    img.style.setProperty("--char-fade-duration", "1000ms");
-
-    if (fadeIds.includes(c.id)) {
-      img.classList.remove("fade-in", "fade-out");
-      img.style.opacity = "0";
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          img.classList.add("fade-in");
-          img.style.opacity = "";
-        });
-      });
-    } else if (!exitIds.includes(c.id)) {
-      img.classList.remove("fade-in", "fade-out");
-      img.style.opacity = "";
-    }
-
-    if (exitIds.includes(c.id)) {
-      img.classList.remove("fade-in", "fade-out");
-      void img.offsetWidth;
-      img.classList.add("fade-out");
-    }
-  });
+.bg-layer img.active{
+  opacity:1;
 }
 
-function moveCharacters(chars) {
-  const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const hasExplicitPosition = visible.some(c => c.position);
-  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
-
-  visible.forEach((c, i) => {
-    const img = charMap[c.id];
-    if (!img) return;
-
-    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
-    const left = getPositionLeftValue(pos);
-
-    img.classList.remove("fade-in", "fade-out");
-    img.style.opacity = "";
-    img.style.display = "block";
-    img.src = c.src;
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.setProperty("--char-scale", c.scale || 1);
-    img.classList.remove("hidden");
-  });
+/* ===== キャラ ===== */
+.char-layer img{
+  position:absolute;
+  bottom:-28px;
+  left:50%;
+  transform:translateX(-50%) scale(var(--char-scale,1));
+  transform-origin:bottom center;
+  transition:all 0.6s ease;
+  display:none;
 }
 
-function getAutoSlots(count) {
-  if (count <= 0) return [];
-  if (count === 1) return ["single"];
-  if (count === 2) return ["left", "right"];
-  if (count === 3) return ["left", "center", "right"];
-  return ["far-left", "left", "right", "far-right"];
+.char-layer img.fade-in{
+  animation:fadeIn 1s forwards;
 }
 
-function getPositionLeftValue(position) {
-  switch (position) {
-    case "single": return 50;
-    case "far-left": return 14;
-    case "left": return 37;
-    case "center": return 50;
-    case "right": return 65;
-    case "far-right": return 86;
-    default: return 50;
-  }
+.char-layer img.fade-out{
+  animation:fadeOut 0.6s forwards;
 }
 
-function startTyping(lines) {
-  clearTimeout(typingTimer);
-  el.text.textContent = "";
-  el.next.classList.remove("is-ready");
-
-  const full = lines.join("\n");
-  currentFullText = full;
-
-  let i = 0;
-  isTyping = true;
-
-  function step() {
-    if (i >= currentFullText.length) {
-      isTyping = false;
-      el.next.classList.add("is-ready");
-      return;
-    }
-
-    el.text.textContent += full[i];
-    i++;
-    typingTimer = setTimeout(step, 35);
-  }
-
-  step();
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
 }
 
-function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+@keyframes fadeOut{
+  from{opacity:1;}
+  to{opacity:0;}
 }
 
-function setupMenu() {
-  if (!el.menuBtn || !el.menuPanel) return;
-
-  el.menuBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    isMenuOpen = !isMenuOpen;
-    el.menuBtn.classList.toggle("open", isMenuOpen);
-    el.menuPanel.classList.toggle("hidden", !isMenuOpen);
-  });
-
-  el.menuPanel?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-
-  el.backBtn?.addEventListener("click", async (e) => {
-    e.stopPropagation();
-
-    if (index > 0) {
-      index--;
-      clearCharacters(characterState);
-      currentBg = "placeholder.jpg";
-      prevBg = null;
-      isFlashbackActive = false;
-      setFlashbackMode(false);
-      lineRenderToken++;
-
-      const targetIndex = index;
-      index = 0;
-      isEpisodeEnded = false;
-
-      while (index < targetIndex) {
-        await renderLineWithoutTyping();
-        index++;
-      }
-
-      await renderLine();
-    }
-
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
-
-  el.skipBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    index = script.length;
-    renderLine();
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
+/* ===== UI全体 ===== */
+.ui{
+  position:absolute;
+  bottom:60px;
+  width:100%;
 }
 
-async function renderLineWithoutTyping() {
-  const token = ++lineRenderToken;
-
-  if (index >= script.length) return;
-
-  const line = script[index];
-
-  if (line.bg) currentBg = line.bg;
-
-  if (!isFlashbackActive) {
-    changeBackground(`./assets/images/bg/${currentBg}`);
-  }
-
-  if (Array.isArray(line.motions) && line.motions.length > 0) {
-    isMotionPlaying = true;
-
-    try {
-      await runMotions({
-        motions: line.motions,
-        state: characterState,
-        renderCharacters,
-        moveCharacters,
-        parseCharacter,
-        wait,
-        token,
-        getToken: () => lineRenderToken,
-        playFlashback,
-        endFlashback
-      });
-    } finally {
-      isMotionPlaying = false;
-    }
-
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(line.chars)) {
-    clearCharacters(characterState);
-
-    const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
-
-    renderCharacters(getVisibleCharacters(characterState));
-  }
+/* ===== 名前 ===== */
+.name-row{
+  width:920px;
+  max-width:92vw;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
 }
 
-function setupEndChoice() {
-  el.continueBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = false;
-  });
-
-  el.finishBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = true;
-  });
-
-  el.endChoiceOverlay?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
+#nameMain{
+  font-size:26px;
+  color:#fff;
 }
 
-function showEndChoice() {
-  isEpisodeEnded = true;
-  el.endChoiceOverlay?.classList.remove("hidden");
+#nameSub{
+  font-size:14px;
+  color:#aaa;
 }
 
-el.stage.addEventListener("click", async () => {
-  if (!isOrientationReady || isMenuOpen || isEpisodeEnded || isMotionPlaying) return;
-
-  const now = Date.now();
-  if (now < skipAdvanceUntil) return;
-
-  if (isTyping) {
-    clearTimeout(typingTimer);
-    el.text.textContent = currentFullText;
-    isTyping = false;
-    el.next.classList.add("is-ready");
-    skipAdvanceUntil = now + 220;
-    return;
-  }
-
-  index++;
-  await renderLine();
-});
-
-async function playFlashback(bgName) {
-  if (!flashOverlay || !flashFrame) return;
-
-  flashOverlay.classList.add("active");
-  await wait(300);
-
-  prevBg = currentBg;
-  isFlashbackActive = true;
-
-  changeBackground(`./assets/images/bg/${bgName}`);
-  setFlashbackMode(true);
-  flashFrame.classList.add("active");
-
-  flashOverlay.classList.remove("active");
-  await wait(300);
+/* ===== 線 ===== */
+.dialogue-line-image{
+  width:920px;
+  max-width:92vw;
+  margin:6px auto 10px;
+  height:2px;
+  background:rgba(255,255,255,0.3);
+  transform:translateY(-6px);
 }
 
-async function endFlashback() {
-  if (!flashOverlay || !flashFrame) return;
-
-  flashOverlay.classList.add("active");
-  await wait(300);
-
-  isFlashbackActive = false;
-  changeBackground(`./assets/images/bg/${prevBg || currentBg}`);
-  setFlashbackMode(false);
-  flashFrame.classList.remove("active");
-
-  flashOverlay.classList.remove("active");
-  await wait(300);
-}
-
-let currentDisplayedBg = "";
-
-
-
-/* ===== テキスト全体の横幅制御 ===== */
+/* ===== テキストエリア（ここが本体） ===== */
 .text-row{
-  width: 100%;
-  max-width: none; /* ←制限解除 */
-  display: flex;
-  justify-content: center;
+  width:100%;
+  max-width:none;
+  display:flex;
+  justify-content:center;
 }
 
-/* ===== 会話テキスト本体 ===== */
 .dialogue-text{
-  width: 920px; /* ←ここで横幅調整（850〜950推奨） */
-  max-width: 92vw; /* モバイル対策 */
-  margin: 0 auto;
+  width:920px;
+  max-width:92vw;
+  margin:0 auto;
 
-  font-size: 26px;
-  line-height: 1.7;
+  font-size:26px;
+  line-height:1.7;
+  color:#fff;
 
   /* 3行固定 */
-  height: calc(1.7em * 3);
-  overflow: hidden;
+  height:calc(1.7em * 3);
+  overflow:hidden;
 
-  /* 余白 */
-  padding: 0 24px;
+  padding:0 24px;
 
-  /* 改行制御 */
-  white-space: pre-wrap;
-  word-break: break-word;
+  white-space:pre-wrap;
+  word-break:break-word;
 }
 
-/* ===== 名前＋線も中央揃えに合わせる ===== */
-.name-row,
-.dialogue-line-image{
-  width: 920px;
-  max-width: 92vw;
-  margin: 0 auto;
+/* ===== ▼インジケータ ===== */
+#nextIndicator{
+  position:absolute;
+  right:calc(50% - 460px);
+  bottom:0;
+  opacity:0;
 }
 
-/* ===== 線の位置微調整（ズレてる対策） ===== */
-.dialogue-line-image{
-  transform: translateY(-6px);
+#nextIndicator.is-ready{
+  opacity:1;
+  animation:float 1.2s infinite ease-in-out;
 }
 
-/* ===== モバイル用 ===== */
-@media screen and (max-width: 768px){
-  .dialogue-text{
-    width: 92vw;
-    font-size: 22px;
-    padding: 0 16px;
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(6px);}
+  100%{transform:translateY(0);}
+}
+
+/* ===== モバイル ===== */
+@media screen and (max-width:768px){
+
+  .game-stage{
+    width:1600px;
+    height:900px;
   }
 
   .name-row,
   .dialogue-line-image{
-    width: 92vw;
+    width:92vw;
+  }
+
+  .dialogue-text{
+    width:92vw;
+    font-size:22px;
+    padding:0 16px;
+  }
+
+  #nextIndicator{
+    right:16px;
   }
 }
