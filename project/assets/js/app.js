@@ -206,9 +206,8 @@ async function startGame() {
   if (isOrientationReady) return;
   isOrientationReady = true;
 
-  el.stage?.classList.add("is-ready");
-  await renderLine();
-}
+await renderLine();
+el.stage?.classList.add("is-ready");
 
 async function loadScript() {
   const res = await fetch("./assets/data/ep01.json");
