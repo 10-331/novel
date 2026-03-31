@@ -403,3 +403,12 @@ button{
   background:
     radial-gradient(circle at center, rgba(255,255,255,0) 52%, rgba(255,255,255,0.68) 100%);
 }
+
+/* 初期チラ見え防止 */
+.bg-layer img{
+  opacity: 0;
+}
+
+.game-stage.is-ready .bg.active{
+  opacity: 1;
+}
