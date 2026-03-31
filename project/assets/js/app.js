@@ -735,3 +735,60 @@ async function endFlashback() {
 
 let currentDisplayedBg = "";
 
+
+
+/* ===== テキスト全体の横幅制御 ===== */
+.text-row{
+  width: 100%;
+  max-width: none; /* ←制限解除 */
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== 会話テキスト本体 ===== */
+.dialogue-text{
+  width: 920px; /* ←ここで横幅調整（850〜950推奨） */
+  max-width: 92vw; /* モバイル対策 */
+  margin: 0 auto;
+
+  font-size: 26px;
+  line-height: 1.7;
+
+  /* 3行固定 */
+  height: calc(1.7em * 3);
+  overflow: hidden;
+
+  /* 余白 */
+  padding: 0 24px;
+
+  /* 改行制御 */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ===== 名前＋線も中央揃えに合わせる ===== */
+.name-row,
+.dialogue-line-image{
+  width: 920px;
+  max-width: 92vw;
+  margin: 0 auto;
+}
+
+/* ===== 線の位置微調整（ズレてる対策） ===== */
+.dialogue-line-image{
+  transform: translateY(-6px);
+}
+
+/* ===== モバイル用 ===== */
+@media screen and (max-width: 768px){
+  .dialogue-text{
+    width: 92vw;
+    font-size: 22px;
+    padding: 0 16px;
+  }
+
+  .name-row,
+  .dialogue-line-image{
+    width: 92vw;
+  }
+}
