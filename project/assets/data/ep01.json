@@ -240,6 +240,21 @@
   ]
 },
 {
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["aya"],
+      "duration": 180
+    },
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "ten", "to": "center", "scale": 1.25 }
+      ],
+      "duration": 180
+    }
+  ],
+{
   "speaker": "添",
   "speakerSub": "TEN",
   "text": ["……。"]
@@ -251,11 +266,41 @@
     "研修に行って、そのままオレが帰ってこなかったらどうします？"
   ]
 },
+  {
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["ten"],
+      "duration": 180
+    },
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "aya", "to": "center", "scale": 0.45 }
+      ],
+      "duration": 180
+    }
+  ],
 {
   "speaker": "綾",
   "speakerSub": "AYA",
   "text": ["え、っと……。"]
 },
+{
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["aya"],
+      "duration": 180
+    },
+    {
+      "type": "enter",
+      "targets": [
+        { "id": "ten", "to": "center", "scale": 1.25 }
+      ],
+      "duration": 180
+    }
+  ],
 {
   "speaker": "添",
   "speakerSub": "TEN",
