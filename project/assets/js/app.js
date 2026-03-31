@@ -14,7 +14,10 @@ const el = {
   viewport: document.getElementById("gameViewport"),
   stage: document.getElementById("stage"),
   stageGradient: document.getElementById("stageGradient"),
-  bg: document.getElementById("bg"),
+
+  bgA: document.getElementById("bgA"),
+  bgB: document.getElementById("bgB"),
+
   nameMain: document.getElementById("nameMain"),
   nameSub: document.getElementById("nameSub"),
   text: document.getElementById("text"),
@@ -56,33 +59,23 @@ const CHARACTER_SOURCES = {
   kuguri: "./assets/images/chars/kuguri.png"
 };
 
-const imageCache = new Map();
+let activeBg = "A";
 
-async function preloadCharacterImages() {
-  const entries = Object.entries(CHARACTER_SOURCES);
+function changeBackground(src) {
+  const next = activeBg === "A" ? el.bgB : el.bgA;
+  const current = activeBg === "A" ? el.bgA : el.bgB;
 
-  await Promise.all(
-    entries.map(([id, src]) => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = src;
+  next.src = src;
+  next.classList.remove("active");
 
-        const done = () => {
-          imageCache.set(id, src);
-          resolve();
-        };
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      next.classList.add("active");
+      current.classList.remove("active");
+    });
+  });
 
-        img.onload = async () => {
-          try {
-            if (img.decode) await img.decode();
-          } catch {}
-          done();
-        };
-
-        img.onerror = done;
-      });
-    })
-  );
+  activeBg = activeBg === "A" ? "B" : "A";
 }
 
 const characterState = createCharacterState();
@@ -95,10 +88,8 @@ let typingTimer = null;
 let currentFullText = "";
 
 let currentBg = "placeholder.jpg";
-let currentChars = [];
 let prevBg = null;
 let isFlashbackActive = false;
-let hasInitialRenderCompleted = false;
 let isMotionPlaying = false;
 
 let isMenuOpen = false;
@@ -112,24 +103,15 @@ const flashFrame = document.getElementById("flashFrame");
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    await preloadCharacterImages();
     await loadScript();
     fitStage();
     updateOrientation();
     setupMenu();
     setupEndChoice();
 
-    // 初期の不要背景ちら見え防止
-    if (el.bg) {
-      el.bg.removeAttribute("src");
-    }
-
-    // 最初のフェードインを見せるため、先にstageを表示
     el.stage?.classList.add("is-ready");
-
     await renderLine();
 
-    hasInitialRenderCompleted = true;
   } catch (err) {
     console.error(err);
     alert("シナリオの読み込みに失敗しました");
@@ -140,21 +122,6 @@ window.addEventListener("resize", () => {
   fitStage();
   updateOrientation();
 });
-
-window.addEventListener("orientationchange", () => {
-  setTimeout(() => {
-    fitStage();
-    updateOrientation();
-  }, 200);
-});
-
-async function loadScript() {
-  const res = await fetch("./assets/data/ep01.json");
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status}`);
-  }
-  script = await res.json();
-}
 
 function fitStage() {
   const vw = el.viewport.clientWidth;
@@ -169,41 +136,26 @@ function updateOrientation() {
 }
 
 function setFlashbackMode(isOn) {
-  if (el.bg) {
-    el.bg.classList.toggle("flashback", isOn);
-  }
+  el.stageGradient.classList.toggle("white", isOn);
+  el.stageGradient.classList.toggle("black", !isOn);
 
-  if (el.stageGradient) {
-    el.stageGradient.classList.toggle("white", isOn);
-    el.stageGradient.classList.toggle("black", !isOn);
-  }
+  el.nameRow.classList.toggle("is-flashback", isOn);
+  el.textRow.classList.toggle("is-flashback", isOn);
+  el.text.classList.toggle("is-flashback", isOn);
+  el.nameMain.classList.toggle("is-flashback", isOn);
 
-  if (el.nameRow) el.nameRow.classList.toggle("is-flashback", isOn);
-  if (el.lineImage) el.lineImage.classList.toggle("is-flashback", isOn);
-  if (el.textRow) el.textRow.classList.toggle("is-flashback", isOn);
-  if (el.text) el.text.classList.toggle("is-flashback", isOn);
-  if (el.nameMain) el.nameMain.classList.toggle("is-flashback", isOn);
-  if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isOn);
+  // ★サブは色変えない（要件）
 }
 
 async function renderLine() {
   const token = ++lineRenderToken;
 
-  while (index < script.length && script[index]?.disabled === true) {
-    index++;
-  }
-
   clearTimeout(typingTimer);
   isTyping = false;
-  el.next.classList.remove("is-ready");
   el.text.textContent = "";
   el.nameMain.textContent = "";
   el.nameSub.textContent = "";
-
-  [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
-    if (!node) return;
-    node.classList.remove("ui-fade-in");
-  });
+  el.next.classList.remove("is-ready");
 
   if (index >= script.length) {
     clearCharacters(characterState);
@@ -215,37 +167,31 @@ async function renderLine() {
   const line = script[index];
 
   if (line.bg) currentBg = line.bg;
-  if (line.chars !== undefined) currentChars = line.chars;
 
   if (!isFlashbackActive) {
-    el.bg.src = `./assets/images/bg/${currentBg}`;
+    changeBackground(`./assets/images/bg/${currentBg}`);
   }
 
-  const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
-  let usedMotions = false;
-
   if (Array.isArray(line.motions) && line.motions.length > 0) {
-    usedMotions = true;
     isMotionPlaying = true;
 
-    try {
-      await runMotions({
-        motions: line.motions,
-        state: characterState,
-        renderCharacters,
-        moveCharacters,
-        parseCharacter,
-        wait,
-        token,
-        getToken: () => lineRenderToken,
-        playFlashback,
-        endFlashback
-      });
-    } finally {
-      isMotionPlaying = false;
-    }
+    await runMotions({
+      motions: line.motions,
+      state: characterState,
+      renderCharacters,
+      moveCharacters,
+      parseCharacter,
+      wait,
+      token,
+      getToken: () => lineRenderToken,
+      playFlashback,
+      endFlashback
+    });
+
+    isMotionPlaying = false;
 
     if (token !== lineRenderToken) return;
+
   } else if (Array.isArray(line.chars)) {
     clearCharacters(characterState);
 
@@ -259,151 +205,66 @@ async function renderLine() {
     renderCharacters(getVisibleCharacters(characterState));
   }
 
-  const shouldFadeUi = usedMotions && !hadCharactersBefore;
-
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
-
-  if (shouldFadeUi) {
-    [el.nameRow, el.lineImage, el.textRow].forEach((node) => {
-      if (!node) return;
-      node.classList.remove("ui-fade-in");
-      void node.offsetWidth;
-      node.classList.add("ui-fade-in");
-    });
-  }
 
   startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
 }
 
 function parseCharacter(entry) {
-  const parts = String(entry).split(":").map(v => v.trim()).filter(Boolean);
+  const parts = String(entry).split(":");
   const id = parts[0];
 
-  const data = {
+  return {
     id,
-    src: CHARACTER_SOURCES[id] || "",
-    visible: true,
-    position: null,
+    src: CHARACTER_SOURCES[id],
+    position: parts[1] || "center",
     x: 0,
     y: 0,
-    scale: 1
+    scale: 1,
+    visible: true
   };
-
-  for (const p of parts.slice(1)) {
-    if (["left", "right", "center", "single", "far-left", "far-right"].includes(p)) {
-      data.position = p;
-    } else if (p.startsWith("x=")) {
-      data.x = Number(p.replace("x=", "")) || 0;
-    } else if (p.startsWith("y=")) {
-      data.y = Number(p.replace("y=", "")) || 0;
-    } else if (p.startsWith("scale=")) {
-      data.scale = Number(p.replace("scale=", "")) || 1;
-    } else if (p === "hide") {
-      data.visible = false;
-    }
-  }
-
-  return data;
 }
 
-function renderCharacters(chars, options = {}) {
-  const { fadeIds = [], exitIds = [] } = options;
-
-  const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const hasExplicitPosition = visible.some(c => c.position);
-  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
-
-  Object.entries(charMap).forEach(([id, img]) => {
-    if (!img) return;
-
-    const isStillUsed = visible.some(c => c.id === id);
-
-    if (!isStillUsed && !exitIds.includes(id)) {
-      img.style.display = "none";
-      img.classList.add("hidden");
-    }
+function renderCharacters(chars) {
+  Object.values(charMap).forEach((img) => {
+    img.style.display = "none";
   });
 
-  visible.forEach((c, i) => {
+  chars.forEach((c) => {
     const img = charMap[c.id];
     if (!img) return;
 
-    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
-
     img.src = c.src;
     img.style.display = "block";
+    img.style.left = `${getPositionLeftValue(c.position)}%`;
+    img.style.bottom = `${CHARACTER_BOTTOM}px`;
 
-    const left = getPositionLeftValue(pos);
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.setProperty("--char-scale", c.scale || 1);
+    img.classList.remove("fade-in", "fade-out");
+    img.style.opacity = "0";
 
-    // ★ ここが重要：move前にfade系クラスを外す
-    img.classList.remove("hidden", "fade-in", "fade-out");
-
-    img.style.setProperty("--char-fade-duration", "1000ms");
-
-    if (fadeIds.includes(c.id)) {
-      img.classList.remove("fade-in");
-      img.style.opacity = "0";
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          img.classList.add("fade-in");
-          img.style.opacity = "";
-        });
-      });
-    }
-
-    if (exitIds.includes(c.id)) {
-      img.classList.remove("fade-out");
-      void img.offsetWidth;
-      img.classList.add("fade-out");
-    }
+    requestAnimationFrame(() => {
+      img.classList.add("fade-in");
+      img.style.opacity = "";
+    });
   });
 }
 
 function moveCharacters(chars) {
-  const visible = chars.filter(c => c && c.visible !== false && c.src);
-  const hasExplicitPosition = visible.some(c => c.position);
-  const slots = hasExplicitPosition ? [] : getAutoSlots(visible.length);
-
-  visible.forEach((c, i) => {
+  chars.forEach((c) => {
     const img = charMap[c.id];
     if (!img) return;
 
-    const pos = hasExplicitPosition ? (c.position || "center") : slots[i];
-    const left = getPositionLeftValue(pos);
-
-    // ★ ここも重要：fade-in残留を消してtransitionを有効化
     img.classList.remove("fade-in", "fade-out");
-
-    img.style.display = "block";
-    img.src = c.src;
-    img.style.left = `calc(${left}% + ${c.x}px)`;
-    img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
-    img.style.setProperty("--char-scale", c.scale || 1);
-    img.classList.remove("hidden");
+    img.style.left = `${getPositionLeftValue(c.position)}%`;
   });
-}
-
-function getAutoSlots(count) {
-  if (count <= 0) return [];
-  if (count === 1) return ["single"];
-  if (count === 2) return ["left", "right"];
-  if (count === 3) return ["left", "center", "right"];
-  return ["far-left", "left", "right", "far-right"];
 }
 
 function getPositionLeftValue(position) {
   switch (position) {
-    case "single": return 50;
-    case "far-left": return 14;
-    case "left": return 37;
+    case "left": return 30;
     case "center": return 50;
-    case "right": return 65;
-    case "far-right": return 86;
+    case "right": return 70;
     default: return 50;
   }
 }
@@ -411,7 +272,6 @@ function getPositionLeftValue(position) {
 function startTyping(lines) {
   clearTimeout(typingTimer);
   el.text.textContent = "";
-  el.next.classList.remove("is-ready");
 
   const full = lines.join("\n");
   currentFullText = full;
@@ -420,7 +280,7 @@ function startTyping(lines) {
   isTyping = true;
 
   function step() {
-    if (i >= currentFullText.length) {
+    if (i >= full.length) {
       isTyping = false;
       el.next.classList.add("is-ready");
       return;
@@ -435,147 +295,50 @@ function startTyping(lines) {
 }
 
 function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((r) => setTimeout(r, ms));
 }
 
-function setupMenu() {
-  if (!el.menuBtn || !el.menuPanel) return;
+async function playFlashback(bgName) {
+  flashOverlay.classList.add("active");
+  await wait(300);
 
-  el.menuBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    isMenuOpen = !isMenuOpen;
-    el.menuBtn.classList.toggle("open", isMenuOpen);
-    el.menuPanel.classList.toggle("hidden", !isMenuOpen);
-  });
+  prevBg = currentBg;
+  isFlashbackActive = true;
 
-  el.menuPanel?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
+  changeBackground(`./assets/images/bg/${bgName}`);
+  setFlashbackMode(true);
 
-  el.backBtn?.addEventListener("click", async (e) => {
-    e.stopPropagation();
-
-    if (index > 0) {
-      index--;
-      clearCharacters(characterState);
-      currentChars = [];
-      currentBg = "placeholder.jpg";
-      prevBg = null;
-      isFlashbackActive = false;
-      setFlashbackMode(false);
-      lineRenderToken++;
-
-      const targetIndex = index;
-      index = 0;
-      isEpisodeEnded = false;
-
-      while (index < targetIndex) {
-        await renderLineWithoutTyping();
-        index++;
-      }
-
-      await renderLine();
-    }
-
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
-
-  el.skipBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    index = script.length;
-    renderLine();
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
-  });
+  flashFrame.classList.add("active");
+  flashOverlay.classList.remove("active");
 }
 
-async function renderLineWithoutTyping() {
-  const token = ++lineRenderToken;
+async function endFlashback() {
+  flashOverlay.classList.add("active");
+  await wait(300);
 
-  if (index >= script.length) return;
+  isFlashbackActive = false;
 
-  const line = script[index];
+  changeBackground(`./assets/images/bg/${prevBg || currentBg}`);
+  setFlashbackMode(false);
 
-  if (line.bg) currentBg = line.bg;
-  if (line.chars !== undefined) currentChars = line.chars;
-
-  if (!isFlashbackActive) {
-    el.bg.src = `./assets/images/bg/${currentBg}`;
-  }
-
-  if (Array.isArray(line.motions) && line.motions.length > 0) {
-    isMotionPlaying = true;
-
-    try {
-      await runMotions({
-        motions: line.motions,
-        state: characterState,
-        renderCharacters,
-        moveCharacters,
-        parseCharacter,
-        wait,
-        token,
-        getToken: () => lineRenderToken,
-        playFlashback,
-        endFlashback
-      });
-    } finally {
-      isMotionPlaying = false;
-    }
-
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(line.chars)) {
-    clearCharacters(characterState);
-
-    const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
-    });
-
-    renderCharacters(getVisibleCharacters(characterState));
-  }
+  flashFrame.classList.remove("active");
+  flashOverlay.classList.remove("active");
 }
 
-function setupEndChoice() {
-  el.continueBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = false;
-  });
+function setupMenu() {}
 
-  el.finishBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = true;
-  });
+function setupEndChoice() {}
 
-  el.endChoiceOverlay?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-}
-
-function showEndChoice() {
-  isEpisodeEnded = true;
-  el.endChoiceOverlay?.classList.remove("hidden");
-}
+function showEndChoice() {}
 
 el.stage.addEventListener("click", async () => {
   if (isMenuOpen || isEpisodeEnded || isMotionPlaying) return;
-
-  const now = Date.now();
-  if (now < skipAdvanceUntil) return;
 
   if (isTyping) {
     clearTimeout(typingTimer);
     el.text.textContent = currentFullText;
     isTyping = false;
     el.next.classList.add("is-ready");
-    skipAdvanceUntil = now + 220;
     return;
   }
 
@@ -583,34 +346,7 @@ el.stage.addEventListener("click", async () => {
   await renderLine();
 });
 
-async function playFlashback(bgName) {
-  if (!flashOverlay || !flashFrame) return;
-
-  flashOverlay.classList.add("active");
-  await wait(300);
-
-  prevBg = currentBg;
-  isFlashbackActive = true;
-
-  el.bg.src = `./assets/images/bg/${bgName}`;
-  setFlashbackMode(true);
-  flashFrame.classList.add("active");
-
-  flashOverlay.classList.remove("active");
-  await wait(300);
-}
-
-async function endFlashback() {
-  if (!flashOverlay || !flashFrame) return;
-
-  flashOverlay.classList.add("active");
-  await wait(300);
-
-  isFlashbackActive = false;
-  el.bg.src = `./assets/images/bg/${prevBg || currentBg}`;
-  setFlashbackMode(false);
-  flashFrame.classList.remove("active");
-
-  flashOverlay.classList.remove("active");
-  await wait(300);
+async function loadScript() {
+  const res = await fetch("./assets/data/ep01.json");
+  script = await res.json();
 }
