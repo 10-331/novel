@@ -75,7 +75,7 @@
     "speakerSub": "AYA",
     "text": ["えっ、そういうことしちゃうの！？　わるい子だ！"]
   },
-    {
+  {
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": ["……。"]
@@ -85,7 +85,7 @@
     "speakerSub": "AYA",
     "text": ["う、冗談ですって～……。"]
   },
-    {
+  {
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": ["あ～あ、なんで人もバグも言うこと聞いてくれなんだろう。"]
@@ -153,198 +153,178 @@
       "えっ逃げてる前提なんですか？"
     ]
   },
-{
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": [
-    "………………あ～～、えっと。",
-    "まあ、くだらないことなんですけど、その。"
-  ]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["rakuro", "aya"],
-      "duration": 220
-    },
-    {
-      "type": "flashback",
-      "bg": "placeholder.jpg"
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "aya", "to": "center", "scale": 0.45 }
-      ],
-      "duration": 220
-    }
-  ],
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": ["福岡に行ってたんだ？"]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["aya"],
-      "duration": 180
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "ten", "to": "center", "scale": 1.25 }
-      ],
-      "duration": 180
-    }
-  ],
-  "speaker": "添",
-  "speakerSub": "TEN",
-  "text": [
-    "そ。まあ仕事ですけどね",
-    "てか、オレが此処に来てなかった理由とか気にならなかったんです？"]
-},
   {
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["ten"],
-      "duration": 180
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "aya", "to": "center", "scale": 0.45 }
-      ],
-      "duration": 180
-    }
-  ],
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": ["あ～……大学生は忙しいって言うし、そういう時期かなって。"]
-},
-{
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": [
-    "（久しぶりに来たと思ったら怪我したとか言ってたし、",
-    "どうしたのかなって思ったりもしたけど）"
-  ]
-},
-{
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": [
-    "（お互い、あまり踏み込んじゃダメだろうなってなるって言うか。）"
-  ]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["aya"],
-      "duration": 180
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "ten", "to": "center", "scale": 1.25 }
-      ],
-      "duration": 180
-    }
-  ],
-{
-  "speaker": "添",
-  "speakerSub": "TEN",
-  "text": ["……。"]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["aya"],
-      "duration": 180
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "ten", "to": "center", "scale": 1.25 }
-      ],
-      "duration": 180
-    }
-  ],
-  "speaker": "添",
-  "speakerSub": "TEN",
-  "text": ["……。"]
-},
-{
-  "speaker": "添",
-  "speakerSub": "TEN",
-  "text": [
-    "研修に行って、そのままオレが帰ってこなかったらどうします？"
-  ]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["ten"],
-      "duration": 180
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "aya", "to": "center", "scale": 0.45 }
-      ],
-      "duration": 180
-    }
-  ],
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": ["え、っと……。"]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["aya"],
-      "duration": 180
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "ten", "to": "center", "scale": 1.25 }
-      ],
-      "duration": 180
-    }
-  ],
-  "speaker": "添",
-  "speakerSub": "TEN",
-  "text": ["はは、冗談。"]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["aya", "ten"],
-      "duration": 180
-    },
-    {
-      "type": "flashbackEnd"
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "rakuro", "to": "left", "scale": 0.5 },
-        { "id": "aya", "to": "right", "scale": 0.42 }
-      ],
-      "duration": 260
-    }
-  ],
-  "speaker": "綾",
-  "speakerSub": "AYA",
-  "text": ["……って感じで。"]
-}
-
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "………………あ～～、えっと。",
+      "まあ、くだらないことなんですけど、その。"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["rakuro", "aya"],
+        "duration": 220
+      },
+      {
+        "type": "flashback",
+        "bg": "placeholder.jpg"
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "center", "scale": 0.45 }
+        ],
+        "duration": 220
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["福岡に行ってたんだ？"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "ten", "to": "center", "scale": 1.25 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": [
+      "そ。まあ仕事ですけどね",
+      "てか、オレが此処に来てなかった理由とか気にならなかったんです？"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["ten"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "center", "scale": 0.45 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["あ～……大学生は忙しいって言うし、そういう時期かなって。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "（久しぶりに来たと思ったら怪我したとか言ってたし、",
+      "どうしたのかなって思ったりもしたけど）"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "（お互い、あまり踏み込んじゃダメだろうなってなるって言うか。）"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "ten", "to": "center", "scale": 1.25 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": ["……。"]
+  },
+  {
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": [
+      "研修に行って、そのままオレが帰ってこなかったらどうします？"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["ten"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "center", "scale": 0.45 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["え、っと……。"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "ten", "to": "center", "scale": 1.25 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": ["はは、冗談。"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["ten"],
+        "duration": 180
+      },
+      {
+        "type": "flashbackEnd"
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "left", "scale": 0.5 },
+          { "id": "aya", "to": "right", "scale": 0.42 }
+        ],
+        "duration": 260
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["……って感じで。"]
+  }
 ]
