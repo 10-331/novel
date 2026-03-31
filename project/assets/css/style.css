@@ -302,7 +302,7 @@ button{
 }
 
 .dialogue-text{
-  width: 30ic;
+  width: 40ic;
   height: calc(1.62em * 3);
   font-size: 24px;
   line-height: 1.62;
