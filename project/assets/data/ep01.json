@@ -440,31 +440,503 @@
       "…………。"
       "……旅行、か。いいよ。どこがいい。"]
   },
+[
+  {
+    "bg": "bar.jpg",
+    "motions": [
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
+        ],
+        "duration": 1200
+      }
+    ],
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……今日、ちょっと飲みすぎじゃない？"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "move",
+        "targets": [
+          { "id": "rakuro", "to": "left", "scale": 0.5 }
+        ],
+        "duration": 500
+      },
+      {
+        "type": "wait",
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "right", "scale": 0.42 }
+        ],
+        "duration": 1000
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "うん、んん？　まだそんなに飲んでないです～。",
+      "……たぶん。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "\"たぶん\"と言っている時点で、自分の限界を把握できていない",
+      "証拠だ。もうアウトに近い。"
+    ]
+  },
   {
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
-     "え、本当に行ってくれるんですか？"]
-     "なんだろう、海……とか、あ、温泉とか女子旅みたいで……憧れ……。"]
+      "え～今日もお仕事頑張ったんですよ。",
+      "私、お姉さんに褒めてほしいなあ。ね、いい子でしょ？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["エンジニアは大変だね。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["えっ、そういうことしちゃうの！？　わるい子だ！"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["う、冗談ですって～……。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["あ～あ、なんで人もバグも言うこと聞いてくれなんだろう。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["人間は元から聞かないだろう。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["すぐそういうこと言う。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "……でも来ちゃうんですよね～、此処。",
+      "お姉さんに会いに。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["そういうこと言って、あとで恥ずかしくなっても知らないぞ。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "なりません～～",
+      "……たぶん？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["また\"たぶん\"。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["便利な言葉なのに。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["逃げ道とも言うだろう。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["あは、手厳しい。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["それで、今日は何から逃げているんだ？"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "えっ逃げてる前提なんですか？"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "………………あ～～、えっと。",
+      "まあ、くだらないことなんですけど、その。"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["rakuro", "aya"],
+        "duration": 220
+      },
+      {
+        "type": "flashback",
+        "bg": "placeholder.jpg"
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "center", "scale": 0.45 }
+        ],
+        "duration": 220
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["福岡に行ってたんだ？"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "ten", "to": "center", "scale": 1.25 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": [
+      "そ。まあ仕事ですけどね",
+      "てか、オレが此処に来てなかった理由とか気にならなかったんです？"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["ten"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "center", "scale": 0.45 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["あ～……大学生は忙しいって言うし、そういう時期かなって。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "（久しぶりに来たと思ったら怪我したとか言ってたし、",
+      "どうしたのかなって思ったりもしたけど）"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "（お互い、あまり踏み込んじゃダメだろうなってなるって言うか。）"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "ten", "to": "center", "scale": 1.25 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": ["……。"]
+  },
+  {
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": [
+      "研修に行って、そのままオレが帰ってこなかったらどうします？"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["ten"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "aya", "to": "center", "scale": 0.45 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["え、っと……。"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "ten", "to": "center", "scale": 1.25 }
+        ],
+        "duration": 180
+      }
+    ],
+    "speaker": "添",
+    "speakerSub": "TEN",
+    "text": ["はは、冗談。"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["ten"],
+        "duration": 180
+      },
+      {
+        "type": "flashbackEnd"
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "left", "scale": 0.5 },
+          { "id": "aya", "to": "right", "scale": 0.42 }
+        ],
+        "duration": 260
+      }
+    ],
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["……お姉さんは、海外に住んでたんですよね。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "……おい。はぁ、眠ったか……。"
-      "飲みすぎだと言っただろう。"]
+      "そうだね。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "……じゃあ、大切な人に何かがあったら駆け付けられる人、なんですね。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["どうしてそう思うの？"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["私、旅行とかあまりしたことなくて。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["……だから、大事な人を探しに行く方法を知らないような気がして。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      ""
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["ねえ、お姉さん。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["何？"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["一緒に旅行しません？"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["急だね。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "え～、でも今の流れなら行くやつじゃないです？"
+      "行きたいな～で終わりなんて、寂しいじゃないですか。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["終わらせるつもりはなかったけど。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "じゃあ一緒に旅行しましょ？"
+      "私、お姉さんと行きたいな～。面倒見いいし、なんか安心するし。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……君はあまり、私を信用しすぎない方がいい。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+     "私ひとりだったら迷子になっちゃうかも。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["それは否定しない。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["えっ"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["……まあいいや。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": ["ね、だめです？　バー以外でも思い出作りたいなあ、私。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "…………。"]
+      "…………。"
+      "……旅行、か。いいよ。どこがいい。"]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "え、本当に行ってくれるんですか？",
+      "なんだろう、海……とか、あ、温泉とか女子旅みたいで……憧れ……。"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 220
+      },
+      {
+        "type": "wait",
+        "duration": 80
+      },
+      {
+        "type": "exit",
+        "targets": ["rakuro"],
+        "duration": 220
+      },
+      {
+        "type": "wait",
+        "duration": 120
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
+        ],
+        "duration": 420
+      }
+    ],
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……おい。はぁ、眠ったか……。",
+      "飲みすぎだと言っただろう。"
+    ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "　……まあいい。行くと言ったのは、私だ」"]
+      "…………。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……まあいい。行くと言ったのは、私だ。"
+    ]
   }
 
-]
