@@ -20,32 +20,6 @@ const EPISODE_TITLES = [
   { num: "第二話", sub: "タイトル" }
 ];
 
-function setupMenu(){
-  el.menuBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.menuPanel.classList.toggle("hidden");
-  });
-
-  el.menuPanel.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-
-  document.addEventListener("click", () => {
-    el.menuPanel.classList.add("hidden");
-  });
-
-  // 戻る
-  el.backBtn.addEventListener("click", () => {
-    el.menuPanel.classList.add("hidden");
-  });
-
-  // スキップ（次の話へ）
-  el.skipBtn.addEventListener("click", async () => {
-    el.menuPanel.classList.add("hidden");
-    await skipToNextEpisode();
-  });
-}
-
 const el = {
   viewport: document.getElementById("gameViewport"),
   stage: document.getElementById("stage"),
