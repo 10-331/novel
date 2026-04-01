@@ -64,7 +64,8 @@
     "speakerSub": "KUGURI",
     "text": [
       "そんな顔をしなくてもいいじゃないか。",
-      "机に向かって難しい顔をしているものだから、てっきり何か面白いことでも考えているのかと思ったよ。"
+      "机に向かって難しい顔をしているものだから、",
+      "てっきり何か面白いことでも考えているのかと思ったよ。"
     ]
   },
   {
@@ -73,438 +74,201 @@
     "text": ["面白いことではない。ただ予定を立てているだけだ"]
   },
   {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["エンジニアは大変だね。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["あ、今流した！？　わるい子だ！"]
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["予定、ね。",
+      "君がそこまで丁寧に順番を組んでいるとなると、ずいぶん大事な用事みたいだ。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……。"]
+    "text": ["覗き込まないでくれ"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["う、そんな目で見ないでください。",
-    "……冗談ですって、お姉さんはいい人です。"]
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["見せつけるように広げておいて、覗くなというのは難しい注文だね。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["あ～あ、なんで人もバグも言うこと聞いてくれなんだろう。"]
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["……熱海？"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["人間は元から聞かないだろう。"]
+    "text": ["……そうだ。だから来月、三日ほど家を空ける。",
+      "家は好きにしていいが、私はいないぞ。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["すぐそういうこと言う。"]
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["へぇ。熱海。いい響きだ。",
+      "海と湯けむりと、少し古びた街の匂いがする。君が確かに好みそうだ。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["私だけの希望ではない。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": [
-      "……でも来ちゃうんですよね～、此処。",
-      "お姉さんに会いに。"
+      "へぇ、誰かから言われたものをちゃんと叶えようとしているわけだ。"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["そういうこと言って、あとで恥ずかしくなっても知らないぞ。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": [
-      "なりません～～",
-      "……たぶん？"
-    ]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["また\"たぶん\"。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["便利な言葉なのに。"]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["逃げ道とも言うだろう。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["あは、手厳しい。"]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["それで、今日は何から逃げているんだ？"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": [
-      "えっ逃げてる前提なんですか？"
-    ]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": [
-      "………………あ～～、えっと。",
-      "まあ、くだらないことなんですけど、その。"
-    ]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["rakuro", "aya"],
-        "duration": 220
-      },
-      {
-        "type": "flashback",
-        "bg": "placeholder.jpg"
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "aya", "to": "center", "scale": 0.45 }
-        ],
-        "duration": 220
-      }
-    ],
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["福岡に行ってたんだ？"]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["aya"],
-        "duration": 180
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "ten", "to": "center", "scale": 1.25 }
-        ],
-        "duration": 180
-      }
-    ],
-    "speaker": "添",
-    "speakerSub": "TEN",
-    "text": [
-      "そ。まあ仕事ですけどね",
-      "てか、オレが此処に来てなかった理由とか気にならなかったんです？"
-    ]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["ten"],
-        "duration": 180
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "aya", "to": "center", "scale": 0.45 }
-        ],
-        "duration": 180
-      }
-    ],
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["あ～……大学生は忙しいって言うし、そういう時期かなって。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": [
-      "（久しぶりに来たと思ったら怪我したとか言ってたし、",
-      "どうしたのかなって思ったりもしたけど）"
-    ]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": [
-      "（お互い、あまり踏み込んじゃダメだろうなってなるって言うか。）"
-    ]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["aya"],
-        "duration": 180
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "ten", "to": "center", "scale": 1.25 }
-        ],
-        "duration": 180
-      }
-    ],
-    "speaker": "添",
-    "speakerSub": "TEN",
-    "text": ["……。"]
-  },
-  {
-    "speaker": "添",
-    "speakerSub": "TEN",
-    "text": [
-      "研修に行って、そのままオレが帰ってこなかったらどうします？"
-    ]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["ten"],
-        "duration": 180
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "aya", "to": "center", "scale": 0.45 }
-        ],
-        "duration": 180
-      }
-    ],
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["え、っと……。"]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["aya"],
-        "duration": 180
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "ten", "to": "center", "scale": 1.25 }
-        ],
-        "duration": 180
-      }
-    ],
-    "speaker": "添",
-    "speakerSub": "TEN",
-    "text": ["はは、冗談。"]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["ten"],
-        "duration": 180
-      },
-      {
-        "type": "flashbackEnd"
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "rakuro", "to": "left", "scale": 0.5 },
-          { "id": "aya", "to": "right", "scale": 0.42 }
-        ],
-        "duration": 260
-      }
-    ],
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["……お姉さんは、海外に住んでたんですよね。"]
+    "text": ["別に、たいしたことではない。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "そうだね。"
+      "初めての旅行らしいから、移動に無理がなくて、分かりやすくて、",
+      "休める場所の方がいいと思っただけだ。"
     ]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["ずいぶん優しいね。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["普通だろう。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["ずいぶん優しいね。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["普通だろう。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["そういうところを、君は普通だと思っているんだ。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["事実だよ。",
+      "相手が困らないように考えるのは、別に珍しいことじゃない。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": [
-      "……じゃあ、大切な人に何かがあったら駆け付けられる人、なんですね。"
+      "でも、誰にでもここまでするわけじゃない。"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["どうしてそう思うの？"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["私、旅行とかあまりしたことなくて。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["……だから、大事な人を探しに行く方法を知らないような気がして。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["ねえ、お姉さん。"]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["何？"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["一緒に旅行しません？"]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["急だね。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
     "text": [
-      "え～、でも今の流れなら行くやつじゃないです？",
-      "行きたいな～で終わりなんて、寂しいじゃないですか。"
+      "……。"
+    ]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["ふふ、黙るんだね。"]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["行き先を選んで、移動時間を調べて、順番まで組み立てて。"
+    ]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["まるで相手が迷わないように、疲れないように、退屈しないように、",
+      "全部先回りしているみたいだ。"
+    ]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["……君のそういうところ、嫌いじゃないよ。",
+      "誰にでも同じ温度で触れる、綺麗な博愛。"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["終わらせるつもりはなかったけど。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
     "text": [
-      "じゃあ一緒に旅行しましょ？",
-      "私、お姉さんと行きたいな～。面倒見いいし、なんか安心するし。"
+      "そう見えるなら、それで構わない。でも、余計な意味を足すな。"
     ]
   },
   {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["……君はあまり、私を信用しすぎない方がいい。"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": [
-      "私ひとりだったら迷子になっちゃうかも。"
+      "ふふ。……まあ、旅行なんて、少しくらい曖昧な方が面白い。",
+      "全部が予定通りじゃなくてもいいだろう？"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["それは否定しない。"]
+    "text": ["……お前は、いつもそうやって面白がるな。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["えっ"]
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["面白いよ。君がなにか考えている顔は、特にね。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["悪趣味だな、……放っておけ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": ["……まあいいや。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["ね、だめです？　バー以外でも思い出作りたいなあ、私。"]
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["旅行、楽しんでくるといい。",
+      "君がそこまで準備するなんて、きっと退屈はしないだろうしね。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "…………。",
-      "……旅行、か。いいよ。どこがいい。"
-    ]
+    "text": ["……ああ。"]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": [
-      "え、本当に行ってくれるんですか？",
-      "ん～なんだろう、海……とか、あ、温泉も女子旅みたいで……憧れ……。"
-    ]
-  },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["aya"],
-        "duration": 220
-      },
-      {
-        "type": "wait",
-        "duration": 1000
-      },
-      {
-        "type": "exit",
-        "targets": ["rakuro"],
-        "duration": 100
-      },
-      {
-        "type": "wait",
-        "duration": 100
-      },
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "rakuro", "to": "center", "scale": 0.5 }
-        ],
-        "duration": 220
-      }
-    ],
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": [
-      "……おい。"
-    ],
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": [
-      "はぁ、眠ったか……。",
-      "飲みすぎだと言っただろう。"
+      "ただ一つだけ。"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
+    "text": ["何だ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": [
-      "…………。"
+      "迷わないように、ね。"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": [
-      "……まあいい。行くと言ったのは、私だ。"
-    ]
+    "text": ["……お前に言われる筋合いはない。"]
   }
 ]
