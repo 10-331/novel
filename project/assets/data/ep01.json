@@ -455,23 +455,23 @@
       },
       {
         "type": "wait",
-        "duration": 800
+        "duration": 1000
       },
       {
         "type": "exit",
         "targets": ["rakuro"],
-        "duration": 220
+        "duration": 100
       },
       {
         "type": "wait",
-        "duration": 120
+        "duration": 100
       },
       {
         "type": "enter",
         "targets": [
           { "id": "rakuro", "to": "center", "scale": 0.5 }
         ],
-        "duration": 420
+        "duration": 220
       }
     ],
     "speaker": "落露",
