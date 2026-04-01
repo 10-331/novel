@@ -356,7 +356,7 @@ button{
   right: 0;
   top: 0;
   height: 140px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0));
+  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0));
 }
 
 .stage-gradient.black::after{
@@ -366,7 +366,7 @@ button{
   right: 0;
   bottom: 0;
   height: 240px;
-  background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
+  background: linear-gradient(to top, rgba(0,0,0,0.2), rgba(0,0,0,0));
 }
 
 .stage-gradient.white::before{
