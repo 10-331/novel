@@ -90,7 +90,6 @@ button{
   z-index: 1;
 }
 
-/* ★ 修正済み */
 .bg{
   position: absolute;
   inset: 0;
@@ -111,7 +110,6 @@ button{
   filter: brightness(1.08) saturate(0.86) blur(1px);
 }
 
-/* ★ 修正済み */
 .bg-vignette{
   position: absolute;
   inset: 0;
@@ -241,7 +239,7 @@ button{
   z-index: 25;
   inset: auto 0 0 0;
   height: 250px;
-  bottom:40px;
+  bottom: 40px;
   padding: 0 52px 26px;
   display: flex;
   flex-direction: column;
@@ -249,14 +247,12 @@ button{
   pointer-events: none;
 }
 
-/* ★ 基準を統一 */
 .name-row,
 .dialogue-line-image,
 .text-row{
   margin-left: 430px;
 }
 
-/* 名前 */
 .name-row{
   display: flex;
   align-items: baseline;
@@ -283,7 +279,6 @@ button{
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* 線 */
 .dialogue-line-image{
   margin-bottom: 12px;
   height: 12px;
@@ -296,7 +291,6 @@ button{
   opacity: .96;
 }
 
-/* テキスト */
 .text-row{
   height: calc(1.62em * 3);
   overflow: hidden;
@@ -348,7 +342,6 @@ button{
   display: grid;
 }
 
-/* ★ 修正済み */
 .stage-gradient{
   position: absolute;
   inset: 0;
@@ -385,7 +378,7 @@ button{
   height: 110px;
   background: linear-gradient(
     to bottom,
-        rgba(255,255,255,0.8),
+    rgba(255,255,255,0.55),
     rgba(255,255,255,0)
   );
 }
@@ -399,7 +392,7 @@ button{
   height: 150px;
   background: linear-gradient(
     to top,
-     rgba(255,255,255,0.60),
+    rgba(255,255,255,0.40),
     rgba(255,255,255,0)
   );
 }
@@ -415,7 +408,6 @@ button{
     radial-gradient(circle at center, rgba(255,255,255,0) 52%, rgba(255,255,255,0.68) 100%);
 }
 
-/* 初期チラ見え防止 */
 .bg-layer img{
   opacity: 0;
 }
@@ -428,7 +420,6 @@ button{
   opacity: 0 !important;
 }
 
-/* 初期チラ見え防止 */
 .bg-layer img{
   opacity: 0;
 }
@@ -437,62 +428,93 @@ button{
   opacity: 1;
 }
 
-/* ===== 回想中の文字色変更 ===== */
-
-/* メイン名前（日本語） */
 #nameMain.is-flashback{
   color: #fff;
   text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
-/* サブ名前（英語）はそのまま緑維持 */
 #nameSub.is-flashback{
   color: var(--accent);
 }
 
-/* セリフ */
 .dialogue-text.is-flashback{
   color: #fff;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
+/* ===== end choice ===== */
+.end-choice-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.62);
+}
 
+.end-choice-card{
+  min-width: 320px;
+  padding: 28px 24px;
+  border-radius: 16px;
+  background: rgba(20,22,28,.94);
+  box-shadow: 0 14px 40px rgba(0,0,0,.32);
+  text-align: center;
+}
+
+.end-choice-title{
+  margin: 0 0 18px;
+  font-size: 20px;
+  letter-spacing: .04em;
+  color: #fff;
+}
+
+.end-choice-card button{
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+}
+
+/* ===== episode title ===== */
 .episode-title-overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.85);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .4s ease;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
 }
 
 .episode-title-overlay.show{
-  opacity:1;
-  pointer-events:auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .episode-title-inner{
-  text-align:center;
-  color:#fff;
+  text-align: center;
+  color: #fff;
 }
 
 .episode-number{
-  font-size:32px;
-  letter-spacing:0.2em;
-  margin-bottom:12px;
+  font-size: 32px;
+  letter-spacing: .2em;
+  margin-bottom: 12px;
 }
 
 .episode-subtitle{
-  font-size:18px;
-  opacity:0.7;
-  margin-bottom:24px;
+  font-size: 18px;
+  opacity: .7;
+  margin-bottom: 24px;
 }
 
 .episode-start{
-  font-size:12px;
-  opacity:0.4;
+  font-size: 12px;
+  opacity: .4;
 }
