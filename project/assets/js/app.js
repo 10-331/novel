@@ -796,3 +796,30 @@ async function endFlashback() {
   flashOverlay.classList.remove("active");
   await wait(300);
 }
+
+async function goToNextEpisodeOrEnd() {
+  if (isEpisodeTransitioning) return;
+  isEpisodeTransitioning = true;
+
+  clearTimeout(typingTimer);
+  isTyping = false;
+  el.next.classList.remove("is-ready");
+
+  const nextEpisode = currentEpisode + 1;
+
+  if (nextEpisode < EPISODE_FILES.length) {
+    await loadEpisode(nextEpisode);
+    showEpisodeTitle(nextEpisode);
+
+    // ★ これ追加
+    isEpisodeTransitioning = false;
+    return;
+  }
+
+  clearCharacters(characterState);
+  renderCharacters([]);
+  showEndChoice();
+
+  // ★ これも追加
+  isEpisodeTransitioning = false;
+}
