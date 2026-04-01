@@ -455,7 +455,7 @@
       },
       {
         "type": "wait",
-        "duration": 500
+        "duration": 800
       },
       {
         "type": "exit",
