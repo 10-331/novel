@@ -98,6 +98,9 @@ let isEpisodeEnded = false;
 let isEpisodeTransitioning = false;
 let isWaitingEpisodeOverlay = false;
 
+/* ★ 追加：本文スキップ用 */
+let isSkipMode = false;
+
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
 
@@ -291,6 +294,7 @@ async function loadEpisode(episodeIndex) {
   clearTimeout(typingTimer);
   isTyping = false;
   currentFullText = "";
+  isSkipMode = false;
 
   currentBg = script[0]?.bg || "placeholder.jpg";
   prevBg = null;
@@ -583,7 +587,9 @@ function startTyping(lines) {
 
     el.text.textContent += full[i];
     i++;
-    typingTimer = setTimeout(step, 35);
+
+    /* ★ 変更：スキップ中は最速 */
+    typingTimer = setTimeout(step, isSkipMode ? 0 : 35);
   }
 
   step();
@@ -643,7 +649,24 @@ function setupMenu() {
     el.menuBtn.classList.remove("open");
     el.menuPanel.classList.add("hidden");
 
-    await goToNextEpisodeOrEnd();
+    /* ★ 変更：次話送りではなく本文スキップ */
+    isSkipMode = true;
+
+    while (index < script.length && isSkipMode) {
+      if (isTyping) {
+        clearTimeout(typingTimer);
+        el.text.textContent = currentFullText;
+        isTyping = false;
+        el.next.classList.add("is-ready");
+      } else {
+        index++;
+        await renderLine();
+      }
+
+      await wait(10);
+    }
+
+    isSkipMode = false;
   });
 }
 
@@ -719,6 +742,12 @@ function showEndChoice() {
 }
 
 el.stage.addEventListener("click", async () => {
+  /* ★ 追加：スキップ中タップで解除 */
+  if (isSkipMode) {
+    isSkipMode = false;
+    return;
+  }
+
   if (
     !isOrientationReady ||
     isMenuOpen ||
@@ -789,8 +818,6 @@ async function goToNextEpisodeOrEnd() {
   if (nextEpisode < EPISODE_FILES.length) {
     await loadEpisode(nextEpisode);
     showEpisodeTitle(nextEpisode);
-
-    // ★ これ追加
     isEpisodeTransitioning = false;
     return;
   }
@@ -798,7 +825,5 @@ async function goToNextEpisodeOrEnd() {
   clearCharacters(characterState);
   renderCharacters([]);
   showEndChoice();
-
-  // ★ これも追加
   isEpisodeTransitioning = false;
 }
