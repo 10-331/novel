@@ -133,15 +133,19 @@ function hideEpisodeTitle() {
 function setupEpisodeOverlay() {
   if (!el.episodeOverlay) return;
 
-el.skipBtn?.addEventListener("click", async (e) => {
-  e.stopPropagation();
+  el.episodeOverlay.addEventListener("click", async (e) => {
+    e.stopPropagation();
 
-  isMenuOpen = false;
-  el.menuBtn.classList.remove("open");
-  el.menuPanel.classList.add("hidden");
+    if (!isWaitingEpisodeOverlay) return;
 
-  await goToNextEpisodeOrEnd();
-});
+    isWaitingEpisodeOverlay = false;
+    hideEpisodeTitle();
+
+    await wait(400);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await renderLine();
+  });
+}
 
 async function preloadCharacterImages() {
   const entries = Object.entries(CHARACTER_SOURCES);
@@ -655,11 +659,12 @@ function setupMenu() {
 
   el.skipBtn?.addEventListener("click", async (e) => {
     e.stopPropagation();
-    index = script.length;
-    await renderLine();
+
     isMenuOpen = false;
     el.menuBtn.classList.remove("open");
     el.menuPanel.classList.add("hidden");
+
+    await goToNextEpisodeOrEnd();
   });
 }
 
