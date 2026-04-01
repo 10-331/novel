@@ -5,7 +5,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "rakuro", "to": "center", "scale": 0.5, "z": 20 }
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
         ],
         "duration": 1200
       }
@@ -30,7 +30,7 @@
       {
         "type": "move",
         "targets": [
-          { "id": "rakuro", "to": "left", "scale": 0.5, "z": 20 }
+          { "id": "rakuro", "to": "left", "scale": 0.5 }
         ],
         "duration": 500
       },
@@ -41,7 +41,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "kuguri", "to": "right", "scale": 1.2, "z": 10 }
+          { "id": "kuguri", "to": "right", "scale": 1.2 }
         ],
         "duration": 1000
       }
@@ -56,22 +56,21 @@
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": [
-      "\"たぶん\"と言っている時点で、自分の限界を把握できていない",
-      "証拠だ。もうアウトに近い。"
+      "潜……。"
     ]
   },
   {
-    "speaker": "綾",
-    "speakerSub": "AYA",
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
     "text": [
-      "え～今日もお仕事頑張ったんですよ。",
-      "私、お姉さんに褒めてほしいなあ。ね、いい子でしょ？"
+      "そんな顔をしなくてもいいじゃないか。",
+      "机に向かって難しい顔をしているものだから、てっきり何か面白いことでも考えているのかと思ったよ。"
     ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……。"]
+    "text": ["面白いことではない。ただ予定を立てているだけだ"]
   },
   {
     "speaker": "落露",
