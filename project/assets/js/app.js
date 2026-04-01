@@ -159,19 +159,15 @@ function hideEpisodeTitle() {
 function setupEpisodeOverlay() {
   if (!el.episodeOverlay) return;
 
-  el.episodeOverlay.addEventListener("click", async (e) => {
-    e.stopPropagation();
+el.skipBtn?.addEventListener("click", async (e) => {
+  e.stopPropagation();
 
-    if (!isWaitingEpisodeOverlay) return;
+  isMenuOpen = false;
+  el.menuBtn.classList.remove("open");
+  el.menuPanel.classList.add("hidden");
 
-    isWaitingEpisodeOverlay = false;
-    hideEpisodeTitle();
-
-    await wait(400);
-    await new Promise((resolve) => requestAnimationFrame(resolve));
-    await renderLine();
-  });
-}
+  await goToNextEpisodeOrEnd();
+});
 
 async function preloadCharacterImages() {
   const entries = Object.entries(CHARACTER_SOURCES);
