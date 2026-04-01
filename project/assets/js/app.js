@@ -434,6 +434,19 @@ async function renderLine() {
 }
 
 function parseCharacter(entry) {
+  if (typeof entry === "object" && entry !== null) {
+    return {
+      id: entry.id,
+      src: CHARACTER_SOURCES[entry.id] || "",
+      visible: entry.visible !== false,
+      position: entry.to || entry.position || null,
+      x: entry.x || 0,
+      y: entry.y || 0,
+      scale: entry.scale || 1,
+      z: entry.z || 0
+    };
+  }
+
   const parts = String(entry).split(":").map((v) => v.trim()).filter(Boolean);
   const id = parts[0];
 
@@ -444,7 +457,8 @@ function parseCharacter(entry) {
     position: null,
     x: 0,
     y: 0,
-    scale: 1
+    scale: 1,
+    z: 0
   };
 
   for (const p of parts.slice(1)) {
@@ -456,6 +470,8 @@ function parseCharacter(entry) {
       data.y = Number(p.replace("y=", "")) || 0;
     } else if (p.startsWith("scale=")) {
       data.scale = Number(p.replace("scale=", "")) || 1;
+    } else if (p.startsWith("z=")) {
+      data.z = Number(p.replace("z=", "")) || 0;
     } else if (p === "hide") {
       data.visible = false;
     }
