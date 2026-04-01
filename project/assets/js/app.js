@@ -10,6 +10,11 @@ const BASE_WIDTH = 1600;
 const BASE_HEIGHT = 900;
 const CHARACTER_BOTTOM = -28;
 
+const EPISODE_FILES = [
+  "./assets/data/ep01.json",
+  "./assets/data/ep02.json"
+];
+
 const el = {
   viewport: document.getElementById("gameViewport"),
   stage: document.getElementById("stage"),
@@ -62,6 +67,7 @@ const CHARACTER_SOURCES = {
 const imageCache = new Map();
 const characterState = createCharacterState();
 
+let currentEpisode = 0;
 let script = [];
 let index = 0;
 
@@ -80,6 +86,7 @@ let isOrientationReady = false;
 
 let isMenuOpen = false;
 let isEpisodeEnded = false;
+let isEpisodeTransitioning = false;
 
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
@@ -159,7 +166,7 @@ function changeBackground(src, immediate = false) {
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     await preloadCharacterImages();
-    await loadScript();
+    await loadEpisode(currentEpisode);
     fitStage();
     updateOrientation();
     setupMenu();
@@ -214,12 +221,44 @@ async function startGame() {
   el.stage?.classList.add("is-ready");
 }
 
-async function loadScript() {
-  const res = await fetch("./assets/data/ep01.json");
+async function loadEpisode(episodeIndex) {
+  const file = EPISODE_FILES[episodeIndex];
+  if (!file) {
+    throw new Error(`Episode file not found: ${episodeIndex}`);
+  }
+
+  const res = await fetch(file);
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}`);
   }
+
   script = await res.json();
+  currentEpisode = episodeIndex;
+  index = 0;
+
+  clearTimeout(typingTimer);
+  isTyping = false;
+  currentFullText = "";
+
+  currentBg = script[0]?.bg || "placeholder.jpg";
+  prevBg = null;
+  isFlashbackActive = false;
+  isEpisodeEnded = false;
+  isEpisodeTransitioning = false;
+  skipAdvanceUntil = 0;
+  lineRenderToken++;
+
+  clearCharacters(characterState);
+  renderCharacters([]);
+  setFlashbackMode(false);
+
+  el.text.textContent = "";
+  el.nameMain.textContent = "";
+  el.nameSub.textContent = "";
+  el.next.classList.remove("is-ready");
+  el.endChoiceOverlay?.classList.add("hidden");
+
+  changeBackground(`./assets/images/bg/${currentBg}`, true);
 }
 
 function fitStage() {
@@ -271,9 +310,7 @@ async function renderLine() {
   });
 
   if (index >= script.length) {
-    clearCharacters(characterState);
-    renderCharacters([]);
-    showEndChoice();
+    await goToNextEpisodeOrEnd();
     return;
   }
 
@@ -338,6 +375,28 @@ async function renderLine() {
   }
 
   startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
+}
+
+async function goToNextEpisodeOrEnd() {
+  if (isEpisodeTransitioning) return;
+  isEpisodeTransitioning = true;
+
+  clearTimeout(typingTimer);
+  isTyping = false;
+  el.next.classList.remove("is-ready");
+
+  const nextEpisode = currentEpisode + 1;
+
+  if (nextEpisode < EPISODE_FILES.length) {
+    await loadEpisode(nextEpisode);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await renderLine();
+    return;
+  }
+
+  clearCharacters(characterState);
+  renderCharacters([]);
+  showEndChoice();
 }
 
 function parseCharacter(entry) {
@@ -547,10 +606,10 @@ function setupMenu() {
     el.menuPanel.classList.add("hidden");
   });
 
-  el.skipBtn?.addEventListener("click", (e) => {
+  el.skipBtn?.addEventListener("click", async (e) => {
     e.stopPropagation();
     index = script.length;
-    renderLine();
+    await renderLine();
     isMenuOpen = false;
     el.menuBtn.classList.remove("open");
     el.menuPanel.classList.add("hidden");
@@ -629,7 +688,13 @@ function showEndChoice() {
 }
 
 el.stage.addEventListener("click", async () => {
-  if (!isOrientationReady || isMenuOpen || isEpisodeEnded || isMotionPlaying) return;
+  if (
+    !isOrientationReady ||
+    isMenuOpen ||
+    isEpisodeEnded ||
+    isMotionPlaying ||
+    isEpisodeTransitioning
+  ) return;
 
   const now = Date.now();
   if (now < skipAdvanceUntil) return;
