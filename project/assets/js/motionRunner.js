@@ -15,8 +15,8 @@ export async function runMotions({
   wait,
   token,
   getToken,
-  playFlashback,   // ←追加
-  endFlashback     // ←追加
+  playFlashback,
+  endFlashback
 }) {
   for (const motion of motions) {
     if (token !== getToken()) return;
@@ -56,6 +56,7 @@ export async function runMotions({
           if (t.x !== undefined) parts.push(`x=${t.x}`);
           if (t.y !== undefined) parts.push(`y=${t.y}`);
           if (t.scale !== undefined) parts.push(`scale=${t.scale}`);
+          if (t.z !== undefined) parts.push(`z=${t.z}`);
 
           const parsed = parseCharacter(parts.join(":"));
           setCharacter(state, parsed);
@@ -77,7 +78,8 @@ export async function runMotions({
             position: t.to ?? current.position,
             x: t.x ?? current.x,
             y: t.y ?? current.y,
-            scale: t.scale ?? current.scale
+            scale: t.scale ?? current.scale,
+            z: t.z ?? current.z
           });
         }
 
@@ -103,7 +105,6 @@ export async function runMotions({
         await wait(motion.duration || 300);
         break;
 
-      // ★ここ！！switchの中！！
       case "flashback":
         if (playFlashback) {
           await playFlashback(motion.bg);
