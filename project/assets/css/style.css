@@ -85,10 +85,12 @@ button{
 }
 
 .bg-layer{
+  position: absolute;
+  inset: 0;
   z-index: 1;
 }
 
-/* 背景 */
+/* ★ 修正済み */
 .bg{
   position: absolute;
   inset: 0;
@@ -105,11 +107,11 @@ button{
   visibility: visible;
 }
 
-/* 回想（最低限そのまま） */
 .bg.flashback{
   filter: brightness(1.08) saturate(0.86) blur(1px);
 }
 
+/* ★ 修正済み */
 .bg-vignette{
   position: absolute;
   inset: 0;
@@ -135,7 +137,6 @@ button{
   pointer-events: none;
 }
 
-/* キャラ */
 .char-layer{
   z-index: 5;
   pointer-events: none;
@@ -145,12 +146,95 @@ button{
   position: absolute;
   transform: translateX(-50%) scale(var(--char-scale, 1));
   transform-origin: bottom center;
-  transition: left .45s ease, bottom .45s ease, transform .45s ease;
+  transition:
+    left .45s ease,
+    bottom .45s ease,
+    transform .45s ease;
+  will-change: transform, opacity, left;
+  backface-visibility: hidden;
 }
 
-/* UI */
+.char.fade-in,
+.char.fade-out{
+  transition: none !important;
+}
+
+.char.fade-in{
+  animation: charFadeIn var(--char-fade-duration, 1000ms) ease forwards;
+}
+
+.char.fade-out{
+  animation: charFadeOut var(--char-fade-duration, 1000ms) ease forwards;
+}
+
+@keyframes charFadeIn{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
+}
+
+@keyframes charFadeOut{
+  from{ opacity: 1; }
+  to{ opacity: 0; }
+}
+
 .top-ui{
   z-index: 20;
+  pointer-events: none;
+}
+
+.icon-btn,
+.menu-toggle{
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  pointer-events: auto;
+}
+
+.icon-left{
+  top: 24px;
+  left: 24px;
+}
+
+.icon-right{
+  top: 24px;
+  right: 24px;
+}
+
+.icon-btn img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.menu-toggle{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: rgba(28,29,35,.90);
+  border-radius: 6px;
+}
+
+.menu-toggle span{
+  display: block;
+  width: 48%;
+  height: 2px;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.menu-toggle.open span:nth-child(1){
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2){
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3){
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 .dialogue-area{
@@ -162,9 +246,10 @@ button{
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  pointer-events: none;
 }
 
-/* 基準 */
+/* ★ 基準を統一 */
 .name-row,
 .dialogue-line-image,
 .text-row{
@@ -172,9 +257,19 @@ button{
 }
 
 /* 名前 */
+.name-row{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+  min-height: 36px;
+}
+
 .speaker-ja{
   font-size: 34px;
   font-weight: 700;
+  line-height: 1;
+  letter-spacing: .03em;
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
@@ -182,35 +277,180 @@ button{
 .speaker-en{
   font-size: 17px;
   font-weight: 700;
+  line-height: 1;
+  letter-spacing: .03em;
   color: var(--accent);
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+
+/* 線 */
+.dialogue-line-image{
+  margin-bottom: 12px;
+  height: 12px;
+}
+
+.dialogue-line-image img{
+  width: 40ic;
+  height: 12px;
+  object-fit: fill;
+  opacity: .96;
 }
 
 /* テキスト */
+.text-row{
+  height: calc(1.62em * 3);
+  overflow: hidden;
+}
+
 .dialogue-text{
   width: 40ic;
+  height: calc(1.62em * 3);
   font-size: 24px;
   line-height: 1.62;
+  letter-spacing: .01em;
   color: #ffffff;
   font-weight: 500;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
+  white-space: pre-wrap;
+  overflow: hidden;
 }
 
-/* ===================== */
-/* ★ここだけ修正（回想） */
-/* ===================== */
+.next-indicator{
+  position: absolute;
+  right: 28px;
+  bottom: 16px;
+  width: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  animation: nextPrompt 2.15s linear infinite;
+}
 
-/* 名前（白に戻す） */
+@keyframes nextPrompt{
+  0%{ transform: translateY(0); opacity: 1; }
+  50%{ transform: translateY(4px); opacity: 0.28; }
+  100%{ transform: translateY(0); opacity: 1; }
+}
+
+.orientation-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  place-items: center;
+  background: rgba(0,0,0,.82);
+  color: #fff;
+}
+
+.orientation-overlay.show{
+  display: grid;
+}
+
+/* ★ 修正済み */
+.stage-gradient{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.stage-gradient.black::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 140px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0));
+}
+
+.stage-gradient.black::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 240px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
+}
+
+.stage-gradient.white::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 110px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.42),
+    rgba(255,255,255,0)
+  );
+}
+
+.stage-gradient.white::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 150px;
+  background: linear-gradient(
+    to top,
+    rgba(255,255,255,0.30),
+    rgba(255,255,255,0)
+  );
+}
+
+.flash-frame{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  z-index: 40;
+  transition: opacity .35s ease;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0) 52%, rgba(255,255,255,0.68) 100%);
+}
+
+/* 初期チラ見え防止 */
+.bg-layer img{
+  opacity: 0;
+}
+
+.game-stage.is-ready .bg.active{
+  opacity: 1;
+}
+
+.game-stage:not(.is-ready) .bg{
+  opacity: 0 !important;
+}
+
+/* 初期チラ見え防止 */
+.bg-layer img{
+  opacity: 0;
+}
+
+.game-stage.is-ready .bg.active{
+  opacity: 1;
+}
+
+/* ===== 回想中の文字色変更 ===== */
+
+/* メイン名前（日本語） */
 #nameMain.is-flashback{
   color: #fff;
   text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
-/* 英語名はそのまま */
+/* サブ名前（英語）はそのまま緑維持 */
 #nameSub.is-flashback{
   color: var(--accent);
 }
 
-/* セリフ（白に戻す） */
+/* セリフ */
 .dialogue-text.is-flashback{
   color: #fff;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
