@@ -15,6 +15,11 @@ const EPISODE_FILES = [
   "./assets/data/ep02.json"
 ];
 
+const EPISODE_TITLES = [
+  { num: "第一話", sub: "タイトル" },
+  { num: "第二話", sub: "タイトル" }
+];
+
 const el = {
   viewport: document.getElementById("gameViewport"),
   stage: document.getElementById("stage"),
@@ -41,6 +46,10 @@ const el = {
   endChoiceOverlay: document.getElementById("endChoiceOverlay"),
   continueBtn: document.getElementById("continueBtn"),
   finishBtn: document.getElementById("finishBtn"),
+
+  episodeOverlay: document.getElementById("episodeTitleOverlay"),
+  episodeNumber: document.getElementById("episodeNumber"),
+  episodeSubtitle: document.getElementById("episodeSubtitle"),
 
   chars: [
     document.getElementById("char1"),
@@ -87,12 +96,56 @@ let isOrientationReady = false;
 let isMenuOpen = false;
 let isEpisodeEnded = false;
 let isEpisodeTransitioning = false;
+let isWaitingEpisodeOverlay = false;
 
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
 
 const flashOverlay = document.getElementById("flashOverlay");
 const flashFrame = document.getElementById("flashFrame");
+
+function showEpisodeTitle(epIndex) {
+  const data = EPISODE_TITLES[epIndex] || { num: "", sub: "" };
+
+  if (!el.episodeOverlay) return;
+
+  el.episodeNumber.textContent = data.num;
+  el.episodeSubtitle.textContent = data.sub;
+
+  isWaitingEpisodeOverlay = true;
+
+  el.episodeOverlay.classList.remove("hidden");
+  requestAnimationFrame(() => {
+    el.episodeOverlay.classList.add("show");
+  });
+}
+
+function hideEpisodeTitle() {
+  if (!el.episodeOverlay) return;
+
+  el.episodeOverlay.classList.remove("show");
+
+  setTimeout(() => {
+    el.episodeOverlay.classList.add("hidden");
+  }, 400);
+}
+
+function setupEpisodeOverlay() {
+  if (!el.episodeOverlay) return;
+
+  el.episodeOverlay.addEventListener("click", async (e) => {
+    e.stopPropagation();
+
+    if (!isWaitingEpisodeOverlay) return;
+
+    isWaitingEpisodeOverlay = false;
+    hideEpisodeTitle();
+
+    await wait(400);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await renderLine();
+  });
+}
 
 async function preloadCharacterImages() {
   const entries = Object.entries(CHARACTER_SOURCES);
@@ -171,6 +224,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     updateOrientation();
     setupMenu();
     setupEndChoice();
+    setupEpisodeOverlay();
 
     if (window.innerHeight > window.innerWidth) {
       return;
@@ -215,10 +269,8 @@ async function startGame() {
   setFlashbackMode(false);
   changeBackground(`./assets/images/bg/${currentBg}`, true);
 
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-  await renderLine();
-
   el.stage?.classList.add("is-ready");
+  showEpisodeTitle(currentEpisode);
 }
 
 async function loadEpisode(episodeIndex) {
@@ -257,10 +309,6 @@ async function loadEpisode(episodeIndex) {
   el.nameSub.textContent = "";
   el.next.classList.remove("is-ready");
   el.endChoiceOverlay?.classList.add("hidden");
-
-  episodeOverlay: document.getElementById("episodeTitleOverlay"),
-episodeNumber: document.getElementById("episodeNumber"),
-episodeSubtitle: document.getElementById("episodeSubtitle"),
 
   changeBackground(`./assets/images/bg/${currentBg}`, true);
 }
@@ -393,8 +441,7 @@ async function goToNextEpisodeOrEnd() {
 
   if (nextEpisode < EPISODE_FILES.length) {
     await loadEpisode(nextEpisode);
-    await new Promise((resolve) => requestAnimationFrame(resolve));
-    await renderLine();
+    showEpisodeTitle(nextEpisode);
     return;
   }
 
@@ -697,7 +744,8 @@ el.stage.addEventListener("click", async () => {
     isMenuOpen ||
     isEpisodeEnded ||
     isMotionPlaying ||
-    isEpisodeTransitioning
+    isEpisodeTransitioning ||
+    isWaitingEpisodeOverlay
   ) return;
 
   const now = Date.now();
