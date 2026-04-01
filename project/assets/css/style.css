@@ -467,17 +467,6 @@ button{
   );
 }
 
-/* ===== 白フェード中の文字補正 ===== */
-
-.stage-gradient.white ~ .dialogue-area .dialogue-text,
-.stage-gradient.white ~ .dialogue-area #nameMain{
-  color: #fff;
-  -webkit-text-stroke: 0.4px rgba(0,0,0,0.7);
-  text-shadow:
-    0 0 2px rgba(0,0,0,0.01),
-    0 1px 3px rgba(0,0,0,0.01);
-}
-
 .flash-frame{
   position: absolute;
   inset: 0;
