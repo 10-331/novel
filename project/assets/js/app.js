@@ -513,6 +513,7 @@ function renderCharacters(chars, options = {}) {
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.setProperty("--char-scale", c.scale || 1);
+    img.style.zIndex = String(c.z || 0);
 
     img.classList.remove("hidden");
     img.style.setProperty("--char-fade-duration", "1000ms");
@@ -560,6 +561,7 @@ function moveCharacters(chars) {
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.setProperty("--char-scale", c.scale || 1);
     img.classList.remove("hidden");
+    img.style.zIndex = String(c.z || 0);
   });
 }
 
