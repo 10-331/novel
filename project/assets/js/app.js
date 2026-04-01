@@ -429,27 +429,6 @@ async function renderLine() {
   startTyping(Array.isArray(line.text) ? line.text : [line.text || ""]);
 }
 
-async function goToNextEpisodeOrEnd() {
-  if (isEpisodeTransitioning) return;
-  isEpisodeTransitioning = true;
-
-  clearTimeout(typingTimer);
-  isTyping = false;
-  el.next.classList.remove("is-ready");
-
-  const nextEpisode = currentEpisode + 1;
-
-  if (nextEpisode < EPISODE_FILES.length) {
-    await loadEpisode(nextEpisode);
-    showEpisodeTitle(nextEpisode);
-    return;
-  }
-
-  clearCharacters(characterState);
-  renderCharacters([]);
-  showEndChoice();
-}
-
 function parseCharacter(entry) {
   const parts = String(entry).split(":").map((v) => v.trim()).filter(Boolean);
   const id = parts[0];
