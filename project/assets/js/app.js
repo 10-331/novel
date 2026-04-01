@@ -258,6 +258,10 @@ async function loadEpisode(episodeIndex) {
   el.next.classList.remove("is-ready");
   el.endChoiceOverlay?.classList.add("hidden");
 
+  episodeOverlay: document.getElementById("episodeTitleOverlay"),
+episodeNumber: document.getElementById("episodeNumber"),
+episodeSubtitle: document.getElementById("episodeSubtitle"),
+
   changeBackground(`./assets/images/bg/${currentBg}`, true);
 }
 
