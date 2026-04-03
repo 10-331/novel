@@ -118,8 +118,11 @@ function showEpisodeTitle(epIndex) {
   isWaitingEpisodeOverlay = true;
 
   el.episodeOverlay.classList.remove("hidden");
+  el.episodeOverlay.style.pointerEvents = "none";
+
   requestAnimationFrame(() => {
     el.episodeOverlay.classList.add("show");
+    el.episodeOverlay.style.pointerEvents = "auto";
   });
 }
 
@@ -127,6 +130,7 @@ function hideEpisodeTitle() {
   if (!el.episodeOverlay) return;
 
   el.episodeOverlay.classList.remove("show");
+  el.episodeOverlay.style.pointerEvents = "none";
 
   setTimeout(() => {
     el.episodeOverlay.classList.add("hidden");
@@ -296,7 +300,7 @@ async function loadEpisode(episodeIndex) {
   clearTimeout(typingTimer);
   isTyping = false;
   currentFullText = "";
-  
+
   isSkipMode = false;
   isRewindMode = false;
 
@@ -305,6 +309,7 @@ async function loadEpisode(episodeIndex) {
   isFlashbackActive = false;
   isEpisodeEnded = false;
   isEpisodeTransitioning = false;
+  isWaitingEpisodeOverlay = false;
   skipAdvanceUntil = 0;
   lineRenderToken++;
 
@@ -317,6 +322,12 @@ async function loadEpisode(episodeIndex) {
   el.nameSub.textContent = "";
   el.next.classList.remove("is-ready");
   el.endChoiceOverlay?.classList.add("hidden");
+
+  if (el.episodeOverlay) {
+    el.episodeOverlay.classList.add("hidden");
+    el.episodeOverlay.classList.remove("show");
+    el.episodeOverlay.style.pointerEvents = "none";
+  }
 
   changeBackground(`./assets/images/bg/${currentBg}`, true);
 }
@@ -643,7 +654,15 @@ function wait(ms) {
 }
 
 function setupMenu() {
-  if (!el.menuBtn || !el.menuPanel) return;
+  if (!el.menuBtn || !el.menuPanel) {
+    console.error("menu setup failed", {
+      menuBtn: el.menuBtn,
+      menuPanel: el.menuPanel,
+      backBtn: el.backBtn,
+      skipBtn: el.skipBtn
+    });
+    return;
+  }
 
   el.menuBtn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -652,19 +671,19 @@ function setupMenu() {
     el.menuPanel.classList.toggle("hidden", !isMenuOpen);
   });
 
-  el.menuPanel?.addEventListener("click", (e) => {
+  el.menuPanel.addEventListener("click", (e) => {
     e.stopPropagation();
   });
 
   el.backBtn?.addEventListener("click", async (e) => {
     e.stopPropagation();
-    
+
     if (isRewindMode || isSkipMode || isEpisodeTransitioning) return;
 
     if (index > 0) {
       isRewindMode = true;
       index--;
-      
+
       clearCharacters(characterState);
       currentBg = "placeholder.jpg";
       prevBg = null;
