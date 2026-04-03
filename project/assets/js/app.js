@@ -640,7 +640,7 @@ function getPositionLeftValue(position) {
 
 function startTyping(lines) {
   clearTimeout(typingTimer);
-  el.text.textContent = "";
+  el.text.innerHTML = "";
   el.next.classList.remove("is-ready");
 
   const full = lines.join("\n");
@@ -649,15 +649,23 @@ function startTyping(lines) {
   let i = 0;
   isTyping = true;
 
+  function formatText(text) {
+    return text
+      .replace(/（(.*?)）/g, '<span class="inner-voice">（$1）</span>')
+      .replace(/\((.*?)\)/g, '<span class="inner-voice">($1)</span>');
+  }
+
   function step() {
     if (i >= currentFullText.length || isRewindMode) {
       isTyping = false;
       el.next.classList.add("is-ready");
-      if (isRewindMode) el.text.textContent = currentFullText;
+      if (isRewindMode) el.text.innerHTML = formatText(currentFullText);
       return;
     }
 
-    el.text.textContent += full[i];
+    const current = currentFullText.slice(0, i + 1);
+    el.text.innerHTML = formatText(current);
+
     i++;
 
     typingTimer = setTimeout(step, isSkipMode ? 0 : 35);
