@@ -85,8 +85,6 @@ button{
 }
 
 .bg-layer{
-  position: absolute;
-  inset: 0;
   z-index: 1;
 }
 
@@ -235,74 +233,60 @@ button{
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ===== メニュー全体（中央配置） ===== */
 .menu-panel{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: auto;
 }
 
-/* ===== カード本体 ===== */
 .menu-card{
-  width:min(420px, 80vw);
-  padding:32px 24px;
-  border-radius:18px;
-
-  background:rgba(20,22,28,0.92);
+  width: min(420px, 80vw);
+  padding: 32px 24px;
+  border-radius: 18px;
+  background: rgba(20,22,28,0.92);
   backdrop-filter: blur(10px);
-
   box-shadow:
     0 20px 60px rgba(0,0,0,0.5),
     0 0 0 1px rgba(255,255,255,0.05);
-
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  text-align:center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  margin: 0;
+  pointer-events: auto;
 }
 
-/* ===== タイトル ===== */
 .menu-card h2{
-  margin:0 0 8px;
-  font-size:18px;
-  letter-spacing:0.2em;
-  color:#fff;
-  opacity:0.8;
+  margin: 0 0 8px;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  color: #fff;
+  opacity: 0.8;
 }
 
-/* ===== ボタン共通 ===== */
 .menu-item-btn{
-  width:100%;
-  padding:14px 0;
-
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.12);
-
-  background:rgba(255,255,255,0.04);
-  color:#fff;
-
-  font-size:14px;
-  letter-spacing:0.1em;
-
-  cursor:pointer;
-  transition:.2s ease;
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: .2s ease;
 }
 
-/* hover（PC） */
 .menu-item-btn:hover{
-  background:rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.08);
 }
 
-/* 押したとき */
 .menu-item-btn:active{
-  transform:scale(0.98);
-}
-
-.menu-card{
-  margin:0;
+  transform: scale(0.98);
 }
 
 .dialogue-area{
@@ -490,14 +474,6 @@ button{
   opacity: 0 !important;
 }
 
-.bg-layer img{
-  opacity: 0;
-}
-
-.game-stage.is-ready .bg.active{
-  opacity: 1;
-}
-
 #nameMain.is-flashback{
   color: #fff;
   text-shadow: 0 2px 6px rgba(0,0,0,0.4);
@@ -512,7 +488,6 @@ button{
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
-/* ===== end choice ===== */
 .end-choice-overlay{
   position: absolute;
   inset: 0;
@@ -548,7 +523,6 @@ button{
   color: #fff;
 }
 
-/* ===== episode title ===== */
 .episode-title-overlay{
   position: absolute;
   inset: 0;
@@ -570,6 +544,7 @@ button{
 .episode-title-inner{
   text-align: center;
   color: #fff;
+  pointer-events: none;
 }
 
 .episode-number{
