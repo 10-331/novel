@@ -363,6 +363,11 @@ button{
   overflow: hidden;
 }
 
+.dialogue-text .inner-voice{
+  color: #b8bcc6;
+  opacity: 0.7;
+}
+
 .next-indicator{
   position: absolute;
   right: 28px;
