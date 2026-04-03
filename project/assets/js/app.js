@@ -16,8 +16,8 @@ const EPISODE_FILES = [
 ];
 
 const EPISODE_TITLES = [
-  { num: "第一話", sub: "タイトル" },
-  { num: "第二話", sub: "タイトル" }
+  { num: "壊生カメリア　1話", sub: "TRACK.1" },
+  { num: "壊生カメリア　2話", sub: "TRACK.2" }
 ];
 
 const el = {
