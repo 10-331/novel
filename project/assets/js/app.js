@@ -98,8 +98,8 @@ let isEpisodeEnded = false;
 let isEpisodeTransitioning = false;
 let isWaitingEpisodeOverlay = false;
 
-/* ★ 追加：本文スキップ用 */
 let isSkipMode = false;
+let isRewindMode = false;
 
 let skipAdvanceUntil = 0;
 let lineRenderToken = 0;
@@ -180,6 +180,8 @@ async function preloadCharacterImages() {
 function changeBackground(src, immediate = false) {
   if (!el.bgA || !el.bgB) return;
   if (!src) return;
+
+  if (isSkipMode || isRewindMode) immediate = true;
 
   const current = activeBg === "A" ? el.bgA : el.bgB;
   const next = activeBg === "A" ? el.bgB : el.bgA;
@@ -294,7 +296,9 @@ async function loadEpisode(episodeIndex) {
   clearTimeout(typingTimer);
   isTyping = false;
   currentFullText = "";
+  
   isSkipMode = false;
+  isRewindMode = false;
 
   currentBg = script[0]?.bg || "placeholder.jpg";
   prevBg = null;
@@ -416,7 +420,7 @@ async function renderLine() {
     renderCharacters(getVisibleCharacters(characterState));
   }
 
-  const shouldFadeUi = usedMotions && !hadCharactersBefore;
+  const shouldFadeUi = usedMotions && !hadCharactersBefore && !isSkipMode && !isRewindMode;
 
   el.nameMain.textContent = line.speaker || "";
   el.nameSub.textContent = line.speakerSub || "";
@@ -516,6 +520,13 @@ function renderCharacters(chars, options = {}) {
     img.style.zIndex = String(c.z || 0);
 
     img.classList.remove("hidden");
+
+    if (isSkipMode || isRewindMode) {
+      img.classList.remove("fade-in", "fade-out");
+      img.style.opacity = "";
+      return;
+    }
+
     img.style.setProperty("--char-fade-duration", "1000ms");
 
     if (fadeIds.includes(c.id)) {
@@ -597,16 +608,16 @@ function startTyping(lines) {
   isTyping = true;
 
   function step() {
-    if (i >= currentFullText.length) {
+    if (i >= currentFullText.length || isRewindMode) {
       isTyping = false;
       el.next.classList.add("is-ready");
+      if (isRewindMode) el.text.textContent = currentFullText;
       return;
     }
 
     el.text.textContent += full[i];
     i++;
 
-    /* ★ 変更：スキップ中は最速 */
     typingTimer = setTimeout(step, isSkipMode ? 0 : 35);
   }
 
@@ -614,7 +625,21 @@ function startTyping(lines) {
 }
 
 function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    if (isSkipMode || isRewindMode || ms <= 0) {
+      resolve();
+      return;
+    }
+    const start = Date.now();
+    function step() {
+      if (isSkipMode || isRewindMode || Date.now() - start >= ms) {
+        resolve();
+      } else {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
+  });
 }
 
 function setupMenu() {
@@ -633,9 +658,13 @@ function setupMenu() {
 
   el.backBtn?.addEventListener("click", async (e) => {
     e.stopPropagation();
+    
+    if (isRewindMode || isSkipMode || isEpisodeTransitioning) return;
 
     if (index > 0) {
+      isRewindMode = true;
       index--;
+      
       clearCharacters(characterState);
       currentBg = "placeholder.jpg";
       prevBg = null;
@@ -652,6 +681,7 @@ function setupMenu() {
         index++;
       }
 
+      isRewindMode = false;
       await renderLine();
     }
 
@@ -663,11 +693,12 @@ function setupMenu() {
   el.skipBtn?.addEventListener("click", async (e) => {
     e.stopPropagation();
 
+    if (isRewindMode || isSkipMode || isEpisodeTransitioning) return;
+
     isMenuOpen = false;
     el.menuBtn.classList.remove("open");
     el.menuPanel.classList.add("hidden");
 
-    /* ★ 変更：次話送りではなく本文スキップ */
     isSkipMode = true;
 
     while (index < script.length && isSkipMode) {
@@ -678,6 +709,10 @@ function setupMenu() {
         el.next.classList.add("is-ready");
       } else {
         index++;
+        if (index >= script.length) {
+          await goToNextEpisodeOrEnd();
+          break;
+        }
         await renderLine();
       }
 
@@ -760,7 +795,6 @@ function showEndChoice() {
 }
 
 el.stage.addEventListener("click", async () => {
-  /* ★ 追加：スキップ中タップで解除 */
   if (isSkipMode) {
     isSkipMode = false;
     return;
@@ -772,7 +806,8 @@ el.stage.addEventListener("click", async () => {
     isEpisodeEnded ||
     isMotionPlaying ||
     isEpisodeTransitioning ||
-    isWaitingEpisodeOverlay
+    isWaitingEpisodeOverlay ||
+    isRewindMode
   ) return;
 
   const now = Date.now();
@@ -795,7 +830,7 @@ async function playFlashback(bgName) {
   if (!flashOverlay || !flashFrame) return;
 
   flashOverlay.classList.add("active");
-  await wait(300);
+  if (!isSkipMode && !isRewindMode) await wait(300);
 
   prevBg = currentBg;
   isFlashbackActive = true;
@@ -805,14 +840,14 @@ async function playFlashback(bgName) {
   flashFrame.classList.add("active");
 
   flashOverlay.classList.remove("active");
-  await wait(300);
+  if (!isSkipMode && !isRewindMode) await wait(300);
 }
 
 async function endFlashback() {
   if (!flashOverlay || !flashFrame) return;
 
   flashOverlay.classList.add("active");
-  await wait(300);
+  if (!isSkipMode && !isRewindMode) await wait(300);
 
   isFlashbackActive = false;
   setFlashbackMode(false);
@@ -820,7 +855,7 @@ async function endFlashback() {
   flashFrame.classList.remove("active");
 
   flashOverlay.classList.remove("active");
-  await wait(300);
+  if (!isSkipMode && !isRewindMode) await wait(300);
 }
 
 async function goToNextEpisodeOrEnd() {
