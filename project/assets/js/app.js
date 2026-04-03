@@ -40,6 +40,7 @@ const el = {
 
   menuBtn: document.getElementById("menuBtn"),
   menuPanel: document.getElementById("menuPanel"),
+  menuCard: document.querySelector(".menu-card"),
   backBtn: document.getElementById("backBtn"),
   skipBtn: document.getElementById("skipBtn"),
 
@@ -106,6 +107,28 @@ let lineRenderToken = 0;
 
 const flashOverlay = document.getElementById("flashOverlay");
 const flashFrame = document.getElementById("flashFrame");
+
+function openMenu() {
+  if (!el.menuBtn || !el.menuPanel) return;
+  isMenuOpen = true;
+  el.menuBtn.classList.add("open");
+  el.menuPanel.classList.remove("hidden");
+}
+
+function closeMenu() {
+  if (!el.menuBtn || !el.menuPanel) return;
+  isMenuOpen = false;
+  el.menuBtn.classList.remove("open");
+  el.menuPanel.classList.add("hidden");
+}
+
+function toggleMenu() {
+  if (isMenuOpen) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
+}
 
 function showEpisodeTitle(epIndex) {
   const data = EPISODE_TITLES[epIndex] || { num: "", sub: "" };
@@ -266,6 +289,12 @@ window.addEventListener("orientationchange", () => {
   }, 200);
 });
 
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isMenuOpen) {
+    closeMenu();
+  }
+});
+
 async function startGame() {
   if (isOrientationReady) return;
   isOrientationReady = true;
@@ -322,6 +351,8 @@ async function loadEpisode(episodeIndex) {
   el.nameSub.textContent = "";
   el.next.classList.remove("is-ready");
   el.endChoiceOverlay?.classList.add("hidden");
+
+  closeMenu();
 
   if (el.episodeOverlay) {
     el.episodeOverlay.classList.add("hidden");
@@ -658,20 +689,26 @@ function setupMenu() {
     console.error("menu setup failed", {
       menuBtn: el.menuBtn,
       menuPanel: el.menuPanel,
+      menuCard: el.menuCard,
       backBtn: el.backBtn,
       skipBtn: el.skipBtn
     });
     return;
   }
 
+  closeMenu();
+
   el.menuBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    isMenuOpen = !isMenuOpen;
-    el.menuBtn.classList.toggle("open", isMenuOpen);
-    el.menuPanel.classList.toggle("hidden", !isMenuOpen);
+    toggleMenu();
   });
 
   el.menuPanel.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeMenu();
+  });
+
+  el.menuCard?.addEventListener("click", (e) => {
     e.stopPropagation();
   });
 
@@ -704,9 +741,7 @@ function setupMenu() {
       await renderLine();
     }
 
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
+    closeMenu();
   });
 
   el.skipBtn?.addEventListener("click", async (e) => {
@@ -714,9 +749,7 @@ function setupMenu() {
 
     if (isRewindMode || isSkipMode || isEpisodeTransitioning) return;
 
-    isMenuOpen = false;
-    el.menuBtn.classList.remove("open");
-    el.menuPanel.classList.add("hidden");
+    closeMenu();
 
     isSkipMode = true;
 
