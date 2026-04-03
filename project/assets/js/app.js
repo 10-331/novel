@@ -84,6 +84,7 @@ let index = 0;
 let isTyping = false;
 let typingTimer = null;
 let currentFullText = "";
+let currentRenderedHtml = "";
 
 let currentBg = "placeholder.jpg";
 let prevBg = null;
@@ -329,6 +330,7 @@ async function loadEpisode(episodeIndex) {
   clearTimeout(typingTimer);
   isTyping = false;
   currentFullText = "";
+  currentRenderedHtml = "";
 
   isSkipMode = false;
   isRewindMode = false;
@@ -659,40 +661,55 @@ function startTyping(lines) {
     };
   }
 
+  function escapeHtml(str) {
+    return str
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
   const parsedLines = lines.map(parseLine);
 
   function buildHTML(charIndex) {
     let count = 0;
     let result = "";
 
-    for (const line of parsedLines) {
+    for (let lineIndex = 0; lineIndex < parsedLines.length; lineIndex++) {
+      const line = parsedLines[lineIndex];
       const remaining = charIndex - count;
 
       if (remaining <= 0) break;
 
       const slice = line.text.slice(0, remaining);
+      const safeSlice = escapeHtml(slice);
 
       if (line.isInner) {
-        result += `<span class="inner-voice">${slice}</span>`;
+        result += `<span class="inner-voice">${safeSlice}</span>`;
       } else {
-        result += slice;
+        result += safeSlice;
       }
 
       count += line.text.length;
 
-      if (count < charIndex) result += "\n";
+      if (lineIndex < parsedLines.length - 1 && count < charIndex) {
+        result += "<br>";
+      }
     }
 
     return result;
   }
 
   const fullLength = parsedLines.reduce((sum, l) => sum + l.text.length, 0);
+  currentFullText = parsedLines.map((l) => l.text).join("\n");
+  currentRenderedHtml = buildHTML(fullLength);
 
   function step() {
     if (i >= fullLength || isRewindMode) {
       isTyping = false;
       el.next.classList.add("is-ready");
-      el.text.innerHTML = buildHTML(fullLength);
+      el.text.innerHTML = currentRenderedHtml;
       return;
     }
 
@@ -795,7 +812,7 @@ function setupMenu() {
     while (index < script.length && isSkipMode) {
       if (isTyping) {
         clearTimeout(typingTimer);
-        el.text.textContent = currentFullText;
+        el.text.innerHTML = currentRenderedHtml;
         isTyping = false;
         el.next.classList.add("is-ready");
       } else {
@@ -906,7 +923,7 @@ el.stage.addEventListener("click", async () => {
 
   if (isTyping) {
     clearTimeout(typingTimer);
-    el.text.textContent = currentFullText;
+    el.text.innerHTML = currentRenderedHtml;
     isTyping = false;
     el.next.classList.add("is-ready");
     skipAdvanceUntil = now + 220;
