@@ -643,29 +643,60 @@ function startTyping(lines) {
   el.text.innerHTML = "";
   el.next.classList.remove("is-ready");
 
-  const full = lines.join("\n");
-  currentFullText = full;
-
   let i = 0;
   isTyping = true;
 
-  function formatText(text) {
-    return text
-      .replace(/（(.*?)）/g, '<span class="inner-voice">（$1）</span>')
-      .replace(/\((.*?)\)/g, '<span class="inner-voice">($1)</span>');
+  function parseLine(line) {
+    if (line.startsWith("[inner]")) {
+      return {
+        text: line.replace("[inner]", ""),
+        isInner: true
+      };
+    }
+    return {
+      text: line,
+      isInner: false
+    };
   }
 
+  const parsedLines = lines.map(parseLine);
+
+  function buildHTML(charIndex) {
+    let count = 0;
+    let result = "";
+
+    for (const line of parsedLines) {
+      const remaining = charIndex - count;
+
+      if (remaining <= 0) break;
+
+      const slice = line.text.slice(0, remaining);
+
+      if (line.isInner) {
+        result += `<span class="inner-voice">${slice}</span>`;
+      } else {
+        result += slice;
+      }
+
+      count += line.text.length;
+
+      if (count < charIndex) result += "\n";
+    }
+
+    return result;
+  }
+
+  const fullLength = parsedLines.reduce((sum, l) => sum + l.text.length, 0);
+
   function step() {
-    if (i >= currentFullText.length || isRewindMode) {
+    if (i >= fullLength || isRewindMode) {
       isTyping = false;
       el.next.classList.add("is-ready");
-      if (isRewindMode) el.text.innerHTML = formatText(currentFullText);
+      el.text.innerHTML = buildHTML(fullLength);
       return;
     }
 
-    const current = currentFullText.slice(0, i + 1);
-    el.text.innerHTML = formatText(current);
-
+    el.text.innerHTML = buildHTML(i + 1);
     i++;
 
     typingTimer = setTimeout(step, isSkipMode ? 0 : 35);
