@@ -19,15 +19,19 @@ html, body{
 
 body{
   min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
 }
 
 img{
   display: block;
   max-width: 100%;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 button{
   appearance: none;
+  -webkit-appearance: none;
   border: 0;
   background: none;
   padding: 0;
@@ -35,6 +39,16 @@ button{
   font: inherit;
   color: inherit;
   cursor: pointer;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+button:focus-visible,
+button:active{
+  outline: none;
+  box-shadow: none;
 }
 
 .hidden{
@@ -184,6 +198,19 @@ button{
   width: 58px;
   height: 58px;
   pointer-events: auto;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.icon-btn:focus,
+.icon-btn:focus-visible,
+.icon-btn:active,
+.menu-toggle:focus,
+.menu-toggle:focus-visible,
+.menu-toggle:active{
+  outline: none;
+  box-shadow: none;
 }
 
 .icon-left{
@@ -279,6 +306,9 @@ button{
   letter-spacing: 0.1em;
   cursor: pointer;
   transition: .2s ease;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-item-btn:hover{
@@ -287,6 +317,14 @@ button{
 
 .menu-item-btn:active{
   transform: scale(0.98);
+  outline: none;
+  box-shadow: none;
+}
+
+.menu-item-btn:focus,
+.menu-item-btn:focus-visible{
+  outline: none;
+  box-shadow: none;
 }
 
 .dialogue-area{
@@ -521,6 +559,16 @@ button{
   border-radius: 10px;
   background: rgba(255,255,255,.08);
   color: #fff;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.end-choice-card button:focus,
+.end-choice-card button:focus-visible,
+.end-choice-card button:active{
+  outline: none;
+  box-shadow: none;
 }
 
 .episode-title-overlay{
