@@ -499,5 +499,263 @@
     "text": [
       "……まあいい。行くと言ったのは、私だ。"
     ]
+  },
+  {
+    "bg": "room.jpg",
+    "motions": [
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "center", "scale": 0.5, "z": 20 }
+        ],
+        "duration": 1200
+      }
+    ],
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "[inner]（さあ何から始めようか。）"
+    ]
+  },
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "[inner]（とりあえず、彼女は海と温泉がいいと言っていた。）"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "[inner]（九州だと遠すぎるが、熱海ぐらいならちょうどいいだろう。",
+      "[inner]新幹線で行ける。二泊三日なら無理もない。）",
+      "[inner]温泉街もあるし、街並みにも退屈しなさそうだ。）"
+    ]
+  },
+  {
+    "motions": [
+      {
+        "type": "move",
+        "targets": [
+          { "id": "rakuro", "to": "left", "scale": 0.5, "z": 20 }
+        ],
+        "duration": 500
+      },
+      {
+        "type": "wait",
+        "duration": 180
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "kuguri", "to": "right", "scale": 1.2, "z": 10 }
+        ],
+        "duration": 1000
+      }
+    ],
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "へぇ、随分と考え込んでる様子だけど、一体何をしているのかな？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "潜……。"
+    ]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "そんな顔をしなくてもいいじゃないか。",
+      "机に向かって難しい顔をしているものだから、",
+      "てっきり何か面白いことでも考えているのかと思ったよ。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["面白いことではない。ただ予定を立てているだけだ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["予定、ね。",
+      "君がそこまで丁寧に順番を組んでいるとなると、ずいぶん大事な用事みたいだ。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["覗き込まないでくれ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["見せつけるように広げておいて、覗くなというのは難しい注文だね。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["……熱海？"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……そうだ。だから来月、三日ほど家を空ける。",
+      "家は好きにしていいが、私はいないぞ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["へぇ。熱海。いい響きだ。",
+      "海と湯けむりと、少し古びた街の匂いがする。君が確かに好みそうだ。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["私だけの希望ではない。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "へぇ、誰かから言われたものをちゃんと叶えようとしているわけだ。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["別に、たいしたことではない。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "初めての旅行らしいから、移動に無理がなくて、分かりやすくて、",
+      "休める場所の方がいいと思っただけだ。"
+    ]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["そういうところを、君は普通だと思っているんだ。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["事実だよ。",
+      "相手が困らないように考えるのは、珍しいことじゃない。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "でも、誰にでもここまでするわけじゃない。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……。"
+    ]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["ふふ、黙るんだね。"]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["行き先を選んで、移動時間を調べて、順番まで組み立てて。"
+    ]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["まるで相手が迷わないように、疲れないように、退屈しないように、",
+      "全部先回りしているみたいだ。"
+    ]
+  },
+    {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["……君のそういうところ、嫌いじゃないよ。",
+      "誰にでも同じ温度で触れる、綺麗な博愛。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "そう見えるなら、それで構わない。でも、余計な意味を足すな。"
+    ]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "ふふ。……まあ、旅行なんて、少しくらい曖昧な方が面白い。",
+      "全部が予定通りじゃなくてもいいだろう？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……お前は、いつもそうやって面白がるな。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["面白いよ。君がなにか考えている顔は、特にね。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["悪趣味だな、……放っておけ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["……まあいいや。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["旅行、楽しんでくるといい。",
+      "君がそこまで準備するなんて、きっと退屈はしないだろうしね。"]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……ああ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "ただ一つだけ。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["何だ。"]
+  },
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": [
+      "迷わないように、ね。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["……お前に言われる筋合いはない。"]
   }
 ]
