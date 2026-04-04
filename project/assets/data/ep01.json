@@ -325,7 +325,7 @@
       {
         "type": "exit",
         "targets": ["ten"],
-        "duration": 350
+        "duration": 700
       },
       {
         "type": "flashbackEnd"
