@@ -320,17 +320,12 @@
     "speakerSub": "TEN",
     "text": ["はは、冗談ですって。"]
   },
-{
-    "speaker": "添",
-    "speakerSub": "TEN",
-    "text": [""]
-  },
   {
     "motions": [
       {
         "type": "exit",
         "targets": ["ten"],
-        "duration": 180
+        "duration": 350
       },
       {
         "type": "flashbackEnd"
