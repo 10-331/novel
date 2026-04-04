@@ -336,7 +336,7 @@
           { "id": "rakuro", "to": "left", "scale": 0.5 },
           { "id": "aya", "to": "right", "scale": 0.42 }
         ],
-        "duration": 260
+        "duration": 500
       }
     ],
     "speaker": "綾",
