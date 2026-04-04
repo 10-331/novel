@@ -313,11 +313,12 @@
         "targets": [
           { "id": "ten", "to": "center", "scale": 1.25 }
         ],
-        "duration": 180,
+        "duration": 180
+      }
+    ],
     "speaker": "添",
     "speakerSub": "TEN",
     "text": ["はは、冗談ですって。"]
-    ]
   },
 {
     "speaker": "添",
