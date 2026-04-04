@@ -206,6 +206,7 @@
       "まあ仕事ですけどね～。"
     ]
   },
+  {
     "speaker": "添",
     "speakerSub": "TEN",
     "text": [
@@ -510,19 +511,21 @@
         ],
         "duration": 220
       }
-    ],
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": [
-      "……おい。"
-    ],
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": [
-      "はぁ、眠ったか……。",
-      "飲みすぎだと言っただろう。"
-    ]
-  },
+    ],{
+  "speaker": "落露",
+  "speakerSub": "RAKURO",
+  "text": [
+    "……おい。"
+  ]
+},
+{
+  "speaker": "落露",
+  "speakerSub": "RAKURO",
+  "text": [
+    "はぁ、眠ったか……。",
+    "飲みすぎだと言っただろう。"
+  ]
+},
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
