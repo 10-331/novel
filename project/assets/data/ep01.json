@@ -511,21 +511,50 @@
         ],
         "duration": 220
       }
-    ],{
-  "speaker": "落露",
-  "speakerSub": "RAKURO",
-  "text": [
-    "……おい。"
-  ]
-},
-{
-  "speaker": "落露",
-  "speakerSub": "RAKURO",
-  "text": [
-    "はぁ、眠ったか……。",
-    "飲みすぎだと言っただろう。"
-  ]
-},
+    ],   {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["aya"],
+        "duration": 220
+      },
+      {
+        "type": "wait",
+        "duration": 1000
+      },
+      {
+        "type": "exit",
+        "targets": ["rakuro"],
+        "duration": 100
+      },
+      {
+        "type": "wait",
+        "duration": 100
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
+        ],
+        "duration": 220
+      }
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……おい。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "はぁ、眠ったか……。",
+      "飲みすぎだと言っただろう。"
+    ]
+  },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
