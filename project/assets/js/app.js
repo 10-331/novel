@@ -33,6 +33,7 @@ const el = {
   text: document.getElementById("text"),
   next: document.getElementById("nextIndicator"),
   overlay: document.getElementById("orientationOverlay"),
+  blackoutOverlay: document.getElementById("blackoutOverlay"),
 
   nameRow: document.querySelector(".name-row"),
   lineImage: document.querySelector(".dialogue-line-image"),
@@ -422,15 +423,13 @@ function setFlashbackMode(mode) {
 }
 
 async function playBlackFlash() {
-  if (!flashOverlay) return;
+  if (!el.blackoutOverlay) return;
 
-  flashOverlay.style.background = "#000";
-  flashOverlay.classList.add("active");
+  el.blackoutOverlay.classList.add("active");
 
   if (!isSkipMode && !isRewindMode) await wait(250);
 
-  flashOverlay.classList.remove("active");
-  flashOverlay.style.background = "#fff";
+  el.blackoutOverlay.classList.remove("active");
 
   if (!isSkipMode && !isRewindMode) await wait(120);
 }
