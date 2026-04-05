@@ -155,7 +155,7 @@ button{
 }
 
 .char.flashback{
-  filter: brightness(1.08) saturate(0.86) blur(1px);
+  filter: brightness(1.08) saturate(0.86);
 }
 
 .char.flashback-sepia{
