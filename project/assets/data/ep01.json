@@ -406,15 +406,15 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "rakuro", "to": "left", "scale": 0.5, "z": 20 },
-          { "id": "kuguri", "to": "right", "scale": 1.2, "z": 10 }
+          { "id": "kuguri", "to": "right", "scale": 1.2, "z": 10 },
+          { "id": "rakuro", "to": "left", "scale": 0.5, "z": 20 }
         ],
         "duration": 350
       }
     ],
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["……そういえば、来月、日本に帰ることにしたよ"]
+    "text": ["……そういえば、来月、日本に帰ることにしたよ。"]
   },
   {
     "speaker": "落露",
@@ -424,67 +424,62 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["いつから"]
+    "text": ["いつから。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["四月。もうすぐ、だね"]
+    "text": ["4月。もうすぐ、だね。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["なぜだ"]
+    "text": ["なぜだ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["秘密さ。……したいことができただけ"]
+    "text": ["秘密さ。……したいことができただけ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["……君に言っても仕方ないと思ってたけど"]
+    "text": ["……君に言っても仕方ないと思ってたけど。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["仕方ないかどうかは私が決める"]
+    "text": ["仕方ないかどうかは私が決める。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["ふふ……怖いね。そういうとこ、変わらない"]
+    "text": ["ふふ……怖いね。そういうとこ、変わらない。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……私は半年は動けない。クライアントの仕事がある。知っているだろ"]
+    "text": ["……私は半年は動けない。クライアントの仕事がある。知っているだろ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["うん、知ってる"]
+    "text": ["うん、知ってる。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["──それでも"]
-  },
-  {
-    "speaker": "潜",
-    "speakerSub": "KUGURI",
-    "text": ["着いてきてくれるの？"]
+    "text": ["──それでも、着いてきてくれるの？"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……誰が、お前の義手をメンテナンスしてると思ってる"]
+    "text": ["……誰が、お前の義手をメンテナンスしてると思ってる。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["ふふ……やっぱり君は、いい子だ"]
+    "text": ["ふふ……やっぱり君は、いい子だ。"]
   },
   {
     "speaker": "落露",
@@ -494,17 +489,17 @@
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["じゃあ、自覚させてあげようか？ 日本でも、僕のベッドでね"]
+    "text": ["じゃあ、自覚させてあげようか？　日本でも、僕のベッドでね。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……言ってろ"]
+    "text": ["……言ってろ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["……やっぱり好きだな、君のそういうところ"]
+    "text": ["……やっぱり好きだな、君のそういうところ。"]
   },
   {
     "speaker": "落露",
@@ -514,7 +509,7 @@
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["全部だよ"]
+    "text": ["全部だよ。"]
   },
   {
     "motions": [
@@ -533,7 +528,7 @@
     ],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["ネジの調整はしといた。しばらくは問題ないよ"]
+    "text": ["ネジの調整はしといた。しばらくは問題ないよ。"]
   },
   {
     "speaker": "落露",
@@ -543,7 +538,7 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……調整はしてある。大きな動作不良はないはずだ"]
+    "text": ["……調整はしてある。大きな動作不良はないはずだ。"]
   },
   {
     "motions": [
@@ -569,22 +564,22 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["事実だよ"]
+    "text": ["事実だよ。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["潤滑剤は二週に一度、少量でいい。噴霧したら、関節を数回動かすこと"]
+    "text": ["潤滑剤は2週に1度、少量でいい。噴霧したら、関節を数回動かすこと。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["了解。君が潤わせてくれなくても、僕の指は死なないってことだね"]
+    "text": ["了解。君が潤わせてくれなくても、僕の指は死なないってことだね。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["言い方が最低だ"]
+    "text": ["言い方が最低だ。"]
   },
   {
     "speaker": "潜",
@@ -594,32 +589,32 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["応急的なケアの仕方、全部まとめてUSBに入れておいた。メモもある"]
+    "text": ["応急的なケアの仕方、全部まとめてUSBに入れておいた。メモもある。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["相変わらず丁寧だね。……君らしいよ"]
+    "text": ["相変わらず丁寧だね。……君らしいよ。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……"]
+    "text": ["……。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["何かあったら、すぐに連絡して"]
+    "text": ["何かあったら、すぐに連絡して。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["“すぐ”って、夜中でも？"]
+    "text": ["\"すぐ\"って、夜中でも？"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……起きていたら対応する"]
+    "text": ["……起きていたら対応する。"]
   },
   {
     "speaker": "潜",
@@ -639,17 +634,17 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["必要があれば"]
+    "text": ["必要があれば。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["ふふ……じゃあ、すぐにでも不具合が起きるかもしれないね"]
+    "text": ["ふふ……じゃあ、すぐにでも不具合が起きるかもしれないね。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……私が向こうに行ける目処が立ったら、また連絡するよ"]
+    "text": ["……私が向こうに行ける目処が立ったら、また連絡するよ。"]
   },
   {
     "speaker": "潜",
@@ -659,7 +654,7 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["技術者が仕事をするだけだ"]
+    "text": ["技術者が仕事をするだけだ。"]
   },
   {
     "speaker": "潜",
@@ -669,17 +664,17 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……だからって、調子に乗るなよ"]
+    "text": ["……だからって、調子に乗るなよ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["──君のいない春なんて、つまらなそうだ"]
+    "text": ["──君のいない春なんて、つまらなそうだ。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["なら、君が自分で面白くすればいい。得意だろ"]
+    "text": ["なら、君が自分で面白くすればいい。得意だろ。"]
   },
   {
     "speaker": "潜",
@@ -689,12 +684,12 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["知ってただろ"]
+    "text": ["知ってただろ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["……最後に、整備じゃなくて“君の手”がほしいな"]
+    "text": ["……最後に、整備じゃなくて\"君の手\"がほしいな。"]
   },
   {
     "speaker": "潜",
@@ -704,12 +699,12 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……さっさと寝ろ"]
+    "text": ["……さっさと寝ろ。"]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["命令形。……ま、悪くないけどね"]
+    "text": ["命令形。……ま、悪くないけどね。"]
   },
   {
     "motions": [
@@ -738,7 +733,7 @@
     ],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["…………"]
+    "text": ["…………。"]
   },
   {
     "speaker": "落露",
@@ -749,12 +744,12 @@
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": ["なにしてんだ、あのバカ……！",
-"……半年も経ってないじゃないか"]
+"……半年も経ってないじゃないか。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["言っただろ、“何かあったらすぐに連絡しろ”って……"]
+    "text": ["言っただろ、“何かあったらすぐに連絡しろ”って……。"]
   },
   {
     "motions": [
@@ -777,17 +772,13 @@
     ],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……だから別に、“駆け付けた”というほどのことでもない"]
+    "text": ["……だから別に、\"駆け付けた\"というほどのことでもない。",
+      "ただ、行く理由があったから行った。それだけだよ。"]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["ただ、行く理由があったから行った。それだけだよ"]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["だからそんな大層なことをしたわけじゃない。私のエゴだよ"]
+    "text": ["だからそんな大層なことをしたわけじゃない。私のエゴだよ。"]
   },
   {
     "speaker": "綾",
@@ -818,7 +809,7 @@
     "speaker": "綾",
     "speakerSub": "AYA",
     "text": [
-      "え～、でも今の流れなら行くやつじゃないです？",
+      "え～、でも今の流れって行くやつじゃないです？",
       "行きたいな～で終わりなんて、寂しいじゃないですか。"
     ]
   },
