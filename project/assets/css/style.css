@@ -625,3 +625,18 @@ button{
   font-size: 12px;
   opacity: .4;
 }
+
+
+.blackout-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.blackout-overlay.active{
+  opacity: 1;
+}
