@@ -407,7 +407,7 @@
         "type": "enter",
         "targets": [
           { "id": "rakuro", "to": "left", "scale": 0.5 },
-          { "id": "kuguri", "to": "right", "scale": 0.5 }
+          { "id": "kuguri", "to": "right", "scale": 1.2 }
         ],
         "duration": 350
       }
@@ -557,7 +557,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "kuguri", "to": "right", "scale": 0.5 }
+          { "id": "kuguri", "to": "right", "scale": 1.2 }
         ],
         "duration": 180
       }
