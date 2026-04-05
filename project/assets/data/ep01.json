@@ -748,12 +748,8 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["なにしてんだ、あのバカ……！"]
-  },
-  {
-    "speaker": "落露",
-    "speakerSub": "RAKURO",
-    "text": ["……半年も経ってないじゃないか"]
+    "text": ["なにしてんだ、あのバカ……！",
+"……半年も経ってないじゃないか"]
   },
   {
     "speaker": "落露",
@@ -787,11 +783,6 @@
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": ["ただ、行く理由があったから行った。それだけだよ"]
-  },
-  {
-    "speaker": "綾",
-    "speakerSub": "AYA",
-    "text": ["……"]
   },
   {
     "speaker": "落露",
