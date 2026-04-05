@@ -108,6 +108,10 @@ button{
   filter: brightness(1.08) saturate(0.86) blur(1px);
 }
 
+.bg.flashback-sepia{
+  filter: sepia(0.82) saturate(0.82) brightness(0.94) contrast(0.96);
+}
+
 .bg-vignette{
   position: absolute;
   inset: 0;
@@ -455,6 +459,34 @@ button{
   );
 }
 
+.stage-gradient.sepia::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 110px;
+  background: linear-gradient(
+    to bottom,
+    rgba(120,90,52,0.22),
+    rgba(120,90,52,0)
+  );
+}
+
+.stage-gradient.sepia::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 150px;
+  background: linear-gradient(
+    to top,
+    rgba(72,44,20,0.26),
+    rgba(72,44,20,0)
+  );
+}
+
 .flash-frame{
   position: absolute;
   inset: 0;
@@ -464,6 +496,24 @@ button{
   pointer-events: none;
   background:
     radial-gradient(circle at center, rgba(255,255,255,0) 52%, rgba(255,255,255,0.68) 100%);
+}
+
+.flash-frame.active{
+  opacity: 1;
+}
+
+.flash-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 39;
+  pointer-events: none;
+  background: #fff;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.flash-overlay.active{
+  opacity: .55;
 }
 
 .bg-layer img{
