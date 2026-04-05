@@ -1,3 +1,4 @@
+/* app.js */
 import {
   createCharacterState,
   getVisibleCharacters,
@@ -46,25 +47,20 @@ let currentIndex = 0;
 let isAnimating = false;
 
 async function init() {
-  // エピソード読み込み
   const res = await fetch(EPISODE_FILES[0]);
   script = await res.json();
 
-  // リサイズ設定
   window.addEventListener("resize", handleResize);
   handleResize();
 
-  // 初期表示
   el.stage.classList.add("is-ready");
 
-  // クリックイベント
   el.viewport.addEventListener("click", (e) => {
     if (e.target.closest("button")) return;
     if (isAnimating) return;
     nextStep();
   });
 
-  // メニュー制御
   el.menuBtn.addEventListener("click", () => {
     el.menuBtn.classList.toggle("open");
     el.menuPanel.classList.toggle("hidden");
@@ -108,27 +104,24 @@ async function updateStep() {
   const data = script[currentIndex];
   isAnimating = true;
 
-  // 背景更新
   if (data.bg) {
     el.bgA.src = `./assets/images/bg/${data.bg}`;
     el.bgA.classList.add("active");
   }
 
-  // モーション実行
   if (data.motions) {
-    await runMotions(data.motions, el);
+    // CHARACTER_BOTTOMを考慮してモーションを実行
+    await runMotions(data.motions, el, CHARACTER_BOTTOM);
   }
 
-  // テキスト更新
   updateDialogue(data);
   isAnimating = false;
 }
 
 function updateDialogue(data) {
   const isNews = (data.speaker === "ニュースキャスター");
-  const fullText = Array.isArray(data.text) ? data.text.join("\n") : data.text;
+  const fullText = Array.isArray(data.text) ? data.text.join("\n") : (data.text || "");
 
-  // ニュースと通常ダイアログの切り替え
   if (isNews) {
     el.dialogueArea.classList.add("hidden");
     el.newsLayer.classList.remove("hidden");
@@ -140,14 +133,16 @@ function updateDialogue(data) {
     el.nameMain.innerText = data.speaker || "";
     el.nameSub.innerText = data.speakerSub || "";
 
-    // 回想モードのクラス制御（CSSに対応）
-    const isFlashback = document.querySelector('.bg.flashback, .bg.flashback-sepia');
-    el.nameMain.classList.toggle("is-flashback", !!isFlashback);
-    el.text.classList.toggle("is-flashback", !!isFlashback);
+    const isFlashback = el.stageGradient.classList.contains("sepia") || 
+                       el.bgA.classList.contains("flashback") || 
+                       el.bgA.classList.contains("flashback-sepia");
+                       
+    el.nameMain.classList.toggle("is-flashback", isFlashback);
+    el.text.classList.toggle("is-flashback", isFlashback);
 
-    // [inner] タグの置換
     if (fullText.includes("[inner]")) {
-      el.text.innerHTML = fullText.replace(/\[inner\]/g, '<span class="inner-voice">') + "</span>";
+      const formatted = fullText.replace(/\[inner\](.*?)($|\[inner\]|\n)/g, '<span class="inner-voice">$1</span>');
+      el.text.innerHTML = formatted;
     } else {
       el.text.innerText = fullText;
     }
