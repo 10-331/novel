@@ -485,7 +485,8 @@ async function renderLine() {
         token,
         getToken: () => lineRenderToken,
         playFlashback,
-        endFlashback
+        endFlashback,
+        playBlackFlash
       });
     } finally {
       isMotionPlaying = false;
