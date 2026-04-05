@@ -123,3 +123,7 @@ export async function runMotions({
     }
   }
 }
+
+case "blackout":
+  await playBlackFlash();
+  break;
