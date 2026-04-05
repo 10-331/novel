@@ -92,6 +92,7 @@ let currentDisplayedBg = "";
 let activeBg = "A";
 
 let isFlashbackActive = false;
+let currentFlashbackTone = null;
 let isMotionPlaying = false;
 let isOrientationReady = false;
 
@@ -305,7 +306,7 @@ async function startGame() {
     currentBg = firstLine.bg;
   }
 
-  setFlashbackMode(false);
+  setFlashbackMode(null);
   changeBackground(`./assets/images/bg/${currentBg}`, true);
 
   el.stage?.classList.add("is-ready");
@@ -338,6 +339,7 @@ async function loadEpisode(episodeIndex) {
   currentBg = script[0]?.bg || "placeholder.jpg";
   prevBg = null;
   isFlashbackActive = false;
+  currentFlashbackTone = null;
   isEpisodeEnded = false;
   isEpisodeTransitioning = false;
   isWaitingEpisodeOverlay = false;
@@ -346,7 +348,7 @@ async function loadEpisode(episodeIndex) {
 
   clearCharacters(characterState);
   renderCharacters([]);
-  setFlashbackMode(false);
+  setFlashbackMode(null);
 
   el.text.textContent = "";
   el.nameMain.textContent = "";
@@ -377,21 +379,40 @@ function updateOrientation() {
   el.overlay.classList.toggle("show", isPortrait);
 }
 
-function setFlashbackMode(isOn) {
-  if (el.bgA) el.bgA.classList.toggle("flashback", isOn);
-  if (el.bgB) el.bgB.classList.toggle("flashback", isOn);
+function setFlashbackMode(mode) {
+  let normalizedMode = mode;
 
-  if (el.stageGradient) {
-    el.stageGradient.classList.toggle("white", isOn);
-    el.stageGradient.classList.toggle("black", !isOn);
+  if (mode === true) normalizedMode = "white";
+  if (mode === false) normalizedMode = null;
+
+  currentFlashbackTone = normalizedMode;
+
+  const isAnyFlashback = normalizedMode !== null;
+  const isWhiteFlashback = normalizedMode === "white";
+  const isSepiaFlashback = normalizedMode === "sepia";
+
+  if (el.bgA) {
+    el.bgA.classList.toggle("flashback", isWhiteFlashback);
+    el.bgA.classList.toggle("flashback-sepia", isSepiaFlashback);
   }
 
-  if (el.nameRow) el.nameRow.classList.toggle("is-flashback", isOn);
-  if (el.lineImage) el.lineImage.classList.toggle("is-flashback", isOn);
-  if (el.textRow) el.textRow.classList.toggle("is-flashback", isOn);
-  if (el.text) el.text.classList.toggle("is-flashback", isOn);
-  if (el.nameMain) el.nameMain.classList.toggle("is-flashback", isOn);
-  if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isOn);
+  if (el.bgB) {
+    el.bgB.classList.toggle("flashback", isWhiteFlashback);
+    el.bgB.classList.toggle("flashback-sepia", isSepiaFlashback);
+  }
+
+  if (el.stageGradient) {
+    el.stageGradient.classList.toggle("white", isWhiteFlashback);
+    el.stageGradient.classList.toggle("sepia", isSepiaFlashback);
+    el.stageGradient.classList.toggle("black", !isAnyFlashback);
+  }
+
+  if (el.nameRow) el.nameRow.classList.toggle("is-flashback", isAnyFlashback);
+  if (el.lineImage) el.lineImage.classList.toggle("is-flashback", isAnyFlashback);
+  if (el.textRow) el.textRow.classList.toggle("is-flashback", isAnyFlashback);
+  if (el.text) el.text.classList.toggle("is-flashback", isAnyFlashback);
+  if (el.nameMain) el.nameMain.classList.toggle("is-flashback", isAnyFlashback);
+  if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isAnyFlashback);
 }
 
 async function renderLine() {
@@ -781,7 +802,8 @@ function setupMenu() {
       currentBg = "placeholder.jpg";
       prevBg = null;
       isFlashbackActive = false;
-      setFlashbackMode(false);
+      currentFlashbackTone = null;
+      setFlashbackMode(null);
       lineRenderToken++;
 
       const targetIndex = index;
@@ -934,7 +956,7 @@ el.stage.addEventListener("click", async () => {
   await renderLine();
 });
 
-async function playFlashback(bgName) {
+async function playFlashback(bgName, tone = "white") {
   if (!flashOverlay || !flashFrame) return;
 
   flashOverlay.classList.add("active");
@@ -942,10 +964,16 @@ async function playFlashback(bgName) {
 
   prevBg = currentBg;
   isFlashbackActive = true;
+  currentFlashbackTone = tone;
 
-  setFlashbackMode(true);
+  setFlashbackMode(tone);
   changeBackground(`./assets/images/bg/${bgName}`);
-  flashFrame.classList.add("active");
+
+  if (tone === "white") {
+    flashFrame.classList.add("active");
+  } else {
+    flashFrame.classList.remove("active");
+  }
 
   flashOverlay.classList.remove("active");
   if (!isSkipMode && !isRewindMode) await wait(300);
@@ -958,7 +986,8 @@ async function endFlashback() {
   if (!isSkipMode && !isRewindMode) await wait(300);
 
   isFlashbackActive = false;
-  setFlashbackMode(false);
+  currentFlashbackTone = null;
+  setFlashbackMode(null);
   changeBackground(`./assets/images/bg/${prevBg || currentBg}`);
   flashFrame.classList.remove("active");
 
