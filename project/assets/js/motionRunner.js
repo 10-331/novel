@@ -107,7 +107,7 @@ export async function runMotions({
 
       case "flashback":
         if (playFlashback) {
-          await playFlashback(motion.bg);
+          await playFlashback(motion.bg, motion.tone || "white");
         }
         break;
 
