@@ -506,7 +506,7 @@
     "speakerSub": "RAKURO",
     "text": ["なんの話？"]
   },
- {
+{
   "speaker": "潜",
   "speakerSub": "KUGURI",
   "text": ["全部だよ。"]
@@ -520,25 +520,20 @@
     },
     {
       "type": "blackout"
-    }
-  ],
-  "bg": "next_scene.jpg",
-  "speaker": "",
-  "speakerSub": "",
-  "text": [""]
-},
-{
-  "motions": [
+    },
     {
       "type": "wait",
-      "duration": 700
+      "duration": 150
     },
     {
       "type": "move",
       "targets": [
         { "id": "rakuro", "to": "center", "scale": 0.5 }
       ],
-      "duration": 180,
+      "duration": 180
+    }
+  ],
+  "bg": "next_scene.jpg",
   "speaker": "落露",
   "speakerSub": "RAKURO",
   "text": ["ネジの調整はしといた。しばらくは問題ないよ。"]
