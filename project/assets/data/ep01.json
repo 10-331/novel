@@ -531,16 +531,14 @@
   "motions": [
     {
       "type": "wait",
-      "duration": 200
+      "duration": 700
     },
     {
       "type": "move",
       "targets": [
         { "id": "rakuro", "to": "center", "scale": 0.5 }
       ],
-      "duration": 180
-    }
-  ],
+      "duration": 180,
   "speaker": "落露",
   "speakerSub": "RAKURO",
   "text": ["ネジの調整はしといた。しばらくは問題ないよ。"]
