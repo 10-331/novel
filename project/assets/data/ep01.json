@@ -526,7 +526,7 @@
       "duration": 150
     },
     {
-      "type": "move",
+      "type": "enter",
       "targets": [
         { "id": "rakuro", "to": "center", "scale": 0.5 }
       ],
