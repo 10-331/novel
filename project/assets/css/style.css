@@ -640,3 +640,62 @@ button{
 .blackout-overlay.active{
   opacity: 1;
 }
+
+
+/* ニュース専用吹き出しレイヤー */
+.news-balloon-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.news-balloon-content {
+  position: relative;
+  width: 900px; /* 画像の比率に合わせた横幅 */
+  min-height: 160px;
+  background: rgba(235, 235, 220, 0.92); /* 画像に近い少し黄身がかった白 */
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* ギザギザの形状を clip-path で再現 */
+  clip-path: polygon(
+    0% 50%, 4% 42%, 3% 35%, 10% 35%, 8% 10%, 15% 15%, 50% 8%, 85% 15%, 92% 10%, 90% 35%, 97% 35%, 96% 42%, 100% 50%,
+    96% 58%, 97% 65%, 90% 65%, 92% 90%, 85% 85%, 50% 92%, 15% 85%, 8% 90%, 10% 65%, 3% 65%, 4% 58%
+  );
+  
+  /* 縁取り（擬似要素で作成） */
+  box-shadow: 0 0 0 4px #444; 
+  animation: newsPop 0.2s ease-out;
+}
+
+/* 縁取りを clip-path の外側に見せるための調整用レイヤー */
+.news-balloon-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #444; /* 枠線の色 */
+  z-index: -1;
+  padding: 3px; /* 枠線の太さ */
+  clip-path: inherit;
+}
+
+.news-balloon-text {
+  color: #111;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  letter-spacing: 0.02em;
+  font-family: "Hiragino Sans", sans-serif;
+}
+
+@keyframes newsPop {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
