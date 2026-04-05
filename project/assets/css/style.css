@@ -154,6 +154,14 @@ button{
   backface-visibility: hidden;
 }
 
+.char.flashback{
+  filter: brightness(1.08) saturate(0.86) blur(1px);
+}
+
+.char.flashback-sepia{
+  filter: sepia(0.82) saturate(0.82) brightness(0.94) contrast(0.96);
+}
+
 .char.fade-in,
 .char.fade-out{
   transition: none !important;
