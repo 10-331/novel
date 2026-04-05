@@ -1023,3 +1023,15 @@ async function goToNextEpisodeOrEnd() {
   showEndChoice();
   isEpisodeTransitioning = false;
 }
+
+async function playBlackFlash() {
+  if (!flashOverlay) return;
+
+  flashOverlay.style.background = "#000"; // ←ここがポイント
+  flashOverlay.classList.add("active");
+
+  await wait(250);
+
+  flashOverlay.classList.remove("active");
+  flashOverlay.style.background = "#fff"; // 戻す
+}
