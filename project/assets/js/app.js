@@ -901,7 +901,8 @@ async function renderLineWithoutTyping() {
         token,
         getToken: () => lineRenderToken,
         playFlashback,
-        endFlashback
+        endFlashback,
+        playBlackFlash
       });
     } finally {
       isMotionPlaying = false;
