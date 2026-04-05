@@ -401,6 +401,12 @@ function setFlashbackMode(mode) {
     el.bgB.classList.toggle("flashback-sepia", isSepiaFlashback);
   }
 
+  el.chars.forEach((img) => {
+    if (!img) return;
+    img.classList.toggle("flashback", isWhiteFlashback);
+    img.classList.toggle("flashback-sepia", isSepiaFlashback);
+  });
+
   if (el.stageGradient) {
     el.stageGradient.classList.toggle("white", isWhiteFlashback);
     el.stageGradient.classList.toggle("sepia", isSepiaFlashback);
