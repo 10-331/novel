@@ -16,7 +16,8 @@ export async function runMotions({
   token,
   getToken,
   playFlashback,
-  endFlashback
+  endFlashback,
+  playBlackFlash
 }) {
   for (const motion of motions) {
     if (token !== getToken()) return;
@@ -42,7 +43,8 @@ export async function runMotions({
           token,
           getToken,
           playFlashback,
-          endFlashback
+          endFlashback,
+          playBlackFlash
         });
         break;
       }
@@ -117,13 +119,15 @@ export async function runMotions({
         }
         break;
 
+      case "blackout":
+        if (playBlackFlash) {
+          await playBlackFlash();
+        }
+        break;
+
       default:
         console.warn(`Unknown motion type: ${motion.type}`);
         break;
     }
   }
 }
-
-case "blackout":
-  await playBlackFlash();
-  break;
