@@ -421,6 +421,20 @@ function setFlashbackMode(mode) {
   if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isAnyFlashback);
 }
 
+async function playBlackFlash() {
+  if (!flashOverlay) return;
+
+  flashOverlay.style.background = "#000";
+  flashOverlay.classList.add("active");
+
+  if (!isSkipMode && !isRewindMode) await wait(250);
+
+  flashOverlay.classList.remove("active");
+  flashOverlay.style.background = "#fff";
+
+  if (!isSkipMode && !isRewindMode) await wait(120);
+}
+
 async function renderLine() {
   const token = ++lineRenderToken;
 
