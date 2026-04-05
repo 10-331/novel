@@ -1064,5 +1064,4 @@ async function goToNextEpisodeOrEnd() {
   renderCharacters([]);
   showEndChoice();
   isEpisodeTransitioning = false;
-}」
-何が原因でうまくいってない？まずはコード確認だけで、全文の修正は不要です。
+}
