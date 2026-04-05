@@ -519,6 +519,21 @@
         "duration": 180
       },
       {
+        "type": "blackout"
+      },
+      {
+        "type": "wait",
+        "duration": 150
+      }
+    ],
+    "bg": "next_scene.jpg",
+    "speaker": "",
+    "speakerSub": "",
+    "text": [""]
+  },
+  {
+    "motions": [
+      {
         "type": "move",
         "targets": [
           { "id": "rakuro", "to": "center", "scale": 0.5 }
