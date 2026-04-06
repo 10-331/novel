@@ -640,7 +640,7 @@ button{
   opacity: 1;
 }
 
-/* --- ニュース機能スタイル --- */
+/* ===== ニュースレイヤー（配置はそのまま） ===== */
 .news-layer {
   position: absolute;
   inset: 0;
@@ -651,57 +651,45 @@ button{
   pointer-events: none;
 }
 
+/* ===== 吹き出し（9-slice SVG版） ===== */
 .news-balloon {
-  position: relative;
-  width: 760px;
-  min-height: 108px;
-  padding: 24px 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(250, 248, 240, 0.96);
-  border: 2px solid rgba(60, 60, 56, 0.58);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  clip-path: polygon(
-    0% 50%,
-    2.8% 43%,
-    2.1% 35%,
-    5.4% 40%,
-    8.5% 50%,
-    5.4% 60%,
-    2.1% 65%,
-    2.8% 57%,
+  position: relative;
+  
+  /* テキスト量に応じて可変する設定 */
+  width: fit-content;
+  max-width: 900px;
+  min-width: 450px;
+  min-height: 120px;
+  padding: 30px 70px; /* 左右の余白をトゲの幅に合わせて調整 */
 
-    97.2% 57%,
-    97.9% 65%,
-    94.6% 60%,
-    91.5% 50%,
-    94.6% 40%,
-    97.9% 35%,
-    97.2% 43%,
-    100% 50%,
+  /* --- 9-slice 実装（トゲの形を固定） --- */
+  border-style: solid;
+  border-width: 20px 45px; /* 上下左右の「固定したいトゲの範囲」を指定 */
+  
+  /* SVGをデータとして埋め込み。stroke-widthも一定に保たれます */
+  border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 200 100'%3E%3Cpath d='M30,5 L170,5 L185,0 L180,15 L200,10 L190,30 L190,70 L200,90 L180,85 L185,100 L170,95 L30,95 L15,100 L20,85 L0,90 L10,70 L10,30 L0,10 L20,15 L15,0 Z' fill='%23fdfdfa' stroke='%231a1a1a' stroke-width='2'/%3E%3C/svg%3E");
+  
+  /* 四隅のトゲ部分を「切り取って固定」する指定 */
+  border-image-slice: 20 45 20 45 fill;
+  border-image-repeat: stretch;
 
-    97.2% 57%,
-    92% 57%,
-    92% 100%,
-    8% 100%,
-    8% 57%,
-    2.8% 57%,
-    2.8% 43%,
-    8% 43%,
-    8% 0%,
-    92% 0%,
-    92% 43%,
-    97.2% 43%
-  );
+  /* 影はfilterでかける（clip-pathやborder-imageにも追従する） */
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
 }
 
+/* ===== テキスト（そのまま） ===== */
 .news-text {
-  color: #2b2b28;
-  font-size: 23px;
+  position: relative;
+  z-index: 1;
+  color: #1a1a1a;
+  font-size: 26px;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.6;
   text-align: center;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
   white-space: pre-wrap;
 }
+
