@@ -651,49 +651,36 @@ button{
   pointer-events: none;
 }
 
-/* --- ニュース機能スタイル（修正版） --- */
-.news-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 50;
-  pointer-events: none;
-}
-
+/* --- ニュース機能スタイル（極限再現版） --- */
 .news-balloon {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   
-  /* テキスト量に応じて可変 */
+  /* サイズ可変設定 */
   width: fit-content;
   max-width: 960px;
   min-width: 500px;
   min-height: 120px;
   padding: 30px 80px;
 
-  /* 1. 枠線の基本設定（透明にしておく） */
-  border: 30px solid transparent;
+  /* 1. 枠線の領域を確保（ここを35pxにするとトゲが綺麗に収まります） */
+  border: 35px solid transparent;
   
-  /* 2. 9-slice SVG: 四隅にトゲを配置し、中央は直線にする */
-  border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='100' viewBox='0 0 180 100'%3E%3Cpath d='M30,2 L150,2 L160,8 L165,0 L172,10 L180,5 L175,20 L180,30 L178,150 L180,80 L172,90 L180,95 L165,100 L160,92 L150,98 L30,98 L20,92 L15,100 L8,90 L0,95 L5,80 L0,70 L2,30 L0,20 L5,5 L0,10 L8,0 L15,8 L20,2 Z' fill='%23fdfdfa' stroke='%231a1a1a' stroke-width='2'/%3E%3C/svg%3E");
+  /* 2. 9-slice SVG: トゲの配置を「不規則」かつ「角集中」に設計 */
+  /* viewBoxを広く取り、中央の直線部分を長く確保しました */
+  border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='120' viewBox='0 0 400 120'%3E%3Cpath d='M40,10 L25,0 L15,12 L5,2 L0,15 L0,105 L8,118 L20,105 L35,120 L50,110 L350,110 L365,120 L380,105 L392,118 L400,105 L400,15 L390,2 L380,12 L365,0 L350,10 Z' fill='%23faf8f0' stroke='%231a1a1a' stroke-width='2.5'/%3E%3C/svg%3E");
   
-  /* 3. 角の30px分を固定して、残りを引き伸ばす */
-  border-image-slice: 35 fill;
+  /* 3. 角の50px分を「トゲ領域」として固定 */
+  border-image-slice: 40 60 40 60 fill;
   border-image-repeat: stretch;
 
-  /* 影の調整（画像のような柔らかい広がり） */
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+  /* 4. 影をより柔らかく、画像のように「下に重く」落とす */
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.14));
 }
 
-/* 前のコードにあった ::before は不要なので削除してください */
-.news-balloon::before {
-  content: none !important;
-}
-
+/* テキストの視認性をさらに向上 */
 .news-text {
   position: relative;
   z-index: 1;
@@ -702,7 +689,8 @@ button{
   font-weight: 700;
   line-height: 1.6;
   text-align: center;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em; /* 少し広げて読みやすく */
   white-space: pre-wrap;
+  text-shadow: 0 0 1px rgba(255,255,255,0.5); /* 文字を背景から少し浮かせる */
 }
 
