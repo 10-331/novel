@@ -515,7 +515,7 @@
   "motions": [
     {
       "type": "exit",
-      "targets": ["kuguri"],
+      "targets": ["kuguri", "rakuro"],
       "duration": 180
     },
     {
