@@ -313,10 +313,16 @@ button{
   pointer-events: none;
 }
 
-.name-row,
-.dialogue-line-image,
+.name-row{
+  margin-left: 310px;
+}
+
+.dialogue-line-image{
+  margin-left: 390px;
+}
+
 .text-row{
-  margin-left: 430px;
+  margin-left: 350px;
 }
 
 .name-row{
