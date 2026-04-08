@@ -269,21 +269,23 @@
     "speakerSub": "RAKURO",
     "text": ["……お前に言われる筋合いはない。"]
   },
-    {
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["kuguri", "rakuro"],
-      "duration": 180
-    },
-    {
-      "type": "blackout"
-    },
-    {
-      "type": "wait",
-      "duration": 150
-    }
+  {
+    "motions": [
       {
+        "type": "exit",
+        "targets": ["kuguri", "rakuro"],
+        "duration": 180
+      },
+      {
+        "type": "blackout"
+      },
+      {
+        "type": "wait",
+        "duration": 150
+      }
+    ]
+  },
+  {
     "bg": "bar.jpg",
     "motions": [
       {
@@ -300,4 +302,5 @@
       "いつもの席空いてますよ。お連れ様がお待ちです。"
     ]
   }
+]
 ]
