@@ -524,6 +524,12 @@ async function renderLine() {
       isMotionPlaying = false;
     }
 
+    if (line.autoAdvance) {
+  index++;
+  await renderLine();
+  return;
+}
+    
     if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
     clearCharacters(characterState);
