@@ -713,13 +713,6 @@
     "speakerSub": "KUGURI",
     "text": ["命令形。……ま、悪くないけどね。"]
   },
-    {
-      "type": "blackout"
-    },
-    {
-      "type": "wait",
-      "duration": 150
-    },
   {
     "motions": [
       {
@@ -728,6 +721,13 @@
         "duration": 220
       }
     ],
+    {
+      "type": "blackout"
+    },
+    {
+      "type": "wait",
+      "duration": 150
+    },
     "speaker": "ニュースキャスター",
     "speakerSub": "",
     "text": [
