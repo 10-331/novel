@@ -430,24 +430,31 @@ function setFlashbackMode(mode) {
   if (el.nameSub) el.nameSub.classList.toggle("is-flashback", isAnyFlashback);
 }
 
-async function playBlackFlash() {
+async function playBlackFlash(keep = false) {
   if (!el.blackoutOverlay) return;
 
   el.blackoutOverlay.classList.add("active");
+  isBlackoutActive = true;
 
   if (!isSkipMode && !isRewindMode) await wait(250);
 
+  if (!keep) {
+    el.blackoutOverlay.classList.remove("active");
+    isBlackoutActive = false;
+
+    if (!isSkipMode && !isRewindMode) await wait(120);
+  }
+}
+
+async function endBlackout() {
+  if (!el.blackoutOverlay) return;
+  if (!isBlackoutActive) return;
+
   el.blackoutOverlay.classList.remove("active");
+  isBlackoutActive = false;
 
   if (!isSkipMode && !isRewindMode) await wait(120);
 }
-
-async function renderLine() {
-  const token = ++lineRenderToken;
-
-  while (index < script.length && script[index]?.disabled === true) {
-    index++;
-  }
 
   clearTimeout(typingTimer);
   isTyping = false;
@@ -472,11 +479,11 @@ async function renderLine() {
 
   const line = script[index];
 
-  if (line.bg) currentBg = line.bg;
+if (line.bg) currentBg = line.bg;
 
-  if (!isFlashbackActive) {
-    changeBackground(`./assets/images/bg/${currentBg}`);
-  }
+if (!isFlashbackActive) {
+  changeBackground(`./assets/images/bg/${currentBg}`, isBlackoutActive);
+}
 
   const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
   let usedMotions = false;
@@ -507,6 +514,10 @@ async function renderLine() {
   } else if (Array.isArray(line.chars)) {
     clearCharacters(characterState);
 
+if (isBlackoutActive) {
+  await endBlackout();
+}
+    
     const parsed = line.chars.map(parseCharacter);
     parsed.forEach((c) => {
       if (c.visible !== false) {
@@ -848,10 +859,15 @@ function setupMenu() {
       clearCharacters(characterState);
       currentBg = "placeholder.jpg";
       prevBg = null;
-      isFlashbackActive = false;
-      currentFlashbackTone = null;
-      setFlashbackMode(null);
-      lineRenderToken++;
+isFlashbackActive = false;
+currentFlashbackTone = null;
+isEpisodeEnded = false;
+isEpisodeTransitioning = false;
+isWaitingEpisodeOverlay = false;
+isBlackoutActive = false;
+if (el.blackoutOverlay) el.blackoutOverlay.classList.remove("active");
+skipAdvanceUntil = 0;
+lineRenderToken++;
 
       const targetIndex = index;
       index = 0;
