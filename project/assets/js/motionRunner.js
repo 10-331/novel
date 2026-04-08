@@ -121,7 +121,7 @@ export async function runMotions({
 
       case "blackout":
         if (playBlackFlash) {
-          await playBlackFlash();
+          await playBlackFlash(true);
         }
         break;
 
