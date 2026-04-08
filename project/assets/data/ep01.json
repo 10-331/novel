@@ -714,27 +714,27 @@
     "text": ["命令形。……ま、悪くないけどね。"]
   },
   {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["rakuro", "kuguri"],
-        "duration": 220
-      }
-    ],
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["rakuro", "kuguri"],
+      "duration": 220
+    },
     {
       "type": "blackout"
     },
     {
       "type": "wait",
       "duration": 150
-    },
-    "speaker": "ニュースキャスター",
-    "speakerSub": "",
-    "text": [
-      "──昨夜遅く、東京・六本木の路上で、指名手配中だった",
-      "百目鬼潜被疑者の身柄が拘束され──"
-    ]
-  },
+    }
+  ],
+  "speaker": "ニュースキャスター",
+  "speakerSub": "",
+  "text": [
+    "──昨夜遅く、東京・六本木の路上で、指名手配中だった",
+    "百目鬼潜被疑者の身柄が拘束され──"
+  ]
+},
   {
     "speaker": "ニュースキャスター",
     "speakerSub": "",
