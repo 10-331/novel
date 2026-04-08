@@ -521,10 +521,6 @@ async function renderLine() {
     }
 
     if (token !== lineRenderToken) return;
-
-    if (isBlackoutActive) {
-      await endBlackout();
-    }
   } else if (Array.isArray(line.chars)) {
     clearCharacters(characterState);
 
@@ -931,48 +927,55 @@ async function renderLineWithoutTyping() {
 
   if (index >= script.length) return;
 
-  const line = script[index];
+ const line = script[index];
 
-  if (line.bg) currentBg = line.bg;
+if (line.bg) currentBg = line.bg;
 
-  if (!isFlashbackActive) {
-    changeBackground(`./assets/images/bg/${currentBg}`);
+if (!isFlashbackActive) {
+  changeBackground(`./assets/images/bg/${currentBg}`, isBlackoutActive);
+
+  if (isBlackoutActive && line.bg) {
+    await endBlackout();
   }
+}
 
-  if (Array.isArray(line.motions) && line.motions.length > 0) {
-    isMotionPlaying = true;
+const hadCharactersBefore = getVisibleCharacters(characterState).length > 0;
+let usedMotions = false;
 
-    try {
-      await runMotions({
-        motions: line.motions,
-        state: characterState,
-        renderCharacters,
-        moveCharacters,
-        parseCharacter,
-        wait,
-        token,
-        getToken: () => lineRenderToken,
-        playFlashback,
-        endFlashback,
-        playBlackFlash
-      });
-    } finally {
-      isMotionPlaying = false;
-    }
+if (Array.isArray(line.motions) && line.motions.length > 0) {
+  usedMotions = true;
+  isMotionPlaying = true;
 
-    if (token !== lineRenderToken) return;
-  } else if (Array.isArray(line.chars)) {
-    clearCharacters(characterState);
-
-    const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
+  try {
+    await runMotions({
+      motions: line.motions,
+      state: characterState,
+      renderCharacters,
+      moveCharacters,
+      parseCharacter,
+      wait,
+      token,
+      getToken: () => lineRenderToken,
+      playFlashback,
+      endFlashback,
+      playBlackFlash
     });
-
-    renderCharacters(getVisibleCharacters(characterState));
+  } finally {
+    isMotionPlaying = false;
   }
+
+  if (token !== lineRenderToken) return;
+} else if (Array.isArray(line.chars)) {
+  clearCharacters(characterState);
+
+  const parsed = line.chars.map(parseCharacter);
+  parsed.forEach((c) => {
+    if (c.visible !== false) {
+      setCharacter(characterState, c);
+    }
+  });
+
+  renderCharacters(getVisibleCharacters(characterState));
 }
 
 function setupEndChoice() {
