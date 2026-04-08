@@ -275,7 +275,7 @@
     {
       "type": "exit",
       "targets": ["kuguri", "rakuro"],
-      "duration": 180
+      "duration": 100
     },
     {
       "type": "blackout"
