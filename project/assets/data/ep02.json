@@ -285,23 +285,23 @@
       }
     ]
   },
-  {
-    "bg": "bar.jpg",
-    "motions": [
-      {
-        "type": "enter",
-        "targets": [
-          { "id": "rakuro", "to": "center", "scale": 0.5 }
-        ],
-        "duration": 1200
-      }
-    ],
-    "speaker": "ダンディなバーテンダー",
-    "text": [
-      "いらっしゃいませ。……ああ、橘さん。",
-      "いつもの席空いてますよ。お連れ様がお待ちです。"
-    ]
-  },
+{
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["kuguri", "rakuro"],
+      "duration": 180
+    }
+  ]
+},
+{
+  "bg": "bar.jpg",
+  "speaker": "ダンディなバーテンダー",
+  "text": [
+    "いらっしゃいませ。……ああ、橘さん。",
+    "いつもの席空いてますよ。お連れ様がお待ちです。"
+  ]
+},
     {
     "motions": [
       {
