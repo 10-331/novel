@@ -272,16 +272,12 @@
 {
   "motions": [
     {
-      "type": "blackout"
-    },
-    {
       "type": "exit",
       "targets": ["kuguri", "rakuro"],
       "duration": 180
     },
     {
-      "type": "wait",
-      "duration": 80
+      "type": "blackout"
     }
   ]
 },
