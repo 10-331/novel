@@ -269,22 +269,22 @@
     "speakerSub": "RAKURO",
     "text": ["……お前に言われる筋合いはない。"]
   },
-  {
-    "motions": [
-      {
-        "type": "exit",
-        "targets": ["kuguri", "rakuro"],
-        "duration": 180
-      },
-      {
-        "type": "blackout"
-      },
-      {
-        "type": "wait",
-        "duration": 150
-      }
-    ]
-  },
+{
+  "motions": [
+    {
+      "type": "blackout"
+    },
+    {
+      "type": "exit",
+      "targets": ["kuguri", "rakuro"],
+      "duration": 180
+    },
+    {
+      "type": "wait",
+      "duration": 80
+    }
+  ]
+},
 {
   "bg": "bar.jpg",
   "speaker": "ダンディなバーテンダー",
