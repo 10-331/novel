@@ -268,5 +268,36 @@
     "speaker": "落露",
     "speakerSub": "RAKURO",
     "text": ["……お前に言われる筋合いはない。"]
+  },
+    {
+  "motions": [
+    {
+      "type": "exit",
+      "targets": ["kuguri", "rakuro"],
+      "duration": 180
+    },
+    {
+      "type": "blackout"
+    },
+    {
+      "type": "wait",
+      "duration": 150
+    }
+      {
+    "bg": "bar.jpg",
+    "motions": [
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
+        ],
+        "duration": 1200
+      }
+    ],
+    "speaker": "ダンディなバーテンダー",
+    "text": [
+      "いらっしゃい。……ああ、橘さん。",
+      "いつもの席空いてますよ。お連れ様がお待ちです。"
+    ]
   }
 ]
