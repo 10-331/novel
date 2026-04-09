@@ -121,7 +121,8 @@ export async function runMotions({
 
       case "blackout":
         if (playBlackFlash) {
-          await playBlackFlash(true);
+          const isOn = motion.mode !== "off";
+          await playBlackFlash(isOn);
         }
         break;
 
