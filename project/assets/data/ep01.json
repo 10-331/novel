@@ -506,37 +506,42 @@
     "speakerSub": "RAKURO",
     "text": ["なんの話？"]
   },
-{
-  "speaker": "潜",
-  "speakerSub": "KUGURI",
-  "text": ["全部だよ。"]
-},
-{
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["kuguri", "rakuro"],
-      "duration": 180
-    },
-    {
-      "type": "blackout"
-    },
-    {
-      "type": "wait",
-      "duration": 150
-    },
-    {
-      "type": "enter",
-      "targets": [
-        { "id": "rakuro", "to": "center", "scale": 0.5 }
-      ],
-      "duration": 180
-    }
-  ],
-  "speaker": "落露",
-  "speakerSub": "RAKURO",
-  "text": ["ネジの調整はしといた。しばらくは問題ないよ。"]
-},
+  {
+    "speaker": "潜",
+    "speakerSub": "KUGURI",
+    "text": ["全部だよ。"]
+  },
+  {
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["kuguri", "rakuro"],
+        "duration": 180
+      },
+      {
+        "type": "blackout",
+        "mode": "on"
+      },
+      {
+        "type": "wait",
+        "duration": 150
+      },
+      {
+        "type": "enter",
+        "targets": [
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
+        ],
+        "duration": 180
+      },
+      {
+        "type": "blackout",
+        "mode": "off"
+      }
+    ],
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": ["ネジの調整はしといた。しばらくは問題ないよ。"]
+  },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
@@ -714,27 +719,28 @@
     "text": ["命令形。……ま、悪くないけどね。"]
   },
   {
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["rakuro", "kuguri"],
-      "duration": 220
-    },
-    {
-      "type": "blackout"
-    },
-    {
-      "type": "wait",
-      "duration": 150
-    }
-  ],
-  "speaker": "ニュースキャスター",
-  "speakerSub": "",
-  "text": [
-    "──昨夜遅く、東京・六本木の路上で、指名手配中だった",
-    "百目鬼潜被疑者の身柄が拘束され──"
-  ]
-},
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["rakuro", "kuguri"],
+        "duration": 220
+      },
+      {
+        "type": "blackout",
+        "mode": "on"
+      },
+      {
+        "type": "wait",
+        "duration": 150
+      }
+    ],
+    "speaker": "ニュースキャスター",
+    "speakerSub": "",
+    "text": [
+      "──昨夜遅く、東京・六本木の路上で、指名手配中だった",
+      "百目鬼潜被疑者の身柄が拘束され──"
+    ]
+  },
   {
     "speaker": "ニュースキャスター",
     "speakerSub": "",
@@ -744,6 +750,10 @@
   },
   {
     "motions": [
+      {
+        "type": "blackout",
+        "mode": "off"
+      },
       {
         "type": "enter",
         "targets": [
@@ -764,8 +774,7 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["なにしてんだ、あのバカ……！",
-"……半年も経ってないじゃないか。"]
+    "text": ["なにしてんだ、あのバカ……！", "……半年も経ってないじゃないか。"]
   },
   {
     "speaker": "落露",
@@ -794,8 +803,7 @@
     ],
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……だから別に、\"駆け付けた\"というほどのことでもない。",
-      "ただ、行く理由があったから行った。それだけだよ。"]
+    "text": ["……だから別に、\"駆け付けた\"というほどのことでもない。", "ただ、行く理由があったから行った。それだけだよ。"]
   },
   {
     "speaker": "落露",
