@@ -1,5 +1,5 @@
 [
-    {
+  {
     "bg": "room.jpg",
     "motions": [
       {
@@ -78,7 +78,9 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["面白いことではない。ただ予定を立てているだけだ。"]
+    "text": [
+      "面白いことではない。ただ予定を立てているだけだ。"
+    ]
   },
   {
     "speaker": "潜",
@@ -91,17 +93,23 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["覗き込まないでくれ。"]
+    "text": [
+      "覗き込まないでくれ。"
+    ]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["見せつけるように広げておいて、覗くなというのは難しい注文だね。"]
+    "text": [
+      "見せつけるように広げておいて、覗くなというのは難しい注文だね。"
+    ]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["……熱海？"]
+    "text": [
+      "……熱海？"
+    ]
   },
   {
     "speaker": "落露",
@@ -122,7 +130,9 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["私だけの希望ではない。"]
+    "text": [
+      "私だけの希望ではない。"
+    ]
   },
   {
     "speaker": "潜",
@@ -134,7 +144,9 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["別に、たいしたことではない。"]
+    "text": [
+      "別に、たいしたことではない。"
+    ]
   },
   {
     "speaker": "落露",
@@ -147,7 +159,9 @@
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["そういうところを、君は普通だと思っているんだ。"]
+    "text": [
+      "そういうところを、君は普通だと思っているんだ。"
+    ]
   },
   {
     "speaker": "落露",
@@ -174,12 +188,16 @@
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["ふふ、黙るんだね。"]
+    "text": [
+      "ふふ、黙るんだね。"
+    ]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["行き先を選んで、移動時間を調べて、順番まで組み立てて。"]
+    "text": [
+      "行き先を選んで、移動時間を調べて、順番まで組み立てて。"
+    ]
   },
   {
     "speaker": "潜",
@@ -215,22 +233,30 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……お前は、いつもそうやって面白がるな。"]
+    "text": [
+      "……お前は、いつもそうやって面白がるな。"
+    ]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["面白いよ。君がなにか考えている顔は、特にね。"]
+    "text": [
+      "面白いよ。君がなにか考えている顔は、特にね。"
+    ]
   },
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["悪趣味だな、……放っておけ。"]
+    "text": [
+      "悪趣味だな、……放っておけ。"
+    ]
   },
   {
     "speaker": "潜",
     "speakerSub": "KUGURI",
-    "text": ["……まあいいや。"]
+    "text": [
+      "……まあいいや。"
+    ]
   },
   {
     "speaker": "潜",
@@ -243,7 +269,9 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……ああ。"]
+    "text": [
+      "……ああ。"
+    ]
   },
   {
     "speaker": "潜",
@@ -255,7 +283,9 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["何だ。"]
+    "text": [
+      "何だ。"
+    ]
   },
   {
     "speaker": "潜",
@@ -267,35 +297,37 @@
   {
     "speaker": "落露",
     "speakerSub": "RAKURO",
-    "text": ["……お前に言われる筋合いはない。"]
+    "text": [
+      "……お前に言われる筋合いはない。"
+    ]
   },
-{
-  "autoAdvance": true,
-  "motions": [
-    {
-      "type": "exit",
-      "targets": ["kuguri", "rakuro"],
-      "duration": 100
-    },
-    {
-      "type": "blackout"
-    }
-  ]
-},
-{
-  "bg": "bar.jpg",
-  "speaker": "ダンディなバーテンダー",
-  "text": [
-    "いらっしゃいませ。……ああ、橘さん。",
-    "いつもの席空いてますよ。お連れ様がお待ちです。"
-  ]
-},
-    {
+  {
+    "autoAdvance": true,
+    "motions": [
+      {
+        "type": "exit",
+        "targets": ["kuguri", "rakuro"],
+        "duration": 100
+      },
+      {
+        "type": "blackout"
+      }
+    ]
+  },
+  {
+    "bg": "bar.jpg",
+    "speaker": "ダンディなバーテンダー",
+    "text": [
+      "いらっしゃいませ。……ああ、橘さん。",
+      "いつもの席空いてますよ。お連れ様がお待ちです。"
+    ]
+  },
+  {
     "motions": [
       {
         "type": "enter",
         "targets": [
-          { "id": "rakuro", "to": "center", "scale": 0.5}
+          { "id": "rakuro", "to": "center", "scale": 0.5 }
         ],
         "duration": 600
       }
@@ -311,7 +343,7 @@
       {
         "type": "move",
         "targets": [
-          { "id": "rakuro", "to": "right", "scale": 0.5}
+          { "id": "rakuro", "to": "right", "scale": 0.5 }
         ],
         "duration": 500
       },
@@ -322,7 +354,7 @@
       {
         "type": "enter",
         "targets": [
-          { "id": "aya", "to": "left", "scale": 0.42}
+          { "id": "aya", "to": "left", "scale": 0.42 }
         ],
         "duration": 1000
       }
@@ -331,6 +363,280 @@
     "speakerSub": "AYA",
     "text": [
       "あ、落露さん！"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "今日は迷わなかったんだね。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "う、まるでいつも迷ってるみたいな言い方。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "いつも私のほうが早く着いているから。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "それは！　その、え～っと、道……が、うねうね～っと、こう。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "……と、とにかく飲みましょ？　ほら、せっかくの金晩ですし。ほら、ね？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……そうだね。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "じゃあ、イエローバードを1つ。"
+    ]
+  },
+  {
+    "speaker": "ダンディなバーテンダー",
+    "text": [
+      "かしこまりました。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……そういえばこの前言っていた旅行の件だけど、"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "へえ、旅行！　いいですね、どこに行かれるんですか？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "？"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "……え？　な、なんですか？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "行かないの？"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "い、行く？　私も？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……そのつもりだったのだけど。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "ん、んん？　…………あ～～～～っ！？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "綾、少し声が大きい。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "ご、ごめんなさ、っえ！？　あれ本当に行ってくれるんですか？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……そうだ。だから来月、三日ほど家を空ける。",
+      "君が行きたいって言ったんだよ。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "や、それは……そう、ですけど。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "……ううん、嬉しいです。行きたい！　です！"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……ふふ、うん。行こうね。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "海と温泉に行きたいって話があったから熱海に行こうと思ってるんだけど、どうかな。",
+      "一応他に候補もあるけど、HAMAから新幹線が出ているからアクセスはいいと思う。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "タタミ？"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "あたみ。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "ダーリンが決めてくれたところならどこでも行きます！"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "あ、もう酔ってる。ほら、水飲んで。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "そうだ、苦手な食べ物はない？"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "うんん？　特には……。辛い物は少し苦手ですけど、頑張れます。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "アレルギーもない？"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "ありません！"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "ねえダーリン、愛以外に持っていくものってあるかな。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "初めての旅行だもんね。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "とりあえず、普段君が持ち歩かない携帯は忘れないようにね。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "……ハニー、聞いてる？"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "あは！　ふふ、あはは。うん……ふふ。な～に、ダーリン。"
+    ]
+  },
+  {
+    "speaker": "落露",
+    "speakerSub": "RAKURO",
+    "text": [
+      "携帯、忘れちゃだめだよ。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "はあい。"
+    ]
+  },
+  {
+    "speaker": "綾",
+    "speakerSub": "AYA",
+    "text": [
+      "……楽しみにしてますね、熱海旅行。"
     ]
   }
 ]
