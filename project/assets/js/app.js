@@ -1101,3 +1101,10 @@ async function goToNextEpisodeOrEnd() {
   showEndChoice();
   isEpisodeTransitioning = false;
 }
+
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./assets/js/sw.js");
+  });
+}
