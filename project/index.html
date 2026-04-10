@@ -135,6 +135,9 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./assets/js/sw-v2.js")
     .then(() => console.log("SW登録成功"))
     .catch(err => console.error("SW登録失敗", err));
+  self.addEventListener("install", (event) => {
+  console.log("SWインストールされたぞ");
+});
 }
 </body>
 </html>
