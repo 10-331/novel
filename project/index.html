@@ -139,5 +139,8 @@ navigator.serviceWorker.register("./assets/js/sw-v2.js")
       console.log("まだ制御されてない");
     }
   });
+  self.addEventListener("fetch", (event) => {
+  console.log("fetchきた:", event.request.url);
+});
 </body>
 </html>
