@@ -129,18 +129,14 @@
   
   <script type="module" src="./assets/js/app.js"></script>
 
-navigator.serviceWorker.register("./assets/js/sw-v2.js")
-  .then(reg => {
-    console.log("登録成功", reg);
-
-    if (navigator.serviceWorker.controller) {
-      console.log("このページはSWに制御されてる");
-    } else {
-      console.log("まだ制御されてない");
-    }
-  });
-  self.addEventListener("fetch", (event) => {
-  console.log("fetchきた:", event.request.url);
-});
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw-v2.js') // パスをルートに変更
+        .then(reg => console.log("SW registered:", reg))
+        .catch(err => console.error("SW registration failed:", err));
+    });
+  }
+</script>
 </body>
 </html>
