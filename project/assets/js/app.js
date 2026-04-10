@@ -1128,3 +1128,12 @@ document.getElementById("installBtn")?.addEventListener("click", async () => {
 
   document.getElementById("installOverlay").classList.add("hidden");
 });
+
+
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+if (isIOS) {
+  document.getElementById("installOverlay").classList.remove("hidden");
+  document.querySelector("#installOverlay p").textContent =
+    "共有ボタンから『ホーム画面に追加』してください";
+}
