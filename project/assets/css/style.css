@@ -20,11 +20,6 @@ html, body{
 
 body{
   min-height: 100dvh;
-  padding:
-    env(safe-area-inset-top)
-    env(safe-area-inset-right)
-    env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
 }
 
 img{
@@ -237,19 +232,6 @@ button{
   right: calc(env(safe-area-inset-right) + 24px);
 }
 
-.next-indicator{
-  position: absolute;
-  right: calc(env(safe-area-inset-right) + 28px);
-  bottom: calc(env(safe-area-inset-bottom) + 16px);
-  width: 58px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  pointer-events: none;
-  animation: nextPrompt 2.15s linear infinite;
-}
-
 .icon-btn img{
   width: 100%;
   height: 100%;
@@ -429,8 +411,8 @@ button{
 
 .next-indicator{
   position: absolute;
-  right: 28px;
-  bottom: 16px;
+  right: calc(env(safe-area-inset-right) + 28px);
+  bottom: calc(env(safe-area-inset-bottom) + 16px);
   width: 58px;
   display: flex;
   flex-direction: column;
@@ -718,7 +700,6 @@ button{
   min-height: 120px;
   padding: 30px 70px;
 
-  /* トゲを少し深くするため上下を増やす */
   border-style: solid;
   border-width: 26px 45px;
 
@@ -742,4 +723,3 @@ button{
   letter-spacing: 0.05em;
   white-space: pre-wrap;
 }
-
