@@ -1,25 +1,20 @@
-const CACHE_NAME = "novel-app-v1";
-
+const CACHE_NAME = "novel-app-v2";
 const urlsToCache = [
-  "./index.html"
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./assets/css/style.css",
+  "./assets/js/app.js"
 ];
 
-// インストール時
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async (cache) => {
-      for (const url of urlsToCache) {
-        try {
-          await cache.add(url);
-        } catch (e) {
-          console.warn("キャッシュ失敗:", url);
-        }
-      }
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(urlsToCache);
     })
   );
 });
 
-// リクエスト時
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
