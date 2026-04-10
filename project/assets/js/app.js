@@ -1105,7 +1105,7 @@ async function goToNextEpisodeOrEnd() {
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./assets/js/sw.js");
+    navigator.serviceWorker.register("./assets/js/sw-v2.js");
   });
 }
 
