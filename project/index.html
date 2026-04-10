@@ -131,12 +131,10 @@ navigator.serviceWorker.register("./assets/js/sw-v2.js");
   
   <script type="module" src="./assets/js/app.js"></script>
 
-  <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./assets/js/sw.js")
+  navigator.serviceWorker.register("./assets/js/sw-v2.js")
     .then(() => console.log("SW登録成功"))
     .catch(err => console.error("SW登録失敗", err));
 }
-</script>
 </body>
 </html>
