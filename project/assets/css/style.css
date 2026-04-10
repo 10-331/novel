@@ -237,6 +237,19 @@ button{
   right: calc(env(safe-area-inset-right) + 24px);
 }
 
+.next-indicator{
+  position: absolute;
+  right: calc(env(safe-area-inset-right) + 28px);
+  bottom: calc(env(safe-area-inset-bottom) + 16px);
+  width: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  animation: nextPrompt 2.15s linear infinite;
+}
+
 .icon-btn img{
   width: 100%;
   height: 100%;
