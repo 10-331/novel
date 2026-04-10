@@ -2,7 +2,6 @@ const CACHE_NAME = "novel-app-v1";
 
 const urlsToCache = [
   "./index.html",
-  "./index.html",
   "./assets/css/style.css",
   "./assets/js/app.js"
 ];
