@@ -126,17 +126,6 @@
     <button id="installBtn">インストール</button>
   </div>
 </div>
-  
   <script type="module" src="./assets/js/app.js"></script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw-v2.js') // パスをルートに変更
-        .then(reg => console.log("SW registered:", reg))
-        .catch(err => console.error("SW registration failed:", err));
-    });
-  }
-</script>
 </body>
 </html>
