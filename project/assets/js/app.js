@@ -1101,39 +1101,3 @@ async function goToNextEpisodeOrEnd() {
   showEndChoice();
   isEpisodeTransitioning = false;
 }
-
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./assets/js/sw-v2.js");
-  });
-}
-
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-
-  document.getElementById("installOverlay").classList.remove("hidden");
-});
-
-document.getElementById("installBtn")?.addEventListener("click", async () => {
-  if (!deferredPrompt) return;
-
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-
-  deferredPrompt = null;
-
-  document.getElementById("installOverlay").classList.add("hidden");
-});
-
-
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-if (isIOS) {
-  document.getElementById("installOverlay").classList.remove("hidden");
-  document.querySelector("#installOverlay p").textContent =
-    "共有ボタンから『ホーム画面に追加』してください";
-}
