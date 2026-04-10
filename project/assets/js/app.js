@@ -1108,3 +1108,23 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./assets/js/sw.js");
   });
 }
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  document.getElementById("installOverlay").classList.remove("hidden");
+});
+
+document.getElementById("installBtn")?.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+
+  deferredPrompt = null;
+
+  document.getElementById("installOverlay").classList.add("hidden");
+});
