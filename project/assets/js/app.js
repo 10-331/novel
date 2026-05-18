@@ -613,8 +613,6 @@ if (line.autoAdvance) {
 }
 
 if (token !== lineRenderToken) return;
-    
-    if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
     clearCharacters(characterState);
 
@@ -1070,16 +1068,24 @@ async function renderLineWithoutTyping() {
 }
 
 function setupEndChoice() {
-  el.continueBtn?.addEventListener("click", (e) => {
+  el.continueBtn?.addEventListener("click", async (e) => {
     e.stopPropagation();
     el.endChoiceOverlay?.classList.add("hidden");
     isEpisodeEnded = false;
+
+    const nextEpisode = currentEpisode + 1;
+
+    if (nextEpisode < episodeList.length) {
+      await loadEpisode(nextEpisode);
+      showEpisodeTitle(nextEpisode);
+    } else {
+      window.location.href = "./story.html";
+    }
   });
 
   el.finishBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
-    el.endChoiceOverlay?.classList.add("hidden");
-    isEpisodeEnded = true;
+    window.location.href = "./story.html";
   });
 
   el.endChoiceOverlay?.addEventListener("click", (e) => {
