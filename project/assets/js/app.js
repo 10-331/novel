@@ -10,15 +10,84 @@ const BASE_WIDTH = 1600;
 const BASE_HEIGHT = 900;
 const CHARACTER_BOTTOM = -28;
 
-const EPISODE_FILES = [
-  "./assets/data/ep01.json",
-  "./assets/data/ep02.json"
+const STORIES_PATH = "./assets/data/stories.json";
+const READ_KEY = "novel.readEpisodes.v1";
+
+let episodeList = [
+  {
+    id: "ep01",
+    title: "1話",
+    subtitle: "壊生カメリア",
+    file: "./assets/data/ep01.json",
+    open: true
+  },
+  {
+    id: "ep02",
+    title: "2話",
+    subtitle: "壊生カメリア",
+    file: "./assets/data/ep02.json",
+    unlockAfter: "ep01"
+  }
 ];
 
-const EPISODE_TITLES = [
-  { num: "壊生カメリア", sub: "1話" },
-  { num: "壊生カメリア", sub: "2話" }
-];
+function getEpisodeIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("episode") || "ep01";
+}
+
+function flattenEpisodes(storiesData) {
+  const result = [];
+
+  for (const story of storiesData.stories || []) {
+    for (const chapter of story.chapters || []) {
+      for (const episode of chapter.episodes || []) {
+        result.push({
+          ...episode,
+          storyId: story.id,
+          storyTitle: story.title,
+          chapterId: chapter.id,
+          chapterTitle: chapter.title
+        });
+      }
+    }
+  }
+
+  return result;
+}
+
+async function loadEpisodeRegistry() {
+  try {
+    const res = await fetch(STORIES_PATH);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+    const flattened = flattenEpisodes(data);
+
+    if (flattened.length > 0) {
+      episodeList = flattened;
+    }
+  } catch (error) {
+    console.warn("stories.json の読み込みに失敗したため、fallback episodeListを使用します。", error);
+  }
+}
+
+function getReadEpisodes() {
+  try {
+    return JSON.parse(localStorage.getItem(READ_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function markEpisodeRead(episodeId) {
+  if (!episodeId) return;
+
+  const read = getReadEpisodes();
+  if (read.includes(episodeId)) return;
+
+  read.push(episodeId);
+  localStorage.setItem(READ_KEY, JSON.stringify(read));
+}
 
 const el = {
   viewport: document.getElementById("gameViewport"),
