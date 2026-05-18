@@ -748,3 +748,20 @@ button{
   color: #000;
   border-radius: 6px;
 }
+
+
+.char.motion-smile {
+  animation: motionSmile 420ms ease;
+}
+
+@keyframes motionSmile {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(var(--char-scale, 1));
+  }
+  45% {
+    transform: translateX(-50%) translateY(-18px) scale(calc(var(--char-scale, 1) * 1.04));
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(var(--char-scale, 1));
+  }
+}
