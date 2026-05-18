@@ -2,124 +2,103 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  />
-  <title>Novel Story Prototype</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novel Story</title>
+  <style>
+    * { box-sizing: border-box; }
 
-  <meta name="theme-color" content="#000000" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <link rel="manifest" href="./manifest.webmanifest" />
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #0e0f14;
+      color: #fff;
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+    }
 
-  <!-- iOS向け -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Novel Story" />
-  <link rel="apple-touch-icon" href="./assets/icons/icon-180.png" />
+    body {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(217,255,63,.16), transparent 28%),
+        linear-gradient(180deg, #17181e 0%, #090a0d 100%);
+    }
 
-  <link rel="stylesheet" href="./assets/css/style.css" />
+    .top {
+      width: min(960px, calc(100% - 32px));
+      padding: 48px 28px;
+      text-align: center;
+    }
+
+    .label {
+      margin-bottom: 14px;
+      font-size: 12px;
+      letter-spacing: .24em;
+      color: #d9ff3f;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(36px, 7vw, 76px);
+      letter-spacing: .08em;
+      line-height: 1;
+    }
+
+    .lead {
+      max-width: 620px;
+      margin: 28px auto 40px;
+      color: rgba(255,255,255,.72);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .menu {
+      display: grid;
+      gap: 14px;
+      width: min(420px, 100%);
+      margin: 0 auto;
+    }
+
+    .menu a {
+      display: block;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: .12em;
+      transition: .2s ease;
+    }
+
+    .menu a:hover {
+      background: rgba(255,255,255,.1);
+      transform: translateY(-2px);
+    }
+
+    .note {
+      margin-top: 30px;
+      color: rgba(255,255,255,.38);
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+  </style>
 </head>
 <body>
-  <div class="app">
-    <div class="game-shell">
-      <div class="game-viewport" id="gameViewport">
-        <div class="game-stage" id="stage">
-          <div class="stage-gradient black" id="stageGradient"></div>
+  <main class="top">
+    <div class="label">STORY PORTAL</div>
+    <h1>Novel Story</h1>
+    <p class="lead">
+      ここはストーリー、イベント、キャラクター、世界設定へ進むための入口です。
+      現在はノベルゲーム形式の本編を公開中です。
+    </p>
 
-          <div class="bg-layer">
-            <img id="bgA" class="bg active" src="./assets/images/bg/placeholder.jpg" alt="background A" />
-            <img id="bgB" class="bg" alt="background B" />
-            <div class="bg-vignette"></div>
-            <div class="bg-bottom-shadow"></div>
-            <div class="flash-overlay" id="flashOverlay"></div>
-            <div class="flash-frame" id="flashFrame"></div>
-          </div>
+    <nav class="menu">
+      <a href="./story.html">MAIN STORY</a>
+      <a href="./player.html?episode=ep01">最初から読む</a>
+    </nav>
 
-          <div class="char-layer">
-            <img id="char1" class="char hidden" alt="character 1" />
-            <img id="char2" class="char hidden" alt="character 2" />
-            <img id="char3" class="char hidden" alt="character 3" />
-            <img id="char4" class="char hidden" alt="character 4" />
-          </div>
-
-          <div class="blackout-overlay" id="blackoutOverlay"></div>
-          
-          <div class="top-ui">
-            <button class="icon-btn icon-left" type="button" aria-label="location">
-              <img src="./assets/images/ui/location.png" alt="" />
-            </button>
-
-            <button
-              class="menu-toggle icon-right"
-              id="menuBtn"
-              type="button"
-              aria-label="menu"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-
-            <div class="menu-panel hidden" id="menuPanel">
-              <div class="menu-card">
-                <h2>MENU</h2>
-                <button class="menu-item-btn" id="backBtn" type="button">戻る</button>
-                <button class="menu-item-btn" id="skipBtn" type="button">スキップ</button>
-              </div>
-            </div>
-          </div>
-
-          <div id="newsLayer" class="news-layer hidden">
-            <div class="news-balloon">
-              <div class="news-text" id="newsText"></div>
-            </div>
-          </div>
-
-          <div class="dialogue-area" id="dialogueArea">
-            <div class="name-row">
-              <div class="speaker-ja" id="nameMain"></div>
-              <div class="speaker-en" id="nameSub"></div>
-            </div>
-
-            <div class="dialogue-line-image">
-              <img src="./assets/images/ui/line.png" alt="" />
-            </div>
-
-            <div class="text-row">
-              <div class="dialogue-text" id="text"></div>
-            </div>
-
-            <div class="next-indicator" id="nextIndicator" aria-hidden="true">
-              <img src="./assets/images/ui/tap-next.png" alt="" />
-              <span>NEXT</span>
-            </div>
-          </div>
-
-          <div id="endChoiceOverlay" class="end-choice-overlay hidden">
-            <div class="end-choice-card">
-              <p class="end-choice-title">この先をどうする？</p>
-              <button id="continueBtn" type="button">続きを読む</button>
-              <button id="finishBtn" type="button">終わりにする</button>
-            </div>
-          </div>
-
-          <div id="episodeTitleOverlay" class="episode-title-overlay hidden">
-            <div class="episode-title-inner">
-              <div class="episode-number" id="episodeNumber"></div>
-              <div class="episode-subtitle" id="episodeSubtitle"></div>
-              <div class="episode-start">TAP</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="orientation-overlay" id="orientationOverlay">
-    横画面でご覧ください
-  </div>
-
-  <script type="module" src="./assets/js/app.js"></script>
+    <p class="note">Prototype / Chapter Unlock ADV</p>
+  </main>
 </body>
 </html>
