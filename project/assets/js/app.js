@@ -208,7 +208,11 @@ function toggleMenu() {
 }
 
 function showEpisodeTitle(epIndex) {
-  const data = EPISODE_TITLES[epIndex] || { num: "", sub: "" };
+  const episode = episodeList[epIndex] || {};
+  const data = {
+    num: episode.subtitle || episode.storyTitle || "",
+    sub: episode.title || ""
+  };
 
   if (!el.episodeOverlay) return;
 
@@ -328,6 +332,12 @@ function changeBackground(src, immediate = false) {
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     await preloadCharacterImages();
+    await loadEpisodeRegistry();
+
+    const requestedEpisodeId = getEpisodeIdFromUrl();
+    const requestedIndex = episodeList.findIndex((ep) => ep.id === requestedEpisodeId);
+    currentEpisode = requestedIndex >= 0 ? requestedIndex : 0;
+
     await loadEpisode(currentEpisode);
     fitStage();
     updateOrientation();
@@ -389,12 +399,13 @@ async function startGame() {
 }
 
 async function loadEpisode(episodeIndex) {
-  const file = EPISODE_FILES[episodeIndex];
-  if (!file) {
+  const episode = episodeList[episodeIndex];
+
+  if (!episode || !episode.file) {
     throw new Error(`Episode file not found: ${episodeIndex}`);
   }
 
-  const res = await fetch(file);
+  const res = await fetch(episode.file);
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}`);
   }
@@ -419,7 +430,9 @@ async function loadEpisode(episodeIndex) {
   isEpisodeTransitioning = false;
   isWaitingEpisodeOverlay = false;
   isBlackoutActive = false;
+
   if (el.blackoutOverlay) el.blackoutOverlay.classList.remove("active");
+
   skipAdvanceUntil = 0;
   lineRenderToken++;
 
@@ -593,11 +606,13 @@ async function renderLine() {
       isMotionPlaying = false;
     }
 
-    if (line.autoAdvance) {
+if (line.autoAdvance) {
   index++;
   await renderLine();
   return;
 }
+
+if (token !== lineRenderToken) return;
     
     if (token !== lineRenderToken) return;
   } else if (Array.isArray(line.chars)) {
@@ -1156,9 +1171,14 @@ async function goToNextEpisodeOrEnd() {
   isTyping = false;
   el.next.classList.remove("is-ready");
 
+  const current = episodeList[currentEpisode];
+  if (current?.id) {
+    markEpisodeRead(current.id);
+  }
+
   const nextEpisode = currentEpisode + 1;
 
-  if (nextEpisode < EPISODE_FILES.length) {
+  if (nextEpisode < episodeList.length) {
     await loadEpisode(nextEpisode);
     showEpisodeTitle(nextEpisode);
     isEpisodeTransitioning = false;
