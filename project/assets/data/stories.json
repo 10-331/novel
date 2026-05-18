@@ -4,26 +4,28 @@
       "id": "main",
       "title": "壊生カメリア",
       "type": "main",
+      "label": "MAIN STORY",
       "chapters": [
         {
           "id": "ch01",
           "title": "Chapter 01",
+          "subtitle": "HAMA",
           "episodes": [
             {
-              "id": "ep01",
+              "id": "main_ch01_ep01",
               "title": "1話",
               "subtitle": "壊生カメリア",
               "mode": "novel",
-              "file": "./assets/data/ep01.json",
+              "file": "./assets/data/episodes/main_ch01_ep01.json",
               "open": true
             },
             {
-              "id": "ep02",
+              "id": "main_ch01_ep02",
               "title": "2話",
               "subtitle": "壊生カメリア",
               "mode": "novel",
-              "file": "./assets/data/ep02.json",
-              "unlockAfter": "ep01"
+              "file": "./assets/data/episodes/main_ch01_ep02.json",
+              "unlockAfter": "main_ch01_ep01"
             }
           ]
         }
