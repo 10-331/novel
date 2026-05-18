@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story Select</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #0e0f14;
+      color: #fff;
+      font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+    }
+
+    body {
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 70% 10%, rgba(217,255,63,.12), transparent 26%),
+        linear-gradient(180deg, #17181e 0%, #08090c 100%);
+    }
+
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 42px 0 64px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 30px;
+      color: rgba(255,255,255,.56);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(34px, 6vw, 64px);
+      letter-spacing: .08em;
+    }
+
+    .lead {
+      margin: 0 0 34px;
+      color: rgba(255,255,255,.62);
+      line-height: 1.8;
+    }
+
+    .story-block {
+      margin-top: 34px;
+    }
+
+    .story-title {
+      margin: 0 0 18px;
+      font-size: 22px;
+      letter-spacing: .1em;
+    }
+
+    .chapter {
+      margin: 22px 0 0;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .chapter-title {
+      margin: 0 0 16px;
+      color: #d9ff3f;
+      font-size: 13px;
+      letter-spacing: .18em;
+    }
+
+    .episode-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .episode {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      padding: 18px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(0,0,0,.18);
+      color: #fff;
+      text-decoration: none;
+      transition: .2s ease;
+    }
+
+    .episode:hover {
+      background: rgba(255,255,255,.08);
+      transform: translateY(-1px);
+    }
+
+    .episode.locked {
+      opacity: .36;
+      pointer-events: none;
+    }
+
+    .ep-main {
+      display: grid;
+      gap: 4px;
+    }
+
+    .ep-title {
+      font-size: 16px;
+      letter-spacing: .06em;
+    }
+
+    .ep-sub {
+      color: rgba(255,255,255,.48);
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+
+    .ep-status {
+      white-space: nowrap;
+      color: rgba(255,255,255,.48);
+      font-size: 12px;
+      letter-spacing: .1em;
+    }
+
+    .empty {
+      color: rgba(255,255,255,.5);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back" href="./index.html">← TOP</a>
+    <h1>MAIN STORY</h1>
+    <p class="lead">章とエピソードを選択してください。読了すると次の話が解放されます。</p>
+
+    <div id="storyMount">
+      <p class="empty">Loading...</p>
+    </div>
+  </main>
+
+  <script type="module" src="./assets/js/storySelect.js"></script>
+</body>
+</html>
