@@ -627,6 +627,27 @@ if (token !== lineRenderToken) return;
     renderCharacters(getVisibleCharacters(characterState));
   }
 
+  if (line.motion) {
+  const speakerToId = {
+    "綾": "aya",
+    "添": "ten",
+    "落露": "rakuro",
+    "潜": "kuguri"
+  };
+
+  const targetId = line.target || speakerToId[line.speaker];
+  const current = targetId ? characterState.active.get(targetId) : null;
+
+  if (current) {
+    setCharacter(characterState, {
+      ...current,
+      motion: line.motion
+    });
+
+    renderCharacters(getVisibleCharacters(characterState));
+  }
+}
+
   const isNews = line.speaker === "ニュースキャスター";
 
   if (isNews) {
