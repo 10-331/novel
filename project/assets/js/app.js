@@ -570,6 +570,7 @@ async function renderLine() {
   }
 
   const line = script[index];
+  const currentMotion = line.motion || null;
 
   if (line.bg) currentBg = line.bg;
 
@@ -738,6 +739,9 @@ function renderCharacters(chars, options = {}) {
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.setProperty("--char-scale", c.scale || 1);
+    if (c.motion === "smile") {
+  img.style.setProperty("--char-scale", (c.scale || 1) * 1.03);
+}
     img.style.zIndex = String(c.z || 0);
 
     img.classList.remove("hidden");
@@ -1057,11 +1061,14 @@ async function renderLineWithoutTyping() {
     clearCharacters(characterState);
 
     const parsed = line.chars.map(parseCharacter);
-    parsed.forEach((c) => {
-      if (c.visible !== false) {
-        setCharacter(characterState, c);
-      }
+parsed.forEach((c) => {
+  if (c.visible !== false) {
+    setCharacter(characterState, {
+      ...c,
+      motion: currentMotion
     });
+  }
+});
 
     renderCharacters(getVisibleCharacters(characterState));
   }
