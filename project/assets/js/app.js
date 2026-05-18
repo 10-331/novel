@@ -760,9 +760,14 @@ function renderCharacters(chars, options = {}) {
     img.style.left = `calc(${left}% + ${c.x}px)`;
     img.style.bottom = `${CHARACTER_BOTTOM + (c.y || 0)}px`;
     img.style.setProperty("--char-scale", c.scale || 1);
-    if (c.motion === "smile") {
-  img.style.setProperty("--char-scale", (c.scale || 1) * 1.03);
+    
+img.classList.remove("motion-smile");
+
+if (c.motion === "smile") {
+  void img.offsetWidth;
+  img.classList.add("motion-smile");
 }
+    
     img.style.zIndex = String(c.z || 0);
 
     img.classList.remove("hidden");
