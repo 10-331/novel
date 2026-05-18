@@ -1182,17 +1182,9 @@ async function goToNextEpisodeOrEnd() {
     markEpisodeRead(current.id);
   }
 
-  const nextEpisode = currentEpisode + 1;
-
-  if (nextEpisode < episodeList.length) {
-    await loadEpisode(nextEpisode);
-    showEpisodeTitle(nextEpisode);
-    isEpisodeTransitioning = false;
-    return;
-  }
-
   clearCharacters(characterState);
   renderCharacters([]);
   showEndChoice();
+
   isEpisodeTransitioning = false;
 }
