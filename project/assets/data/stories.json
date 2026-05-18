@@ -1,0 +1,33 @@
+{
+  "stories": [
+    {
+      "id": "main",
+      "title": "壊生カメリア",
+      "type": "main",
+      "chapters": [
+        {
+          "id": "ch01",
+          "title": "Chapter 01",
+          "episodes": [
+            {
+              "id": "ep01",
+              "title": "1話",
+              "subtitle": "壊生カメリア",
+              "mode": "novel",
+              "file": "./assets/data/ep01.json",
+              "open": true
+            },
+            {
+              "id": "ep02",
+              "title": "2話",
+              "subtitle": "壊生カメリア",
+              "mode": "novel",
+              "file": "./assets/data/ep02.json",
+              "unlockAfter": "ep01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
